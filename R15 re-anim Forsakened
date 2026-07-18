@@ -1,0 +1,1239 @@
+--[[  Q&A abt the script :D
+  - Q.1 : What is this script and how do I use it?
+  - A.1 : Its an r15 re-animate script (Reanimate? I hardly ever know her), just be in r15 and you're good to use it. (Most anims are r6 converted, but some of them are r15 aswell (by ts I mean the limbs won't act like it's r6)
+
+  - Q.2 : How do I add my own emotes or any other anim to this?
+  - A.2 : Go to these tables : ANIM_STYLES or EMOTE_DATA, then get the Anim ID (or emotes) then put them into the tables, use other anim samples that already existed
+  + e.g : Idle = "rbxassetid://98946450554814", -- replace the numbers keep the rbxassetid://
+  + There are some settings and config in here that you can change.
+
+  - Q.3 : Am I allowed to edit, skidded or anything that will change the script?
+  - A.3 : I mean, I did this already so, it's fair yall can do whatever you want.
+
+  - Q.4 : What about the Mp3 Songs/Music that I wanna add?
+  - A.4 : Go to github, Create a new repository, next to the green button "Code" click the 3 dot then "Upload file" from there just choose a mp3 file of your choice in your files. After that, Commit change then get the raw link of the file (must be raw else the script won't accept it)
+  + Should have the raw.githubusercontent.com in the https
+  + 'continuation of A.4' : Once you have the link of the file, go to the EMOTE_DATA table then just kinda figure it out yourself (examples of /e dance or any other emotes that has CustomSound in it)
+
+
+Ty for reading ts, I appreciate your time spending here xd
+This script itself wasn't original by me, I skidded some scrouce code from others, Lmao.
+]]
+
+
+
+
+      --===================================--
+-- ___ Warning: Danger Zone, u have been warned. ___ --
+      --===================================--
+
+task.wait(0.1)
+game.StarterGui:SetCore("SendNotification", {
+Title = "Re-Anim Forsakened r15"; -- Title
+Text = "Script originally wasn't mine, credits to the people who made it. (Ik I skidded)"; -- Text
+Duration = 6.5; -- How long the notification should last (in seconds)
+})
+
+game.StarterGui:SetCore("SendNotification", {
+Title = "Isn't it weird to have this forsaken ui layout? :d";
+Text = "Ehnormalsb/NotError on roblox";
+Duration = 6.5;
+})
+
+
+-- srry about the notifs
+local Players = game:GetService("Players")
+local RunService = game:GetService("RunService")
+local UserInputService = game:GetService("UserInputService")
+local Debris = game:GetService("Debris")
+local MarketplaceService = game:GetService("MarketplaceService")
+local HttpService = game:GetService("HttpService")
+
+if getgenv().R15ReanimForsakened_Cleanup then
+    pcall(getgenv().R15ReanimForsakened_Cleanup)
+end
+
+local scriptGarbage = { Connections = {}, Instances = {} }
+
+getgenv().R15ReanimForsakened_Cleanup = function()
+    for _, conn in ipairs(scriptGarbage.Connections) do
+        if conn.Connected then conn:Disconnect() end
+    end
+    for _, inst in ipairs(scriptGarbage.Instances) do
+        if inst.Parent then inst:Destroy() end
+    end
+    getgenv().R15ReanimForsakened_Cleanup = nil
+end
+
+local player = Players.LocalPlayer
+local camera = workspace.CurrentCamera
+
+-- ### Audio System Supporter ###
+local function getCustomAudio(soundData)
+    if not soundData or not soundData.Url or not soundData.FileName then return nil end
+    
+    local folder = "CustomEmoteSounds"
+    if not isfolder(folder) then makefolder(folder) end
+    
+    local path = folder .. "/" .. soundData.FileName
+    if not isfile(path) then
+        local success, result = pcall(function() return game:HttpGet(soundData.Url) end)
+        if success then 
+            writefile(path, result) 
+        else 
+            warn("Failed to download: " .. soundData.Url)
+            return nil 
+        end
+    end
+    
+    return getcustomasset(path)
+end
+
+-- ### Animations Styles (Configuration) ###
+local ANIM_STYLES = {
+	{ Name = "Default Guest 1337 (Forsaken Survivors)",
+		Idle = "rbxassetid://98946450554814",
+		Walk = "rbxassetid://87493540718854",
+		Run = "rbxassetid://127998320083590",
+		Punch = "rbxassetid://129358357219637",
+		Block = "rbxassetid://115622052244085",
+		InjuredIdle = "rbxassetid://73905365652295",
+		InjuredWalk = "rbxassetid://101924559363550"
+	},
+
+	{ Name = "Empty (0 ids) -put in whatever animation ids you want or desire",
+		Idle = "rbxassetid://0000000000",
+		Walk = "rbxassetid://0000000000",
+		Run = "rbxassetid://0000000000",
+		Punch = "rbxassetid://0000000000",
+		Block = "rbxassetid://0000000000",
+		InjuredIdle = "rbxassetid://0000000000",
+		InjuredWalk = "rbxassetid://0000000000"
+	},
+
+	{ Name = "Telamon Blocktales (Idle and walk)",
+		Idle = "rbxassetid://88024039620770",
+		Walk = "rbxassetid://101828780753469",
+		Run = "rbxassetid://127998320083590",
+		Punch = "rbxassetid://129358357219637",
+		Block = "rbxassetid://115622052244085",
+		InjuredIdle = "rbxassetid://73905365652295",
+		InjuredWalk = "rbxassetid://101924559363550",
+		NormalSpeed = 12
+	},
+
+	{ Name = "Telamon Alt Version (walk)",
+		Idle = "rbxassetid://88024039620770",
+		Walk = "rbxassetid://122687078497889",
+		Run = "rbxassetid://127998320083590",
+		Punch = "rbxassetid://129358357219637",
+		Block = "rbxassetid://115622052244085",
+		InjuredIdle = "rbxassetid://73905365652295",
+		InjuredWalk = "rbxassetid://101924559363550",
+		NormalSpeed = 12
+	},
+
+  { Name = "John doe (walk and run)",
+		Idle = "rbxassetid://98946450554814",
+		Walk = "rbxassetid://138795419712161",
+		Run = "rbxassetid://94467125495426",
+		Punch = "rbxassetid://129358357219637",
+		Block = "rbxassetid://115622052244085",
+		InjuredIdle = "rbxassetid://73905365652295",
+		InjuredWalk = "rbxassetid://101924559363550",
+		-- Custom Speeds settings for this style:
+		RunAnimSpeed = 2.4,
+		SprintSpeed = 27.5,
+		WalkAnimSpeed = 1, -- You can also add custom walk speeds
+		NormalSpeed = 10
+	},
+
+  { Name = "1x1x1x1 (walk and idle)",
+		Idle = "rbxassetid://74574367987310",
+		Walk = "rbxassetid://138379855143069",
+		Run = "rbxassetid://94467125495426",
+		Punch = "rbxassetid://129358357219637",
+		Block = "rbxassetid://115622052244085",
+		InjuredIdle = "rbxassetid://73905365652295",
+		InjuredWalk = "rbxassetid://101924559363550",
+		-- Custom Speeds settings for this style:
+		RunAnimSpeed = 2.25,
+		SprintSpeed = 27.25,
+		WalkAnimSpeed = 1, -- You can also add custom walkspeeds
+		NormalSpeed = 10
+	},
+
+	{ Name = "Mayhem SG (idle)",
+		Idle = "rbxassetid://104949556414712",
+		Walk = "rbxassetid://87493540718854",
+		Run = "rbxassetid://127998320083590",
+		Punch = "rbxassetid://129358357219637",
+		Block = "rbxassetid://115622052244085",
+		InjuredIdle = "rbxassetid://73905365652295",
+		InjuredWalk = "rbxassetid://101924559363550" }
+}
+
+
+-- Main stuff down here
+local currentStyleIndex = 1  -- Use the anim pack u wanna use from top to bottom in an order (as if the first one is 1 and the last one being the last number)
+
+local ANIM_IDS = {
+	Idle = ANIM_STYLES[1].Idle,
+	Walk = ANIM_STYLES[1].Walk,
+	Run = ANIM_STYLES[1].Run,
+	Punch = ANIM_STYLES[1].Punch,
+	Block = ANIM_STYLES[1].Block,
+	InjuredIdle = ANIM_STYLES[1].InjuredIdle,
+	InjuredWalk = ANIM_STYLES[1].InjuredWalk,
+	Head = "rbxassetid://74100161379681",
+}
+-- It will use the index set animation you want to use (put it 2 and it will use the 2nd set whenever the script is executed)
+
+
+
+--=======================================================
+-- I figured I'd put this here if anyone is looking into this script, I completely give credits to g4zwr (on your aswell) and noli.0 on discord for making the r15 guest script. anything here that wasn't in their script is mine. So yeah, I will probably put the script they made in ScriptBlox, even tho THERES ALREADY SOME IN THERE- ehem.
+--=======================================================
+
+
+
+--======================================
+-- Emotes Configurations, I guess
+--[[ 
+   Name = "Whatever you put in here"  -- The name of the emote,
+
+   ID = "rbxassetid://YourAnimID",  -- Put the ID of the anim or emote you want here, use a logger or smt to get it,
+
+   WalkSpeed = number  -- Character movement speed while emoting,
+
+   AnimSpeed = number   -- The animation itself speed),
+
+   IsLooping = true / false  --Means it will loop the animation and the music aswell,
+
+   IsMovingEmote = true  -- Means that you can move while using the emote,
+
+	 CustomSound = {
+    FileName = "YourMusicThatYouCanName.mp3",  -- Name whatever you like
+		Url = "TheLinkFile.Mp3ThatYouPutInHere" }  -- The raw link of your file in github,
+
+    HeightOffset = number  -- The offert your character you want to set higher or lower (Mostly useless ngl),
+
+    -- this config, I will probably fix it
+    Phase2Start = number,  -- The exact second you want the part to speed up (you'll need to align this)
+    Phase2Speed = number  -- How fast you want the 2nd part to play,
+
+	  SequenceType = "AnimsLooped/Intro", -- Tells the handler to use that Type of Sequence.
+    Sequence = {
+		  { ID = "rbxassetid://102806201875589", Duration = 0.5 }, -- first anim plays
+		  { ID = "rbxassetid://106544616318711", Duration = 0.5 }, -- second anim plays
+		  { ID = "rbxassetid://127080445177635", Duration = 0.5 }, -- third anim plays
+		  { ID = "rbxassetid://72037992741389",  Duration = 0.3 }  -- This last anim (or track) will loop / Will loop back the whole anim thing (You can add more Phase if you want)
+     }
+
+    -- By only having these two will result in a 1 time anim played.
+    Name = "Whatever you put in here"
+    ID = "rbxassetid://YourAnimID"
+]]
+--======================================
+
+-- ^^^### Emote Configurations (Also some settings above) ### ^^^
+
+local EMOTE_DATA = {
+	{ Name = "/e dance 1",
+		ID = "rbxassetid://89676212115777", IsLooping = true,
+		CustomSound = {
+      FileName = "Cyberfantasia.mp3",
+			Url = "https://github.com/someraNd0mguy2/SONGSname.mp3-usebale-/raw/refs/heads/main/tn-shi%20-%20Cyberfantasia.mp3" }
+	},
+-- Audio for /e dance 1 is just for fun
+	{ Name = "/e dance 2", ID = "rbxassetid://98081374326578", IsLooping = true},
+	{ Name = "/e dance 3", ID = "rbxassetid://78240649545370", IsLooping = true},
+	{ Name = "/e retro dance", ID = "rbxassetid://112167105910889", IsLooping = true},
+	{ Name = "Dance Potion", ID = "rbxassetid://129385001500617", IsLooping = true},
+	{ Name = "/e wave", ID = "rbxassetid://116146360657398"},
+	{ Name = "/e point", ID = "rbxassetid://82179945186939"},
+	{ Name = "/e laugh", ID = "rbxassetid://113442867466734"},
+	{ Name = "/e cheer", ID = "rbxassetid://84812130090897", AnimSpeed = 1.325},
+	{ Name = "/e sit", ID = "rbxassetid://115023539891047", IsLooping = true},
+	{ Name = "Retro Sit", ID = "rbxassetid://70887364787031", IsLooping = true},
+	{ Name = "Retro Sit (V2)", ID = "rbxassetid://120736576017702", IsLooping = true},
+	{ Name = "Steep Steps Sit", ID = "rbxassetid://96928249373469", IsLooping = true},
+	{ Name = "Sit", ID = "rbxassetid://120346451518207", IsLooping = true},
+	{ Name = "Sit (V2)", ID = "rbxassetid://110141993456103", IsLooping = true},
+	{ Name = "Sit (V3)", ID = "rbxassetid://89130915166852", IsLooping = true},
+	{ Name = "Sit (V4)", ID = "rbxassetid://132432660810949", IsLooping = true, HeightOffset = 0.0075},
+	{ Name = "Legs Kicking", ID = "rbxassetid://80113376828780", IsLooping = true},
+	{ Name = "(BT) Plains Thinking Phase", ID = "rbxassetid://96513369166239", IsLooping = true},
+	{ Name = "(BT) Noobadoor Stance", ID = "rbxassetid://120240990220965", IsLooping = true, AnimSpeed = 0.5},
+
+-- Your entire pfy in the past years, trust me :
+	{ Name = "Low cortisol (V1)", ID = "rbxassetid://108330858686045", IsLooping = true},
+	{ Name = "Low cortisol (V2)", ID = "rbxassetid://73977838462540", IsLooping = true},
+	{ Name = "Low cortisol V3 (best)", ID = "rbxassetid://116276049310823", IsLooping = true},
+	{ Name = "BANG BANG BANG (CSM)", ID = "rbxassetid://96459040879794", IsLooping = true},
+	{ Name = "Rat Dance (V1)", ID = "rbxassetid://79878714311433", IsLooping = true, AnimSpeed = 0.975},
+	{ Name = "Rat Dance (V2)", ID = "rbxassetid://119386711855761", IsLooping = true, AnimSpeed = 1.5},
+	{ Name = "Rat Dance (V3)", ID = "rbxassetid://73555079460637", IsLooping = true},
+	{ Name = "Rat Dance (V4)", ID = "rbxassetid://86334552898234", IsLooping = true},
+	{ Name = "Rat Dance (V5)", ID = "rbxassetid://130278319509843", IsLooping = true, AnimSpeed = 0.95},
+	{ Name = "Rat Dance (V6)", ID = "rbxassetid://86798743613035", IsLooping = true},
+	{ Name = "Conga (Variant 1)", ID = "rbxassetid://126452924444711", IsMovingEmote = true, IsLooping = true, WalkSpeed = 8.5},
+	{ Name = "California Girls (V1)", ID = "rbxassetid://76389296606994", IsLooping = true},
+	{ Name = "California Girls (V2)", ID = "rbxassetid://78796496757269", IsLooping = true},
+	{ Name = "Bag Up", ID = "rbxassetid://88570432473654", IsLooping = true},
+	{ Name = "Metro Man (V1)", ID = "rbxassetid://79481824762169", IsLooping = true},
+	{ Name = "Metro Man (V2)", ID = "rbxassetid://74656859305745", IsLooping = true},
+	{ Name = "Metro Man (V3)", ID = "rbxassetid://126215232581064", IsLooping = true,
+    Phase2Start = 2.15,  -- The exact second the 2nd part begins (you'll need to align this)
+    Phase2Speed = 1.325   -- How fast you want the 2nd part to play
+  },
+	{ Name = "Subject Three", ID = "rbxassetid://111993447655346", IsLooping = true},
+	{ Name = "Caramelldansen", ID = "rbxassetid://102908521825429", IsLooping = true},
+	{ Name = "Unemployment", ID = "rbxassetid://87033513223989", IsLooping = true},
+	{ Name = "Lost In Paradise", ID = "rbxassetid://79664884985828", IsLooping = true, AnimSpeed = 1.25},
+	{ Name = "Dance if you carried", ID = "rbxassetid://85924918188334", IsLooping = true},
+	{ Name = "Dance if you carried (Headlock)", ID = "rbxassetid://85924918188334", IsLooping = true,
+		CustomSound = {
+      FileName = "Headlock_Forsaken.mp3",
+			Url = "https://raw.githubusercontent.com/someraNd0mguy2/SONGSname.mp3-usebale-/refs/heads/main/_%20Headlock%20Forsaken%20remix.mp3" }
+  },
+	{ Name = "Smug Dancin", ID = "rbxassetid://121934635382614", IsLooping = true},
+	{ Name = "Otsukare Summer", ID = "rbxassetid://96239426856784", IsLooping = true},
+	{ Name = "Yuji jumping (V1)", ID = "rbxassetid://134831504136116", IsLooping = true},
+	{ Name = "Yuji jumping (V2)", ID = "rbxassetid://124496563760646", IsLooping = true},
+	{ Name = "Angels of Delusion", ID = "rbxassetid://99893613768286", IsLooping = true},
+	{ Name = "Nervy Dance", ID = "rbxassetid://87354775848784", IsLooping = true, AnimSpeed = 1.3},
+	{ Name = "Jumpstyle", ID = "rbxassetid://87824676803611", IsLooping = true},
+	{ Name = "Who Win's (Wally West)", ID = "rbxassetid://109447419896836", IsLooping = true},
+	{ Name = "Sturdy", ID = "rbxassetid://119641433612039", IsLooping = true},
+	{ Name = "Squingle (DOD)", ID = "rbxassetid://137421579830901", IsLooping = true},
+	{ Name = "Gangnam Style (DOD)", ID = "rbxassetid://112342491908786", IsLooping = true},
+	{ Name = "Kwik Flip (AVGN Bot)", ID = "rbxassetid://123170612946963", IsLooping = true, AnimSpeed = 1.0825,
+		CustomSound = {
+      FileName = "KwikFlipYTPMV.mp3",
+			Url = "https://raw.githubusercontent.com/someraNd0mguy2/SONGSname.mp3-usebale-/refs/heads/main/Kwik%20Flip%20%20YTPMV.mp3" }
+  },
+	{ Name = "Kwik Flip (AVGN Bot) [V2]", ID = "rbxassetid://76820525290498", IsLooping = true,
+		CustomSound = {
+      FileName = "KwikFlipYTPMV.mp3",
+			Url = "https://raw.githubusercontent.com/someraNd0mguy2/SONGSname.mp3-usebale-/refs/heads/main/Kwik%20Flip%20%20YTPMV.mp3" }
+  },
+	{	Name = "Alter Ego",
+    IsLooping = true, -- Sequences usually shouldn't hard-loop, but Part 4 can loop if needed
+    SequenceType = "AnimsLooped", -- Tells the handler to use Option A
+		Sequence = {
+			{ ID = "rbxassetid://102806201875589", Duration = 0.4 }, -- Tweak threshold to match your track lengths (oh btw they go in an order)
+			{ ID = "rbxassetid://106544616318711", Duration = 0.4 },
+			{ ID = "rbxassetid://127080445177635", Duration = 0.4 },
+			{ ID = "rbxassetid://72037992741389",  Duration = 0.4 }
+		}
+	},
+	-- Example of Option C (Intro Sequence -> Infinite Pose/Dance on Part 4)
+  { Name = "Alter Ego Intro", IsLooping = true,
+	  SequenceType = "Intro", -- Tells the handler to use Option B
+    Sequence = {
+		  { ID = "rbxassetid://102806201875589", Duration = 0.5 }, -- Intro Phase 1
+		  { ID = "rbxassetid://106544616318711", Duration = 0.5 }, -- Intro Phase 2
+		  { ID = "rbxassetid://127080445177635", Duration = 0.5 }, -- Intro Phase 3
+		  { ID = "rbxassetid://72037992741389",  Duration = 0.3 }  -- This track loops infinitely!
+     }
+  },
+  { Name = "Hakari (Lonely)", ID = "rbxassetid://89596081956519", IsLooping = true,
+    CustomSound = {
+      FileName = "L0nelyLonely.mp3",
+			Url = "https://raw.githubusercontent.com/someraNd0mguy2/SONGSname.mp3-usebale-/refs/heads/main/lonely%20lonely%20dante%20extended.mp3" }
+  },
+	{ Name = "Dancin with ur eyes closed", ID = "rbxassetid://117991470645633", IsLooping = true, AnimSpeed = 0.91,
+    CustomSound = {
+      FileName = "Dwyec.mp3",
+			Url = "https://raw.githubusercontent.com/someraNd0mguy2/SONGSname.mp3-usebale-/refs/heads/main/%5BROBLOX%5D%20Dance%20With%20Your%20Eyes%20Closed%20EMOTE.mp3" }
+  },
+	{ Name = "Skipping", ID = "rbxassetid://115270771117279", IsMovingEmote = true, IsLooping = true, WalkSpeed = 7.5},
+
+-- poses section, since im lazy
+	{ Name = "IMPOSSIBLE, THIS ISN'T THE CAR 🟣⚡️", ID = "rbxassetid://130825608045596" },
+	{ Name = "Jojo's 'Come at me'", ID = "rbxassetid://84961998273178", IsLooping = true},
+	{ Name = "Jonathan Pose", ID = "rbxassetid://116505117247744", IsLooping = true},
+	{ Name = "Jotaro Jojo's Pose", ID = "rbxassetid://137985052211397", IsLooping = true},
+	{ Name = "test", ID = "rbxassetid://89676212115777"},
+	{ Name = "test 2", ID = "rbxassetid://89676212115777"},
+	{ Name = "test 3", ID = "rbxassetid://89676212115777"}
+}
+
+-- ### Ui Settings ###
+local IMG_BLOCK = "rbxassetid://81303931345144"
+local IMG_PUNCH = "rbxassetid://113322091360332"
+local IMG_SPRINT = "rbxassetid://89719285639088"
+local IMG_SHIFTLOCK = "rbxassetid://127436401745505"
+local IMG_LOCK = "rbxassetid://4823190108"
+
+-- The settings of anims (default for index 1) --
+local WALK_SPEED, RUN_ANIM_SPEED, SPRINT_SPEED, NORMAL_SPEED = 1, 1.5, 26, 12
+local INJURED_HEALTH_THRESHOLD = 50
+local LUNGE_STUDS, LUNGE_TIME, LUNGE_DURATION = 7.5, 0.35, 0.1
+local PUNCH_CD, BLOCK_CD, BLOCK_DURATION = 1, 0, 2
+local BLOCK_SLOW_DURATION, PUNCH_SLOW_DURATION, SLOW_MULTIPLIER = 1.25, 0.5, 0.25
+local KEY_BLOCK, KEY_PUNCH, KEY_SPRINT, KEY_SHIFTLOCK = Enum.KeyCode.Q, Enum.KeyCode.E, Enum.KeyCode.LeftShift, Enum.KeyCode.LeftControl
+
+local isMobile = UserInputService.TouchEnabled and not UserInputService.MouseEnabled
+local playerGui = player:WaitForChild("PlayerGui")
+
+if playerGui:FindFirstChild("CombatGui") then playerGui.CombatGui:Destroy() end
+
+local screenGui = Instance.new("ScreenGui", playerGui)
+screenGui.Name, screenGui.ResetOnSpawn, screenGui.IgnoreGuiInset = "CombatGui", false, true
+
+local FONT, FONT_THIN = Font.fromName("AccanthisADFStd", Enum.FontWeight.SemiBold), Font.fromName("AccanthisADFStd", Enum.FontWeight.Regular)
+local COLOR_WHITE, COLOR_GREY, COLOR_LOCKED = Color3.new(1, 1, 1), Color3.new(0.72, 0.72, 0.72), Color3.fromRGB(75, 75, 75)
+
+-- UI Buttons Construction
+local switchAnimBtn = Instance.new("TextButton", screenGui)
+switchAnimBtn.Name, switchAnimBtn.Size = "SwitchAnimBtn", UDim2.new(0, 150, 0, 35)
+switchAnimBtn.Position = UDim2.new(0, 180, 0, 20)
+switchAnimBtn.BackgroundColor3, switchAnimBtn.Text, switchAnimBtn.TextColor3 = Color3.fromRGB(40, 40, 40), "STYLE: DEFAULT ▼", COLOR_WHITE
+switchAnimBtn.FontFace, switchAnimBtn.TextSize = FONT, 13
+Instance.new("UICorner", switchAnimBtn).CornerRadius = UDim.new(0, 8)
+
+local styleDropdown = Instance.new("ScrollingFrame", screenGui)
+styleDropdown.Name, styleDropdown.Visible = "StyleDropdown", false
+styleDropdown.Size, styleDropdown.Position = UDim2.new(0, 150, 0, 120), UDim2.new(0, 180, 0, 60)
+styleDropdown.BackgroundColor3, styleDropdown.BorderSizePixel = Color3.fromRGB(30, 30, 30), 0
+styleDropdown.ScrollBarThickness, styleDropdown.AutomaticCanvasSize = 4, Enum.AutomaticSize.Y
+Instance.new("UICorner", styleDropdown)
+local styleListLayout = Instance.new("UIListLayout", styleDropdown)
+styleListLayout.Padding = UDim.new(0, 2)
+
+local stopBtn = Instance.new("TextButton", screenGui)
+stopBtn.Name, stopBtn.Size = "StopScriptBtn", UDim2.new(0, 130, 0, 35)
+stopBtn.Position, stopBtn.AnchorPoint = UDim2.new(0.78, 0, 0, 60), Vector2.new(0.5, 0)
+stopBtn.BackgroundColor3, stopBtn.Text, stopBtn.TextColor3 = Color3.fromRGB(150, 0, 0), "STOP SCRIPT", COLOR_WHITE
+stopBtn.FontFace, stopBtn.TextSize = FONT, 13
+Instance.new("UICorner", stopBtn).CornerRadius = UDim.new(0, 8)
+
+local emoteToggleBtn = Instance.new("TextButton", screenGui)
+emoteToggleBtn.Name, emoteToggleBtn.Size = "EmoteBtn", UDim2.new(0, 110, 0, 35)
+emoteToggleBtn.Position, emoteToggleBtn.AnchorPoint = UDim2.new(0.9, 0, 0, 60), Vector2.new(0.5, 0)
+emoteToggleBtn.BackgroundColor3, emoteToggleBtn.Text, emoteToggleBtn.TextColor3 = Color3.fromRGB(40, 40, 40), "EMOTES", COLOR_WHITE
+emoteToggleBtn.FontFace, emoteToggleBtn.TextSize = FONT, 13
+Instance.new("UICorner", emoteToggleBtn).CornerRadius = UDim.new(0, 8)
+
+local boomboxToggleBtn = Instance.new("TextButton", screenGui)
+boomboxToggleBtn.Name, boomboxToggleBtn.Size = "BoomboxBtn", UDim2.new(0, 110, 0, 35)
+boomboxToggleBtn.Position, boomboxToggleBtn.AnchorPoint = UDim2.new(0.66, 0, 0, 60), Vector2.new(0.5, 0)
+boomboxToggleBtn.BackgroundColor3, boomboxToggleBtn.Text, boomboxToggleBtn.TextColor3 = Color3.fromRGB(40, 40, 40), "BOOMBOX", COLOR_WHITE
+boomboxToggleBtn.FontFace, boomboxToggleBtn.TextSize = FONT, 13
+Instance.new("UICorner", boomboxToggleBtn).CornerRadius = UDim.new(0, 8)
+
+local stopEmoteBtn = Instance.new("TextButton", screenGui)
+stopEmoteBtn.Name, stopEmoteBtn.Size = "StopEmoteBtn", UDim2.new(0, 120, 0, 40)
+stopEmoteBtn.Position, stopEmoteBtn.AnchorPoint = UDim2.new(0.5, 0, 0.8, 0), Vector2.new(0.5, 0.5)
+stopEmoteBtn.BackgroundColor3, stopEmoteBtn.Text, stopEmoteBtn.TextColor3 = Color3.fromRGB(150, 0, 0), "STOP EMOTE", COLOR_WHITE
+stopEmoteBtn.FontFace, stopEmoteBtn.TextSize = FONT, 16
+stopEmoteBtn.Visible = false
+Instance.new("UICorner", stopEmoteBtn).CornerRadius = UDim.new(0, 8)
+
+local emotePanel = Instance.new("Frame", screenGui)
+emotePanel.Name, emotePanel.Visible = "EmotePanel", false
+emotePanel.Size, emotePanel.Position = UDim2.new(0, 160, 0, 300), UDim2.new(0.9, 0, 0, 105)
+emotePanel.AnchorPoint, emotePanel.BackgroundTransparency = Vector2.new(0.5, 0), 1
+
+local searchBox = Instance.new("TextBox", emotePanel)
+searchBox.Size, searchBox.Position = UDim2.new(1, 0, 0, 30), UDim2.new(0, 0, 0, 0)
+searchBox.BackgroundColor3, searchBox.TextColor3 = Color3.fromRGB(30, 30, 30), COLOR_WHITE
+searchBox.PlaceholderText, searchBox.Text = "Search...", ""
+searchBox.FontFace, searchBox.TextSize = FONT_THIN, 13
+Instance.new("UICorner", searchBox).CornerRadius = UDim.new(0, 6)
+
+-- === Camera Toggle Options ===
+local cameraModes = {"Default", "HumanoidRootPart", "Head", "Torso"}
+local currentCamMode = 1
+
+local camToggleBtn = Instance.new("TextButton", emotePanel)
+camToggleBtn.Size, camToggleBtn.Position = UDim2.new(1, 0, 0, 30), UDim2.new(0, 0, 0, 35)
+camToggleBtn.BackgroundColor3, camToggleBtn.TextColor3 = Color3.fromRGB(40, 40, 40), COLOR_WHITE
+camToggleBtn.Text = "Cam Focus: " .. cameraModes[currentCamMode]
+camToggleBtn.FontFace, camToggleBtn.TextSize = FONT, 12
+Instance.new("UICorner", camToggleBtn).CornerRadius = UDim.new(0, 6)
+
+camToggleBtn.MouseButton1Click:Connect(function()
+	currentCamMode = currentCamMode >= 4 and 1 or currentCamMode + 1
+	camToggleBtn.Text = "Cam Focus: " .. cameraModes[currentCamMode]
+	
+	-- Update camera instantly if an emote is already playing
+	if player.Character then
+		local hum = player.Character:FindFirstChild("Humanoid")
+		local hrp = player.Character:FindFirstChild("HumanoidRootPart")
+		local head = player.Character:FindFirstChild("Head")
+		local torso = player.Character:FindFirstChild("Torso") or player.Character:FindFirstChild("UpperTorso")
+		
+		if stopEmoteBtn.Visible then
+			if currentCamMode == 2 and hrp then workspace.CurrentCamera.CameraSubject = hrp
+			elseif currentCamMode == 3 and head then workspace.CurrentCamera.CameraSubject = head
+			elseif currentCamMode == 4 and torso then workspace.CurrentCamera.CameraSubject = torso
+			elseif hum then workspace.CurrentCamera.CameraSubject = hum end
+		end
+	end
+end)
+
+local emoteMenu = Instance.new("ScrollingFrame", emotePanel)
+-- We pushed the menu down from Y=35 to Y=70 and made it shorter to fit the button
+emoteMenu.Size, emoteMenu.Position = UDim2.new(1, 0, 1, -70), UDim2.new(0, 0, 0, 70) 
+emoteMenu.BackgroundColor3 = Color3.fromRGB(25, 25, 25)
+emoteMenu.BorderSizePixel, emoteMenu.ScrollBarThickness = 0, 4
+emoteMenu.AutomaticCanvasSize = Enum.AutomaticSize.Y
+Instance.new("UICorner", emoteMenu)
+
+local emoteList = Instance.new("UIListLayout", emoteMenu)
+emoteList.Padding, emoteList.HorizontalAlignment = UDim.new(0, 5), Enum.HorizontalAlignment.Center
+
+-- Main Toggle Connections
+emoteToggleBtn.MouseButton1Click:Connect(function() 
+	emotePanel.Visible = not emotePanel.Visible 
+	if emotePanel.Visible then 
+		if screenGui:FindFirstChild("BoomboxPanel") then screenGui.BoomboxPanel.Visible = false end
+		styleDropdown.Visible = false
+	end
+end)
+
+searchBox:GetPropertyChangedSignal("Text"):Connect(function()
+	local query = searchBox.Text:lower()
+	for _, child in ipairs(emoteMenu:GetChildren()) do
+		if child:IsA("TextButton") then
+			child.Visible = query == "" or child.Text:lower():find(query) ~= nil
+		end
+	end
+end)
+
+-- Boombox Setup
+local boomboxPanel = Instance.new("Frame", screenGui)
+boomboxPanel.Name, boomboxPanel.Visible = "BoomboxPanel", false
+boomboxPanel.Size, boomboxPanel.Position = UDim2.new(0, 150, 0, 180), UDim2.new(0.66, 0, 0, 105)
+boomboxPanel.AnchorPoint, boomboxPanel.BackgroundColor3 = Vector2.new(0.5, 0), Color3.fromRGB(25, 25, 25)
+Instance.new("UICorner", boomboxPanel).CornerRadius = UDim.new(0, 8)
+
+local idInput = Instance.new("TextBox", boomboxPanel)
+idInput.Size, idInput.Position = UDim2.new(1, -10, 0, 30), UDim2.new(0, 5, 0, 5)
+idInput.BackgroundColor3, idInput.TextColor3 = Color3.fromRGB(35, 35, 35), COLOR_WHITE
+idInput.PlaceholderText, idInput.Text = "Sound ID...", ""
+idInput.FontFace, idInput.TextSize = FONT, 13
+Instance.new("UICorner", idInput).CornerRadius = UDim.new(0, 6)
+
+local volInput = Instance.new("TextBox", boomboxPanel)
+volInput.Size, volInput.Position = UDim2.new(1, -10, 0, 30), UDim2.new(0, 5, 0, 40)
+volInput.BackgroundColor3, volInput.TextColor3 = Color3.fromRGB(35, 35, 35), COLOR_WHITE
+volInput.PlaceholderText, volInput.Text = "Volume (Default 1)", ""
+volInput.FontFace, volInput.TextSize = FONT, 13
+Instance.new("UICorner", volInput).CornerRadius = UDim.new(0, 6)
+
+local loopBtn = Instance.new("TextButton", boomboxPanel)
+loopBtn.Size, loopBtn.Position = UDim2.new(1, -10, 0, 30), UDim2.new(0, 5, 0, 75)
+loopBtn.BackgroundColor3, loopBtn.TextColor3 = Color3.fromRGB(40, 40, 40), COLOR_GREY
+loopBtn.Text = "Loop: OFF"
+loopBtn.FontFace, loopBtn.TextSize = FONT, 13
+Instance.new("UICorner", loopBtn).CornerRadius = UDim.new(0, 6)
+
+local playMusicBtn = Instance.new("TextButton", boomboxPanel)
+playMusicBtn.Size, playMusicBtn.Position = UDim2.new(1, -10, 0, 30), UDim2.new(0, 5, 0, 110)
+playMusicBtn.BackgroundColor3, playMusicBtn.TextColor3 = Color3.fromRGB(0, 120, 0), COLOR_WHITE
+playMusicBtn.Text = "PLAY"
+playMusicBtn.FontFace, playMusicBtn.TextSize = FONT, 13
+Instance.new("UICorner", playMusicBtn).CornerRadius = UDim.new(0, 6)
+
+local stopMusicBtn = Instance.new("TextButton", boomboxPanel)
+stopMusicBtn.Size, stopMusicBtn.Position = UDim2.new(1, -10, 0, 30), UDim2.new(0, 5, 0, 145)
+stopMusicBtn.BackgroundColor3, stopMusicBtn.TextColor3 = Color3.fromRGB(150, 0, 0), COLOR_WHITE
+stopMusicBtn.Text = "STOP"
+stopMusicBtn.FontFace, stopMusicBtn.TextSize = FONT, 13
+Instance.new("UICorner", stopMusicBtn).CornerRadius = UDim.new(0, 6)
+
+local isLooped = false
+
+boomboxToggleBtn.MouseButton1Click:Connect(function() 
+	boomboxPanel.Visible = not boomboxPanel.Visible 
+	if boomboxPanel.Visible then 
+		emotePanel.Visible = false 
+		styleDropdown.Visible = false
+	end
+end)
+
+loopBtn.MouseButton1Click:Connect(function()
+	isLooped = not isLooped
+	loopBtn.Text = "Loop: " .. (isLooped and "ON" or "OFF")
+	loopBtn.TextColor3 = isLooped and COLOR_WHITE or COLOR_GREY
+	if player.Character and player.Character:FindFirstChild("HumanoidRootPart") then
+		local sound = player.Character.HumanoidRootPart:FindFirstChild("CustomBoomboxSound")
+		if sound then sound.Looped = isLooped end
+	end
+end)
+
+local function showBillboard(text)
+	if not player.Character or not player.Character:FindFirstChild("Head") then return end
+	local head = player.Character.Head
+	if head:FindFirstChild("BoomboxBillboard") then head.BoomboxBillboard:Destroy() end
+	local bb = Instance.new("BillboardGui", head)
+	bb.Name, bb.Size, bb.StudsOffset, bb.AlwaysOnTop = "BoomboxBillboard", UDim2.new(0, 250, 0, 50), Vector3.new(0, 2.5, 0), true
+	local lbl = Instance.new("TextLabel", bb)
+	lbl.Size, lbl.BackgroundTransparency, lbl.Text = UDim2.new(1, 0, 1, 0), 1, text
+	lbl.TextColor3, lbl.TextStrokeTransparency, lbl.TextScaled = Color3.fromRGB(173, 216, 230), 0, true
+	lbl.FontFace = FONT
+	Debris:AddItem(bb, 3)
+end
+
+playMusicBtn.MouseButton1Click:Connect(function()
+	local id = idInput.Text:match("%d+")
+	if not id then return end
+	local vol = tonumber(volInput.Text) or 1
+	if player.Character and player.Character:FindFirstChild("HumanoidRootPart") then
+		local hrp = player.Character.HumanoidRootPart
+		local sound = hrp:FindFirstChild("CustomBoomboxSound") or Instance.new("Sound", hrp)
+		sound.Name = "CustomBoomboxSound"
+		sound.SoundId, sound.Volume, sound.Looped, sound.TimePosition = "rbxassetid://" .. id, vol, isLooped, 0
+		sound:Play()
+		showBillboard("Playing ID: " .. id)
+		task.spawn(function()
+			local success, info = pcall(function() return MarketplaceService:GetProductInfo(tonumber(id)) end)
+			if success and info and info.Name then showBillboard("🎵 " .. info.Name) end
+		end)
+	end
+end)
+
+stopMusicBtn.MouseButton1Click:Connect(function()
+	if player.Character and player.Character:FindFirstChild("HumanoidRootPart") then
+		local sound = player.Character.HumanoidRootPart:FindFirstChild("CustomBoomboxSound")
+		if sound then sound:Stop() end
+	end
+end)
+
+-- Ability Buttons Helper
+local function makeAbilityButton(name, img, actionTxt, keyHint, size, pos)
+	local group = Instance.new("Frame", screenGui)
+	group.Name, group.BackgroundTransparency = name, 1
+	group.Size, group.Position, group.AnchorPoint = UDim2.new(0, size, 0, size + 20), pos, Vector2.new(1, 1)
+	local btn = Instance.new("ImageButton", group)
+	btn.Name, btn.Size, btn.BackgroundTransparency, btn.Image = "Btn", UDim2.new(1, 0, 0, size), 1, img
+	local overlay = Instance.new("Frame", btn)
+	overlay.Size, overlay.BackgroundColor3, overlay.BackgroundTransparency, overlay.ZIndex = UDim2.new(1, 0, 1, 0), Color3.new(0, 0, 0), 1, 5
+	Instance.new("UICorner", overlay).CornerRadius = UDim.new(0.5, 0)
+	local cdLbl = Instance.new("TextLabel", btn)
+	cdLbl.Size, cdLbl.BackgroundTransparency, cdLbl.Text, cdLbl.TextColor3 = UDim2.new(1, 0, 1, 0), 1, "", COLOR_WHITE
+	cdLbl.TextSize, cdLbl.FontFace, cdLbl.ZIndex = 18, FONT_THIN, 6
+	local keyLbl = Instance.new("TextLabel", group)
+	keyLbl.Size, keyLbl.Position, keyLbl.BackgroundTransparency = UDim2.new(1, 0, 0, 20), UDim2.new(0, 0, 1, -20), 1
+	keyLbl.Text, keyLbl.TextColor3, keyLbl.TextSize, keyLbl.FontFace = (isMobile and actionTxt or ("[" .. keyHint .. "] " .. actionTxt)), COLOR_WHITE, 13, FONT
+	return { button = btn, overlay = overlay, cdLabel = cdLbl }
+end
+
+local sprintUI = makeAbilityButton("Run", IMG_SPRINT, "SHIFT", "SHIFT", 150, UDim2.new(1, -30, 1, -20))
+local shiftlockUI = makeAbilityButton("ShiftLock", IMG_SHIFTLOCK, "CTRL", "CTRL", 75, UDim2.new(1, -190, 1, -135))
+local punchUI = makeAbilityButton("Punch", IMG_PUNCH, "E", "E", 75, UDim2.new(1, -30, 1, -185))
+local blockUI = makeAbilityButton("Block", IMG_BLOCK, "Q", "Q", 75, UDim2.new(1, -115, 1, -185))
+
+-- ### Injured Button Thing ###
+local injuredBtn = Instance.new("TextButton", screenGui)
+injuredBtn.Name, injuredBtn.Size = "InjuredToggleBtn", UDim2.new(0, 75, 0, 30)
+injuredBtn.Position, injuredBtn.AnchorPoint = UDim2.new(1, -190, 1, -235), Vector2.new(1, 1)
+injuredBtn.BackgroundColor3, injuredBtn.Text, injuredBtn.TextColor3 = Color3.fromRGB(100, 0, 0), "Injured : Off", COLOR_WHITE
+injuredBtn.FontFace, injuredBtn.TextSize = FONT, 11
+Instance.new("UICorner", injuredBtn).CornerRadius = UDim.new(0, 6)
+
+local lockImg = Instance.new("ImageLabel", punchUI.button)
+lockImg.Name, lockImg.Size, lockImg.AnchorPoint = "LockImg", UDim2.new(0.38, 0, 0.38, 0), Vector2.new(0.5, 0.5)
+lockImg.Position, lockImg.BackgroundTransparency, lockImg.Image, lockImg.ZIndex = UDim2.new(0.5, 0, 0.5, 0), 1, IMG_LOCK, 8
+punchUI.button.ImageColor3 = COLOR_LOCKED
+
+local function setOverlay(ui, active, text)
+	ui.overlay.BackgroundTransparency, ui.cdLabel.Text = active and 0.5 or 1, text or ""
+end
+
+local function setPunchLocked(locked)
+	punchUI.button.ImageColor3 = locked and COLOR_LOCKED or Color3.new(1, 1, 1)
+	lockImg.Visible = locked
+end
+
+local punchCdEnd, blockCdEnd, punchUnlocked = 0, 0, false
+local connections = {}
+
+local function stopScript()
+	for _, c in ipairs(connections) do c:Disconnect() end
+	table.clear(connections)
+	getgenv().CombatSystemLoaded = nil
+	if player.Character then
+		local hum = player.Character:FindFirstChildOfClass("Humanoid")
+		local animateScript = player.Character:FindFirstChild("Animate")
+		if animateScript then animateScript.Disabled = false end
+		if hum then
+			local animator = hum:FindFirstChildOfClass("Animator")
+			if animator then for _, track in ipairs(animator:GetPlayingAnimationTracks()) do track:Stop(0.1) end end
+			hum.WalkSpeed, hum.AutoRotate = 16, true
+		end
+	end
+	screenGui:Destroy()
+end
+stopBtn.MouseButton1Click:Connect(stopScript)
+
+local function setupCharacter(character)
+	for _, c in ipairs(connections) do c:Disconnect() end
+	table.clear(connections)
+
+	punchUnlocked, blockCdEnd = false, 0
+	setOverlay(blockUI, false); setOverlay(punchUI, false); setOverlay(sprintUI, false)
+	shiftlockUI.button.ImageColor3 = Color3.new(1, 1, 1)
+	setPunchLocked(true)
+
+	local humanoid = character:WaitForChild("Humanoid")
+	local animator = humanoid:WaitForChild("Animator")
+	local rootPart = character:WaitForChild("HumanoidRootPart")
+
+	if character:FindFirstChild("Animate") then character.Animate.Disabled = true end
+
+	local tracks = {}
+	for name, id in pairs(ANIM_IDS) do
+		local a = Instance.new("Animation")
+		a.AnimationId = id
+		tracks[name] = animator:LoadAnimation(a)
+	end
+
+	tracks.Idle.Looped, tracks.Walk.Looped, tracks.Run.Looped = true, true, true
+	tracks.InjuredIdle.Looped, tracks.InjuredWalk.Looped = true, true
+	tracks.Punch.Looped, tracks.Block.Looped = false, false
+	tracks.Block.Priority, tracks.Punch.Priority = Enum.AnimationPriority.Action4, Enum.AnimationPriority.Action4
+	tracks.Head.Priority = Enum.AnimationPriority.Action4
+	tracks.Head:Play(0, 1, 0)
+	tracks.Head:AdjustWeight(0.5)
+
+local State = { 
+    isSprinting = false,
+    isBlocking = false,
+    isPunching = false,
+    isEmoting = false,
+    isMovingEmote = false,
+    isShiftLock = false,
+    forceInjured = false,
+    currentMovementAnim = nil,
+    emoteTrack = nil,
+    currentEmoteSound = nil,
+    currentParticle = nil,
+    originalHipHeight = nil
+}
+
+	local slowToken, currentYaw, smoothness = 0, 0, 3
+	
+	-- Reset Toggle UI on respawn
+	injuredBtn.Text = "Injured : Off"
+	injuredBtn.BackgroundColor3 = Color3.fromRGB(100, 0, 0)
+	
+	table.insert(connections, injuredBtn.MouseButton1Click:Connect(function()
+		State.forceInjured = not State.forceInjured
+		injuredBtn.Text = State.forceInjured and "Injured : On" or "Injured : Off"
+		injuredBtn.BackgroundColor3 = State.forceInjured and Color3.fromRGB(185, 0, 0) or Color3.fromRGB(100, 0, 0)
+	end))
+
+	local function selectStyle(index)
+		if State.isPunching or State.isBlocking or State.isEmoting then return end
+		currentStyleIndex = index
+		local style = ANIM_STYLES[index]
+		switchAnimBtn.Text = "STYLE: " .. style.Name .. " ▼"
+		styleDropdown.Visible = false
+
+		ANIM_IDS.Idle, ANIM_IDS.Walk, ANIM_IDS.Run, ANIM_IDS.Punch, ANIM_IDS.Block, ANIM_IDS.InjuredIdle, ANIM_IDS.InjuredWalk = style.Idle, style.Walk, style.Run, style.Punch, style.Block, style.InjuredIdle, style.InjuredWalk
+		local isCurrentlyIdle = (State.currentMovementAnim == tracks.Idle or State.currentMovementAnim == tracks.InjuredIdle)
+
+		for _, t in pairs(tracks) do if t ~= tracks.Head then t:Stop(0.1) end end
+
+		local function reload(id, looped, priority)
+			local a = Instance.new("Animation"); a.AnimationId = id
+			local t = animator:LoadAnimation(a)
+			t.Looped = looped or false
+			if priority then t.Priority = priority end
+			return t
+		end
+
+		tracks.Idle = reload(style.Idle, true)
+		tracks.Walk = reload(style.Walk, true)
+		tracks.Run = reload(style.Run, true)
+		tracks.Punch = reload(style.Punch, false, Enum.AnimationPriority.Action4)
+		tracks.Block = reload(style.Block, false, Enum.AnimationPriority.Action4)
+		tracks.InjuredIdle = reload(style.InjuredIdle, true)
+		tracks.InjuredWalk = reload(style.InjuredWalk, true)
+
+		if isCurrentlyIdle then 
+			local isInjured = State.forceInjured or (humanoid.Health <= INJURED_HEALTH_THRESHOLD)
+			local currentIdle = isInjured and tracks.InjuredIdle or tracks.Idle
+			currentIdle:Play(0.25)
+			State.currentMovementAnim = currentIdle 
+		end
+		
+		-- Update the player's speed instantly when changing styles
+		if not State.isEmoting then
+			humanoid.WalkSpeed = getBaseSpeed()
+		end
+	end -- This is the end of the selectStyle function
+
+	for _, child in ipairs(styleDropdown:GetChildren()) do if child:IsA("TextButton") then child:Destroy() end end
+	for i, style in ipairs(ANIM_STYLES) do
+		local b = Instance.new("TextButton", styleDropdown)
+		b.Size, b.BackgroundColor3, b.Text = UDim2.new(1, 0, 0, 30), Color3.fromRGB(45, 45, 45), style.Name
+		b.TextColor3, b.FontFace, b.TextSize = COLOR_WHITE, FONT, 12
+		Instance.new("UICorner", b)
+		b.MouseButton1Click:Connect(function() selectStyle(i) end)
+	end
+
+	table.insert(connections, switchAnimBtn.MouseButton1Click:Connect(function()
+		styleDropdown.Visible = not styleDropdown.Visible
+		if styleDropdown.Visible then 
+			emotePanel.Visible = false
+			boomboxPanel.Visible = false
+		end
+	end))
+
+--(if you want the older version for the code down below, the old one is right next to this sentence) local function getBaseSpeed() return State.isSprinting and SPRINT_SPEED or NORMAL_SPEED end
+
+
+	local function getBaseSpeed() 
+		local style = ANIM_STYLES[currentStyleIndex]
+		local sprintSpeed = style.SprintSpeed or SPRINT_SPEED
+		local normalSpeed = style.NormalSpeed or NORMAL_SPEED
+		return State.isSprinting and sprintSpeed or normalSpeed 
+	end
+
+	local activeSequenceToken = 0 -- Keep track of the current active sequence thread
+
+	local function stopEmote()
+		activeSequenceToken = activeSequenceToken + 1 -- Invalidates any running sequences immediately
+
+		if State.emoteTrack then 
+			State.emoteTrack:Stop(0.25)
+			State.emoteTrack = nil 
+		end
+
+		-- ADD THIS BLOCK: Restore original hip height if we changed it
+		if State.originalHipHeight then
+			humanoid.HipHeight = State.originalHipHeight
+			State.originalHipHeight = nil
+		end
+
+		if State.currentEmoteSound then
+			State.currentEmoteSound:Stop()
+			State.currentEmoteSound:Destroy()
+			State.currentEmoteSound = nil
+		end
+
+		-- Clean up the particle!
+		if State.currentParticle then
+			State.currentParticle.Enabled = false 
+			game:GetService("Debris"):AddItem(State.currentParticle, 3) 
+			State.currentParticle = nil
+		end
+
+		State.isEmoting = false
+		State.isMovingEmote = false
+		stopEmoteBtn.Visible = false
+		-- Reset camera subject back to the normal Humanoid
+		workspace.CurrentCamera.CameraSubject = humanoid
+
+
+		-- Your existing logic for playing the idle animation after stop goes here:
+		if character.Parent then
+		  humanoid.WalkSpeed = getBaseSpeed()
+			local isInjured = State.forceInjured or (humanoid.Health <= INJURED_HEALTH_THRESHOLD)
+			local currentIdle = isInjured and tracks.InjuredIdle or tracks.Idle
+			currentIdle:Play(0.25)
+			State.currentMovementAnim = currentIdle
+			if tracks.Head then
+				tracks.Head:Play(0.25, 1, 0)
+				tracks.Head:AdjustWeight(0.5)
+			end
+		end
+	end
+	stopEmoteBtn.MouseButton1Click:Connect(stopEmote)
+
+	local function applySlowFor(duration)
+		slowToken += 1; local myToken = slowToken
+		humanoid.WalkSpeed = getBaseSpeed() * SLOW_MULTIPLIER
+		task.delay(duration, function()
+			if character.Parent and slowToken == myToken and not State.isEmoting then humanoid.WalkSpeed = getBaseSpeed() end
+		end)
+	end
+
+	local function stopAllMovement() 
+		tracks.Idle:Stop(0.2); tracks.Walk:Stop(0.2); tracks.Run:Stop(0.2) 
+		if tracks.InjuredIdle then tracks.InjuredIdle:Stop(0.2) end
+		if tracks.InjuredWalk then tracks.InjuredWalk:Stop(0.2) end
+	end
+
+	local function playMovementAnim(track, fadeTime)
+		if State.currentMovementAnim == track then return end
+		stopAllMovement()
+		track:Play(fadeTime or 0.25)
+		
+		local style = ANIM_STYLES[currentStyleIndex]
+		
+		if track == tracks.Walk or track == tracks.InjuredWalk then 
+			track:AdjustSpeed(style.WalkAnimSpeed or WALK_SPEED) 
+		end
+		if track == tracks.Run then 
+			track:AdjustSpeed(style.RunAnimSpeed or RUN_ANIM_SPEED) 
+		end
+		
+		State.currentMovementAnim = track
+	end
+
+	-- Repopulate Emote Menu with Audio Support
+	for _, child in ipairs(emoteMenu:GetChildren()) do if child:IsA("TextButton") then child:Destroy() end end
+	for _, data in ipairs(EMOTE_DATA) do
+		local eb = Instance.new("TextButton", emoteMenu)
+		eb.Size, eb.BackgroundTransparency, eb.Text = UDim2.new(1, -10, 0, 30), 0.8, data.Name
+		eb.TextColor3, eb.FontFace, eb.TextSize, eb.BackgroundColor3 = COLOR_WHITE, FONT, 12, Color3.new(0,0,0)
+
+		eb.MouseButton1Click:Connect(function()
+			if State.isPunching or State.isBlocking then return end
+			stopEmote()
+			
+			State.isEmoting = true
+
+			local torso = character:FindFirstChild("Torso") or character:FindFirstChild("UpperTorso")
+
+			-- Apply the selected camera to focus on that part
+			if currentCamMode == 2 then
+				workspace.CurrentCamera.CameraSubject = rootPart
+			elseif currentCamMode == 3 and character:FindFirstChild("Head") then
+				workspace.CurrentCamera.CameraSubject = character.Head
+			elseif currentCamMode == 4 and torso then
+				workspace.CurrentCamera.CameraSubject = torso
+			else
+				workspace.CurrentCamera.CameraSubject = humanoid
+			end
+
+			-- OPTION A: The Emote is an endless conveyor sequence
+			if data.Sequence and data.SequenceType == "AnimsLooped" then
+				local currentToken = activeSequenceToken
+				
+				task.spawn(function()
+					local loadedTracks = {}
+					for _, part in ipairs(data.Sequence) do
+						local anim = Instance.new("Animation")
+						anim.AnimationId = part.ID
+						local track = animator:LoadAnimation(anim)
+						track.Priority = Enum.AnimationPriority.Action3
+						table.insert(loadedTracks, track)
+					end
+
+					local previousTrack = nil
+
+					while activeSequenceToken == currentToken do
+						for index, part in ipairs(data.Sequence) do
+							if activeSequenceToken ~= currentToken then break end
+							
+							local track = loadedTracks[index]
+							track.Looped = false
+							
+							State.emoteTrack = track
+							track:Play(0.1)
+							track:AdjustSpeed(data.AnimSpeed or 1)
+
+							if previousTrack then
+								previousTrack:Stop(0.1)
+							end
+							previousTrack = track
+
+							if tracks.Head then tracks.Head:Stop(0.25) end
+							task.wait(part.Duration)
+						end
+						
+						if not data.IsLooping then break end
+					end
+					
+					if activeSequenceToken == currentToken and not data.IsLooping then
+						stopEmote()
+					end
+				end)
+
+			-- OPTION B: The Emote plays an intro sequence, then loops ONLY the last track
+			elseif data.Sequence and data.SequenceType == "Intro" then
+				local currentToken = activeSequenceToken
+				
+				task.spawn(function()
+					local loadedTracks = {}
+					for _, part in ipairs(data.Sequence) do
+						local anim = Instance.new("Animation")
+						anim.AnimationId = part.ID
+						local track = animator:LoadAnimation(anim)
+						track.Priority = Enum.AnimationPriority.Action3
+						table.insert(loadedTracks, track)
+					end
+
+					local previousTrack = nil
+
+					for index, part in ipairs(data.Sequence) do
+						if activeSequenceToken ~= currentToken then break end
+						
+						local track = loadedTracks[index]
+						-- Set the final track to loop natively if IsLooping is checked true
+						track.Looped = (index == #data.Sequence and data.IsLooping) or false
+						
+						State.emoteTrack = track
+						track:Play(0.1)
+						track:AdjustSpeed(data.AnimSpeed or 1)
+
+						if previousTrack then
+							previousTrack:Stop(0.1)
+						end
+						previousTrack = track
+
+						if tracks.Head then tracks.Head:Stop(0.25) end
+						task.wait(part.Duration)
+					end
+					
+					-- If the whole emote setup isn't looping, turn it off completely after the final duration
+					if activeSequenceToken == currentToken and not data.IsLooping then
+						stopEmote()
+					end
+				end)
+
+			-- OPTION C: Standard single-animation entry (Your existing logic)
+			else
+				local anim = Instance.new("Animation")
+				anim.AnimationId = data.ID
+				local track = animator:LoadAnimation(anim)
+				track.Priority = Enum.AnimationPriority.Action3
+				track.Looped = data.IsLooping or false
+				State.emoteTrack = track
+				
+				if data.HeightOffset then
+					State.originalHipHeight = humanoid.HipHeight
+					humanoid.HipHeight = humanoid.HipHeight + data.HeightOffset
+				end
+
+				track:Play(0.25)
+
+
+        -- Check if this specific emote has a phase shift configured
+        if data.Phase2Start then
+        	local RunService = game:GetService("RunService")
+        	local speedConnection
+
+        	speedConnection = RunService.Heartbeat:Connect(function()
+        		-- Kill the loop if the emote is stopped or changed
+	        	if not track.IsPlaying or State.emoteTrack ~= track then
+	        		speedConnection:Disconnect()
+        			return
+        		end
+
+        		-- Shift speed based on the current timestamp of the animation
+        		if track.TimePosition >= data.Phase2Start then
+        			track:AdjustSpeed(data.Phase2Speed or 1.5)
+        		else
+        			track:AdjustSpeed(data.AnimSpeed or 1)
+        		end
+        	end)
+        else
+        	-- Standard speed for normal emotes
+        	track:AdjustSpeed(data.AnimSpeed or 1)
+        end
+
+				-- FIXED: Automatically stop and reset state when a one-time emote ends
+				if not data.IsLooping then
+					task.spawn(function()
+						track.Stopped:Wait()
+						-- Verify they didn't manually start a different emote while waiting
+						if State.emoteTrack == track then
+							stopEmote()
+						end
+					end)
+				end
+			end
+
+       -- Handle Custom Audio
+       if data.CustomSound then
+         local asset = getCustomAudio(data.CustomSound)
+           if asset then
+               local s = Instance.new("Sound", rootPart)
+               s.SoundId = asset
+               s.Volume = 1
+               s.Looped = data.IsLooping or false
+               s:Play()
+               State.currentEmoteSound = s
+           end
+       end
+
+       -- Handle Custom Particles
+       if data.Particle then
+           -- Find the attachment point (defaults to HumanoidRootPart's RootRigAttachment)
+           local attachment = rootPart:FindFirstChild(data.Particle.AttachmentName or "RootRigAttachment")
+           if attachment then
+               local emitter = Instance.new("ParticleEmitter")
+               emitter.Texture = data.Particle.Texture
+
+               -- Use ColorSequence to apply the single Color3
+               if data.Particle.Color then
+                   emitter.Color = ColorSequence.new(data.Particle.Color)
+               end
+               emitter.Rate = data.Particle.Rate or 10
+               emitter.Lifetime = data.Particle.Lifetime or NumberRange.new(1)
+               emitter.Speed = data.Particle.Speed or NumberRange.new(5)
+               emitter.Size = data.Particle.Size or NumberSequence.new(1)
+               -- Keep it from lighting up the whole map
+               emitter.LightEmission = 0.5 
+               emitter.ZOffset = 1   
+               emitter.Parent = attachment
+               State.currentParticle = emitter
+           end
+       end
+
+			-- Stop the head lock track so the emote can animate the head freely
+			if tracks.Head then
+    			tracks.Head:Stop(0.25)
+			end
+
+			State.isMovingEmote = data.IsMovingEmote or false
+			
+			-- THIS WAS FIXED: Added 'data.Sequence ~= nil' so the Stop button appears for sequences
+			stopEmoteBtn.Visible = (data.IsLooping or data.IsMovingEmote or data.Sequence ~= nil)
+			
+			emotePanel.Visible = false
+			humanoid.WalkSpeed = data.WalkSpeed or (State.isMovingEmote and 8 or 16)
+		end)
+	end
+
+	local function doPunch()
+		if State.isPunching or not punchUnlocked or os.clock() < punchCdEnd then return end
+		stopEmote()
+		State.isPunching = true; setOverlay(punchUI, true)
+		stopAllMovement(); State.currentMovementAnim = nil
+		if State.isBlocking then State.isBlocking = false; tracks.Block:Stop(0.1) end
+		tracks.Punch:Play(0.1)
+		task.delay(LUNGE_TIME, function()
+			if State.isPunching and character.Parent then
+				local bv = Instance.new("BodyVelocity", rootPart)
+				bv.Velocity, bv.MaxForce, bv.P = rootPart.CFrame.LookVector * (LUNGE_STUDS / LUNGE_DURATION), Vector3.new(1e5, 0, 1e5), 1e5
+				Debris:AddItem(bv, LUNGE_DURATION)
+			end
+		end)
+		tracks.Punch.Stopped:Wait()
+		State.isPunching = false
+		if not character.Parent then return end
+		punchUnlocked, State.currentMovementAnim = false, nil
+		setPunchLocked(true); applySlowFor(PUNCH_SLOW_DURATION)
+		punchCdEnd = os.clock() + PUNCH_CD
+		task.delay(PUNCH_CD, function() if character.Parent and not State.isPunching then setOverlay(punchUI, false) end end)
+	end
+
+	local function handleBlockInput()
+		if State.isPunching or os.clock() < blockCdEnd then return end
+		stopEmote(); State.isBlocking = true
+		tracks.Block:Play(0.15)
+		blockCdEnd = os.clock() + BLOCK_CD
+		if not punchUnlocked then punchUnlocked = true; setPunchLocked(false) end
+		applySlowFor(BLOCK_SLOW_DURATION)
+		task.delay(BLOCK_DURATION, function()
+			if character.Parent and State.isBlocking then State.isBlocking = false; tracks.Block:Stop(0.3) end
+		end)
+	end
+
+	local function toggleSprint(forceState)
+		State.isSprinting = forceState ~= nil and forceState or not State.isSprinting
+		if State.isSprinting then stopEmote() end
+		humanoid.WalkSpeed = getBaseSpeed()
+		setOverlay(sprintUI, State.isSprinting)
+	end
+	
+	local function toggleShiftLock()
+		State.isShiftLock = not State.isShiftLock
+		shiftlockUI.button.ImageColor3 = State.isShiftLock and Color3.fromRGB(0, 200, 255) or Color3.new(1, 1, 1)
+	end
+
+	table.insert(connections, UserInputService.InputBegan:Connect(function(input, processed)
+		if processed then return end
+		if input.KeyCode == KEY_SPRINT then toggleSprint(true)
+		elseif input.KeyCode == KEY_BLOCK then handleBlockInput()
+		elseif input.KeyCode == KEY_PUNCH then task.spawn(doPunch) 
+		elseif input.KeyCode == KEY_SHIFTLOCK then toggleShiftLock() end
+	end))
+
+	table.insert(connections, UserInputService.InputEnded:Connect(function(input)
+		if input.KeyCode == KEY_SPRINT and not isMobile then toggleSprint(false) end
+	end))
+
+	table.insert(connections, blockUI.button.MouseButton1Click:Connect(handleBlockInput))
+	table.insert(connections, punchUI.button.MouseButton1Click:Connect(function() task.spawn(doPunch) end))
+	table.insert(connections, sprintUI.button.MouseButton1Click:Connect(function() toggleSprint() end))
+	table.insert(connections, shiftlockUI.button.MouseButton1Click:Connect(toggleShiftLock))
+
+	table.insert(connections, RunService.RenderStepped:Connect(function(dt)
+		if not character.Parent or humanoid.Health <= 0 then return end
+		local moving = humanoid.MoveDirection.Magnitude > 0.1
+		local isInjured = State.forceInjured or (humanoid.Health <= INJURED_HEALTH_THRESHOLD)
+		
+		if moving and State.isEmoting and not State.isMovingEmote then stopEmote() end
+		
+		if not State.isPunching and not State.isEmoting then
+			local targetAnim = moving and (State.isSprinting and tracks.Run or (isInjured and tracks.InjuredWalk or tracks.Walk)) or (isInjured and tracks.InjuredIdle or tracks.Idle)
+			playMovementAnim(targetAnim)
+		elseif State.isEmoting or State.isPunching then
+			stopAllMovement(); State.currentMovementAnim = nil
+		end
+
+		local targetFov = (State.isSprinting and moving) and 85 or 70
+		camera.FieldOfView = camera.FieldOfView + (targetFov - camera.FieldOfView) * math.min(dt * 2, 1)
+
+		if State.isShiftLock then
+			humanoid.AutoRotate = false
+			local camLook = camera.CFrame.LookVector
+			rootPart.CFrame = rootPart.CFrame:Lerp(CFrame.lookAt(rootPart.Position, rootPart.Position + Vector3.new(camLook.X, 0, camLook.Z)), 0.5)
+		else
+			humanoid.AutoRotate = true
+			if moving and not State.isMovingEmote then
+				rootPart.CFrame = rootPart.CFrame:Lerp(CFrame.lookAt(rootPart.Position, rootPart.Position + humanoid.MoveDirection), 0.1)
+			end
+		end
+
+		if State.isMovingEmote then humanoid:Move(rootPart.CFrame.LookVector) end
+
+		-- Handle Head Rotation Track based on Injured State or Emoting
+		if isInjured or State.isEmoting then
+			if tracks.Head.IsPlaying then
+				tracks.Head:Stop(0.1)
+			end
+		else
+			if not tracks.Head.IsPlaying then
+				tracks.Head:Play(0.1, 1, 0)
+				tracks.Head:AdjustWeight(0.5)
+			end
+		end
+
+		local targetYaw = 0
+		if not (State.isPunching or State.isEmoting or isInjured) then
+			local camDirObjSpace = rootPart.CFrame:VectorToObjectSpace(camera.CFrame.LookVector)
+			local rawYaw = -math.atan2(camDirObjSpace.X, -camDirObjSpace.Z)
+			local absYaw = math.abs(rawYaw)
+	
+			-- Look straight forward (0) if camera is directly behind (<= 35 deg) 
+			-- OR if camera is directly in front (>= 170 deg, which is 180 minus 10, note this is optional so its your choice)
+			if absYaw <= math.rad(35) or absYaw >= math.rad(170) then
+				targetYaw = 0
+			else
+				targetYaw = math.clamp(rawYaw, -math.rad(65), math.rad(65))
+			end
+		end
+	
+		if not isInjured and not State.isEmoting then
+			currentYaw = currentYaw + (targetYaw - currentYaw) * math.min(dt * smoothness, 1)
+			local yawMapped = (currentYaw < 0 and currentYaw + (math.pi * 2) or currentYaw)
+			if tracks.Head.Length > 0 then tracks.Head.TimePosition = (yawMapped / (math.pi * 2)) * tracks.Head.Length end
+		end
+
+		local now = os.clock()
+		if now < punchCdEnd and not State.isPunching then setOverlay(punchUI, true, tostring(math.ceil(punchCdEnd - now))) end
+		if State.isBlocking then setOverlay(blockUI, true)
+		elseif now < blockCdEnd then setOverlay(blockUI, true, string.format("%.2f", blockCdEnd - now))
+		else setOverlay(blockUI, false) end
+	end))
+
+	local isInjured = State.forceInjured or (humanoid.Health <= INJURED_HEALTH_THRESHOLD)
+	local initialIdle = isInjured and tracks.InjuredIdle or tracks.Idle
+	initialIdle:Play(0); State.currentMovementAnim = initialIdle
+end
+
+-- Reset still works :]
+player.CharacterAdded:Connect(setupCharacter)
+if player.Character then setupCharacter(player.Character) end
