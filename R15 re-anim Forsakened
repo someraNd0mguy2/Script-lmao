@@ -35,8 +35,8 @@ Duration = 6.5; -- How long the notification should last (in seconds)
 })
 
 game.StarterGui:SetCore("SendNotification", {
-Title = "Isn't it weird to have this forsaken ui layout? :d";
-Text = "Ehnormalsb/NotError on roblox";
+Title = "Ehnormalsb/NotError -roblox";
+Text = "Isn't it weird to have this forsaken ui layout? :d";
 Duration = 6.5;
 })
 
