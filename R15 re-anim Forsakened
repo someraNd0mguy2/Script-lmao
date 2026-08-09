@@ -31,15 +31,33 @@ task.wait(0.1)
 game.StarterGui:SetCore("SendNotification", {
 Title = "Re-Anim Forsakened r15"; -- Title
 Text = "Script originally wasn't mine, credits to the people who made it. (Ik I skidded)"; -- Text
-Duration = 6.5; -- How long the notification should last (in seconds)
+Duration = 5; -- How long the notification should last (in seconds)
 })
 
 game.StarterGui:SetCore("SendNotification", {
-Title = "Ehnormalsb/NotError -roblox";
-Text = "Isn't it weird to have this forsaken ui layout? :d";
-Duration = 6.5;
+Title = "The script is...";
+Text = "Loading";
+Duration = 3;
 })
 
+task.wait(3)
+game.StarterGui:SetCore("SendNotification", {
+Title = "";
+Text = "Isn't it weird to have this forsaken ui layout? :d";
+Duration = 7;
+})
+
+game.StarterGui:SetCore("SendNotification", {
+Title = "";
+Text = "Ehnormalsb/NotError on roblox";
+Duration = 7;
+})
+
+game.StarterGui:SetCore("SendNotification", {
+Title = "Lily.";
+Text = "You asked for this update 🥀";
+Duration = 5;
+})
 
 -- srry about the notifs
 local Players = game:GetService("Players")
@@ -192,13 +210,13 @@ local ANIM_IDS = {
 
 
 --=======================================================
--- I figured I'd put this here if anyone is looking into this script, I completely give credits to g4zwr (on your aswell) and noli.0 on discord for making the r15 guest script. anything here that wasn't in their script is mine. So yeah, I will probably put the script they made in ScriptBlox, even tho THERES ALREADY SOME IN THERE- ehem.
+-- I figured I'd put this here if anyone is looking into this script, I completely give credits to g4zwr (on YouTube aswell) and noli.0 on discord for making the r15 guest script. anything here that wasn't in their script is mine. So yeah, I will probably put the script they made in ScriptBlox, even tho THEIR SCRIPT IS ALREADY IN THERE- ehem.
 --=======================================================
 
 
 
 --======================================
--- Emotes Configurations, I guess
+-- Emotes Configurations, I guess?-
 --[[ 
    Name = "Whatever you put in here"  -- The name of the emote,
 
@@ -245,8 +263,8 @@ local EMOTE_DATA = {
       FileName = "Cyberfantasia.mp3",
 			Url = "https://github.com/someraNd0mguy2/SONGSname.mp3-usebale-/raw/refs/heads/main/tn-shi%20-%20Cyberfantasia.mp3" }
 	},
--- Audio for /e dance 1 is just for fun
-	{ Name = "/e dance 2", ID = "rbxassetid://98081374326578", IsLooping = true},
+-- Audio for /e dance 1 is just for fun ykyk
+	{ Name = "/e dance 2", ID = "rbxassetid://116571017721759", IsLooping = true},
 	{ Name = "/e dance 3", ID = "rbxassetid://78240649545370", IsLooping = true},
 	{ Name = "/e retro dance", ID = "rbxassetid://112167105910889", IsLooping = true},
 	{ Name = "Dance Potion", ID = "rbxassetid://129385001500617", IsLooping = true},
@@ -271,12 +289,24 @@ local EMOTE_DATA = {
 	{ Name = "Low cortisol (V2)", ID = "rbxassetid://73977838462540", IsLooping = true},
 	{ Name = "Low cortisol V3 (best)", ID = "rbxassetid://116276049310823", IsLooping = true},
 	{ Name = "BANG BANG BANG (CSM)", ID = "rbxassetid://96459040879794", IsLooping = true},
-	{ Name = "Rat Dance (V1)", ID = "rbxassetid://79878714311433", IsLooping = true, AnimSpeed = 0.975},
-	{ Name = "Rat Dance (V2)", ID = "rbxassetid://119386711855761", IsLooping = true, AnimSpeed = 1.5},
+	{ Name = "Rat Dance (V1)", ID = "rbxassetid://79878714311433", IsLooping = true, AnimSpeed = 0.975,
+		CustomSound = {
+      FileName = "ChessTypeBeat.mp3",
+			Url = "https://raw.githubusercontent.com/someraNd0mguy2/SONGSname.mp3-usebale-/main/CHESS%20TYPE%20BEAT%20(Slowed).mp3" }
+  },
+	{ Name = "Rat Dance (V2)", ID = "rbxassetid://119386711855761", IsLooping = true, AnimSpeed = 1.5,
+		CustomSound = {
+      FileName = "ChessTypeBeat.mp3",
+			Url = "https://raw.githubusercontent.com/someraNd0mguy2/SONGSname.mp3-usebale-/main/CHESS%20TYPE%20BEAT%20(Slowed).mp3" }
+  },
 	{ Name = "Rat Dance (V3)", ID = "rbxassetid://73555079460637", IsLooping = true},
 	{ Name = "Rat Dance (V4)", ID = "rbxassetid://86334552898234", IsLooping = true},
 	{ Name = "Rat Dance (V5)", ID = "rbxassetid://130278319509843", IsLooping = true, AnimSpeed = 0.95},
-	{ Name = "Rat Dance (V6)", ID = "rbxassetid://86798743613035", IsLooping = true},
+	{ Name = "Rat Dance (V6)", ID = "rbxassetid://86798743613035", IsLooping = true,
+		CustomSound = {
+      FileName = "ChessTypeBeat.mp3",
+			Url = "https://raw.githubusercontent.com/someraNd0mguy2/SONGSname.mp3-usebale-/main/CHESS%20TYPE%20BEAT%20(Slowed).mp3" }
+},
 	{ Name = "Conga (Variant 1)", ID = "rbxassetid://126452924444711", IsMovingEmote = true, IsLooping = true, WalkSpeed = 8.5},
 	{ Name = "California Girls (V1)", ID = "rbxassetid://76389296606994", IsLooping = true},
 	{ Name = "California Girls (V2)", ID = "rbxassetid://78796496757269", IsLooping = true},
@@ -297,10 +327,13 @@ local EMOTE_DATA = {
       FileName = "Headlock_Forsaken.mp3",
 			Url = "https://raw.githubusercontent.com/someraNd0mguy2/SONGSname.mp3-usebale-/refs/heads/main/_%20Headlock%20Forsaken%20remix.mp3" }
   },
+	{ Name = "Parrot Dance (MC)", ID = "rbxassetid://101810746304426", IsLooping = true},
 	{ Name = "Smug Dancin", ID = "rbxassetid://121934635382614", IsLooping = true},
+	{ Name = "Rampage", ID = "rbxassetid://79183639768418", IsLooping = true},
 	{ Name = "Otsukare Summer", ID = "rbxassetid://96239426856784", IsLooping = true},
 	{ Name = "Yuji jumping (V1)", ID = "rbxassetid://134831504136116", IsLooping = true},
 	{ Name = "Yuji jumping (V2)", ID = "rbxassetid://124496563760646", IsLooping = true},
+	{ Name = "Take the L", ID = "rbxassetid://81437777446514", IsLooping = true},
 	{ Name = "Angels of Delusion", ID = "rbxassetid://99893613768286", IsLooping = true},
 	{ Name = "Nervy Dance", ID = "rbxassetid://87354775848784", IsLooping = true, AnimSpeed = 1.3},
 	{ Name = "Jumpstyle", ID = "rbxassetid://87824676803611", IsLooping = true},
@@ -338,7 +371,7 @@ local EMOTE_DATA = {
 		  { ID = "rbxassetid://72037992741389",  Duration = 0.3 }  -- This track loops infinitely!
      }
   },
-  { Name = "Hakari (Lonely)", ID = "rbxassetid://89596081956519", IsLooping = true,
+  { Name = "Hakari (Lonely)", ID = "rbxassetid://118465124106910", IsLooping = true,
     CustomSound = {
       FileName = "L0nelyLonely.mp3",
 			Url = "https://raw.githubusercontent.com/someraNd0mguy2/SONGSname.mp3-usebale-/refs/heads/main/lonely%20lonely%20dante%20extended.mp3" }
@@ -355,6 +388,8 @@ local EMOTE_DATA = {
 	{ Name = "Jojo's 'Come at me'", ID = "rbxassetid://84961998273178", IsLooping = true},
 	{ Name = "Jonathan Pose", ID = "rbxassetid://116505117247744", IsLooping = true},
 	{ Name = "Jotaro Jojo's Pose", ID = "rbxassetid://137985052211397", IsLooping = true},
+	{ Name = "Chill.", ID = "rbxassetid://78848614632586", IsLooping = true},
+	{ Name = "Pose 28 🥀😭 (Lily)", ID = "rbxassetid://139228722899224", IsLooping = true},
 	{ Name = "test", ID = "rbxassetid://89676212115777"},
 	{ Name = "test 2", ID = "rbxassetid://89676212115777"},
 	{ Name = "test 3", ID = "rbxassetid://89676212115777"}
