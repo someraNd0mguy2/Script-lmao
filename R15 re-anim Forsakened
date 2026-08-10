@@ -22,7 +22,6 @@ This script itself wasn't original by me, I skidded some scrouce code from other
 
 
 
-
       --===================================--
 -- ___ Warning: Danger Zone, u have been warned. ___ --
       --===================================--
@@ -126,7 +125,16 @@ local ANIM_STYLES = {
 		Punch = "rbxassetid://0000000000",
 		Block = "rbxassetid://0000000000",
 		InjuredIdle = "rbxassetid://0000000000",
-		InjuredWalk = "rbxassetid://0000000000"
+		InjuredWalk = "rbxassetid://0000000000",
+
+    -- Speed test
+		RunAnimSpeed = 1,
+		SprintSpeed = 26,
+		WalkAnimSpeed = 1,
+		InjuredWalkAnimSpeed = 1, -- Unique injured walk anim speed
+		IdleAnimSpeed = 1,  -- Unique idle speed
+		InjuredIdleAnimSpeed = 1, -- Unique injured idle anim speed
+		NormalSpeed = 10
 	},
 
 	{ Name = "Telamon Blocktales (Idle and walk)",
@@ -179,6 +187,21 @@ local ANIM_STYLES = {
 		SprintSpeed = 27.25,
 		WalkAnimSpeed = 1, -- You can also add custom walkspeeds
 		NormalSpeed = 10
+	},
+
+	{ Name = "Civilian (DOD)",
+		Idle = "rbxassetid://115856889045364",
+		Walk = "rbxassetid://94843291897654",
+		Run = "rbxassetid://104914854790417",
+		Punch = "rbxassetid://129358357219637",
+		Block = "rbxassetid://115622052244085",
+		InjuredIdle = "rbxassetid://73905365652295",
+		InjuredWalk = "rbxassetid://101924559363550",
+		RunAnimSpeed = 13,
+		SprintSpeed = 26,
+		WalkAnimSpeed = 10, -- You can also add custom walkspeeds
+		NormalSpeed = 11,
+		IdleAnimSpeed = 0.7  -- Unique idle speed
 	},
 
 	{ Name = "Mayhem SG (idle)",
@@ -395,7 +418,7 @@ local EMOTE_DATA = {
 	{ Name = "test 3", ID = "rbxassetid://89676212115777"}
 }
 
--- ### Ui Settings ###
+-- ### UI Settings ###
 local IMG_BLOCK = "rbxassetid://81303931345144"
 local IMG_PUNCH = "rbxassetid://113322091360332"
 local IMG_SPRINT = "rbxassetid://89719285639088"
@@ -403,11 +426,11 @@ local IMG_SHIFTLOCK = "rbxassetid://127436401745505"
 local IMG_LOCK = "rbxassetid://4823190108"
 
 -- The settings of anims (default for index 1) --
-local WALK_SPEED, RUN_ANIM_SPEED, SPRINT_SPEED, NORMAL_SPEED = 1, 1.5, 26, 12
+local WALK_SPEED, RUN_ANIM_SPEED, SPRINT_SPEED, NORMAL_SPEED = 1, 1.6, 26, 12
 local INJURED_HEALTH_THRESHOLD = 50
-local LUNGE_STUDS, LUNGE_TIME, LUNGE_DURATION = 7.5, 0.35, 0.1
-local PUNCH_CD, BLOCK_CD, BLOCK_DURATION = 1, 0, 2
-local BLOCK_SLOW_DURATION, PUNCH_SLOW_DURATION, SLOW_MULTIPLIER = 1.25, 0.5, 0.25
+local LUNGE_STUDS, LUNGE_TIME, LUNGE_DURATION = 7, 0.325, 0.1
+local PUNCH_CD, BLOCK_CD, BLOCK_DURATION = 1, 0, 2 -- re-edit ts if you want
+local BLOCK_SLOW_DURATION, PUNCH_SLOW_DURATION, SLOW_MULTIPLIER = 1.25, 0.4, 0.25
 local KEY_BLOCK, KEY_PUNCH, KEY_SPRINT, KEY_SHIFTLOCK = Enum.KeyCode.Q, Enum.KeyCode.E, Enum.KeyCode.LeftShift, Enum.KeyCode.LeftControl
 
 local isMobile = UserInputService.TouchEnabled and not UserInputService.MouseEnabled
@@ -421,7 +444,7 @@ screenGui.Name, screenGui.ResetOnSpawn, screenGui.IgnoreGuiInset = "CombatGui", 
 local FONT, FONT_THIN = Font.fromName("AccanthisADFStd", Enum.FontWeight.SemiBold), Font.fromName("AccanthisADFStd", Enum.FontWeight.Regular)
 local COLOR_WHITE, COLOR_GREY, COLOR_LOCKED = Color3.new(1, 1, 1), Color3.new(0.72, 0.72, 0.72), Color3.fromRGB(75, 75, 75)
 
--- UI Buttons Construction
+-- ### UI Buttons Construction ###
 local switchAnimBtn = Instance.new("TextButton", screenGui)
 switchAnimBtn.Name, switchAnimBtn.Size = "SwitchAnimBtn", UDim2.new(0, 150, 0, 35)
 switchAnimBtn.Position = UDim2.new(0, 180, 0, 20)
@@ -481,7 +504,7 @@ Instance.new("UICorner", searchBox).CornerRadius = UDim.new(0, 6)
 
 -- === Camera Toggle Options ===
 local cameraModes = {"Default", "HumanoidRootPart", "Head", "Torso"}
-local currentCamMode = 1
+local currentCamMode = 3  -- Editable 
 
 local camToggleBtn = Instance.new("TextButton", emotePanel)
 camToggleBtn.Size, camToggleBtn.Position = UDim2.new(1, 0, 0, 30), UDim2.new(0, 0, 0, 35)
@@ -494,7 +517,7 @@ camToggleBtn.MouseButton1Click:Connect(function()
 	currentCamMode = currentCamMode >= 4 and 1 or currentCamMode + 1
 	camToggleBtn.Text = "Cam Focus: " .. cameraModes[currentCamMode]
 	
-	-- Update camera instantly if an emote is already playing
+	-- Updates the camera instantly if an emote is already playing
 	if player.Character then
 		local hum = player.Character:FindFirstChild("Humanoid")
 		local hrp = player.Character:FindFirstChild("HumanoidRootPart")
@@ -601,6 +624,7 @@ loopBtn.MouseButton1Click:Connect(function()
 	end
 end)
 
+
 local function showBillboard(text)
 	if not player.Character or not player.Character:FindFirstChild("Head") then return end
 	local head = player.Character.Head
@@ -638,6 +662,7 @@ stopMusicBtn.MouseButton1Click:Connect(function()
 		if sound then sound:Stop() end
 	end
 end)
+
 
 -- Ability Buttons Helper
 local function makeAbilityButton(name, img, actionTxt, keyHint, size, pos)
@@ -795,6 +820,13 @@ local State = {
 			local isInjured = State.forceInjured or (humanoid.Health <= INJURED_HEALTH_THRESHOLD)
 			local currentIdle = isInjured and tracks.InjuredIdle or tracks.Idle
 			currentIdle:Play(0.25)
+			
+			if isInjured then
+				currentIdle:AdjustSpeed(style.InjuredIdleAnimSpeed or 1)
+			else
+				currentIdle:AdjustSpeed(style.IdleAnimSpeed or 1)
+			end
+			
 			State.currentMovementAnim = currentIdle 
 		end
 		
@@ -869,18 +901,27 @@ local State = {
 
 		-- Your existing logic for playing the idle animation after stop goes here:
 		if character.Parent then
-		  humanoid.WalkSpeed = getBaseSpeed()
+			humanoid.WalkSpeed = getBaseSpeed()
 			local isInjured = State.forceInjured or (humanoid.Health <= INJURED_HEALTH_THRESHOLD)
 			local currentIdle = isInjured and tracks.InjuredIdle or tracks.Idle
+			local style = ANIM_STYLES[currentStyleIndex]
+			
 			currentIdle:Play(0.25)
+			if isInjured then
+				currentIdle:AdjustSpeed(style.InjuredIdleAnimSpeed or 1)
+			else
+				currentIdle:AdjustSpeed(style.IdleAnimSpeed or 1)
+			end
+			
 			State.currentMovementAnim = currentIdle
 			if tracks.Head then
 				tracks.Head:Play(0.25, 1, 0)
 				tracks.Head:AdjustWeight(0.5)
 			end
 		end
-	end
+  end
 	stopEmoteBtn.MouseButton1Click:Connect(stopEmote)
+
 
 	local function applySlowFor(duration)
 		slowToken += 1; local myToken = slowToken
@@ -903,10 +944,15 @@ local State = {
 		
 		local style = ANIM_STYLES[currentStyleIndex]
 		
-		if track == tracks.Walk or track == tracks.InjuredWalk then 
+		if track == tracks.Walk then 
 			track:AdjustSpeed(style.WalkAnimSpeed or WALK_SPEED) 
-		end
-		if track == tracks.Run then 
+		elseif track == tracks.InjuredWalk then
+			track:AdjustSpeed(style.InjuredWalkAnimSpeed or WALK_SPEED)
+		elseif track == tracks.Idle then
+			track:AdjustSpeed(style.IdleAnimSpeed or 1)
+		elseif track == tracks.InjuredIdle then
+			track:AdjustSpeed(style.InjuredIdleAnimSpeed or 1)
+		elseif track == tracks.Run then 
 			track:AdjustSpeed(style.RunAnimSpeed or RUN_ANIM_SPEED) 
 		end
 		
@@ -1266,7 +1312,16 @@ local State = {
 
 	local isInjured = State.forceInjured or (humanoid.Health <= INJURED_HEALTH_THRESHOLD)
 	local initialIdle = isInjured and tracks.InjuredIdle or tracks.Idle
-	initialIdle:Play(0); State.currentMovementAnim = initialIdle
+	local style = ANIM_STYLES[currentStyleIndex]
+	
+	initialIdle:Play(0)
+	if isInjured then
+		initialIdle:AdjustSpeed(style.InjuredIdleAnimSpeed or 1)
+	else
+		initialIdle:AdjustSpeed(style.IdleAnimSpeed or 1)
+	end
+
+	State.currentMovementAnim = initialIdle
 end
 
 -- Reset still works :]
