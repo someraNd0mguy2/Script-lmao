@@ -199,7 +199,7 @@ local ANIM_STYLES = {
 		Block = "rbxassetid://115622052244085",
 		InjuredIdle = "rbxassetid://73905365652295",
 		InjuredWalk = "rbxassetid://101924559363550",
-		RunAnimSpeed = 1.3,
+		RunAnimSpeed = 1.275,
 		SprintSpeed = 27.25,
 		WalkAnimSpeed = 1,
 		NormalSpeed = 10
@@ -470,7 +470,7 @@ local EMOTE_DATA = {
 			Url = "https://raw.githubusercontent.com/someraNd0mguy2/SONGSname.mp3-usebale-/refs/heads/main/%5BROBLOX%5D%20Dance%20With%20Your%20Eyes%20Closed%20EMOTE.mp3" }
   },
 	{ Name = "Skipping", ID = "rbxassetid://115270771117279", IsMovingEmote = true, IsLooping = true, WalkSpeed = 7.5, Moveable = true, AutoMove = true},
-	{ Name = "BHop", ID = "rbxassetid://134484705368874", IsMovingEmote = true, IsLooping = true, AnimSpeed = 1.3, WalkSpeed = 12.5, Moveable = true, AutoMove = true},
+	{ Name = "BHop", ID = "rbxassetid://134484705368874", IsMovingEmote = true, IsLooping = true, AnimSpeed = 1.4, WalkSpeed = 12.5, Moveable = true, AutoMove = true},
 
 -- poses section, since im lazy to identify them in separations.
 	{ Name = "IMPOSSIBLE, THIS ISN'T THE CAR 🟣⚡️", ID = "rbxassetid://130825608045596" },
@@ -1000,32 +1000,30 @@ end -- This is the end of the selectStyle function
 
 	local activeSequenceToken = 0 -- Keep track of the current active sequence thread
 
-	local autoMoveConnection = nil -- FIX 1: Explicitly declare this so the script can track the loop
+local autoMoveConnection = nil
 
-	local function stopAutoMove()
-		if autoMoveConnection then
-			autoMoveConnection:Disconnect()
-			autoMoveConnection = nil
+local function stopAutoMove()
+	if autoMoveConnection then
+		autoMoveConnection:Disconnect()
+		autoMoveConnection = nil
+	end
+end
+
+local function startAutoMove()
+	if not humanoid or not rootPart then return end
+	
+	stopAutoMove() 
+	
+	-- Continuously feed the move direction into the humanoid
+	autoMoveConnection = RunService.RenderStepped:Connect(function()
+		if humanoid and humanoid.Health > 0 and rootPart then
+			-- Tells the Humanoid to walk forward relative to the character's current facing direction
+			humanoid:Move(rootPart.CFrame.LookVector, false)
+		else
+			stopAutoMove()
 		end
-	end
-
-	local function startAutoMove()
-		if not humanoid or not rootPart then return end
-		
-		stopAutoMove() 
-		
-		-- FIX 2: Fetches RunService directly and uses RenderStepped to override default Roblox controls
-		autoMoveConnection = game:GetService("RunService").RenderStepped:Connect(function()
-			
-			-- FIX 3: Removed the 'State.isEmoting' check. If it was false for a split second, it cancelled the movement instantly. 
-			-- Now it safely relies on stopEmote() to cancel the movement instead.
-			if humanoid.Health > 0 then
-				humanoid:Move(rootPart.CFrame.LookVector, false)
-			else
-				stopAutoMove()
-			end
-		end)
-	end
+	end)
+end
 
 	local function stopEmote()
     -- 1. stop auto move
@@ -1342,7 +1340,6 @@ end -- This is the end of the selectStyle function
 			if emoteData.AutoMove then
     			startAutoMove()
 			end
-
 		end)
 	end
 
