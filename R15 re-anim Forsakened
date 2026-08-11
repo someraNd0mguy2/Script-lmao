@@ -355,7 +355,7 @@ local EMOTE_DATA = {
 	{ Name = "Low cortisol (V2)", ID = "rbxassetid://73977838462540", IsLooping = true},
 	{ Name = "Low cortisol (V3)", ID = "rbxassetid://116276049310823", IsLooping = true},
 
-	{ Name = "BANG BANG BANG (CSM)", ID = "rbxassetid://96459040879794", IsLooping = true, AnimSpeed = 1.01,
+	{ Name = "BANG BANG BANG (CSM)", ID = "rbxassetid://96459040879794", IsLooping = true, AnimSpeed = 1.001,
 		CustomSound = {
       FileName = "BangBangBang.mp3",
 			Url = "https://raw.githubusercontent.com/someraNd0mguy2/SONGSname.mp3-usebale-/main/BANG%20BANG%20BANG%20-%20Chainsaw%20Man%20Song%20(ft.%20%40starxrayne%20%20%26%20%40JamsDX%20).mp3" }
@@ -427,7 +427,7 @@ local EMOTE_DATA = {
 	{ Name = "Otsukare Summer", ID = "rbxassetid://96239426856784", IsLooping = true},
 	{ Name = "Yuji jumping (V1)", ID = "rbxassetid://134831504136116", IsLooping = true},
 	{ Name = "Yuji jumping (V2)", ID = "rbxassetid://124496563760646", IsLooping = true},
-	{ Name = "Take the L", ID = "rbxassetid://81437777446514", IsLooping = true, Moveable = true, AutoMove = true},
+	{ Name = "Take the L", ID = "rbxassetid://81437777446514", IsLooping = true, Moveable = true, AutoMove = true, WalkSpeed = 0.5},
 	{ Name = "Angels of Delusion", ID = "rbxassetid://99893613768286", IsLooping = true},
 	{ Name = "Nervy Dance", ID = "rbxassetid://87354775848784", IsLooping = true, AnimSpeed = 1.3},
 	{ Name = "Jumpstyle", ID = "rbxassetid://87824676803611", IsLooping = true},
