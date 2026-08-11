@@ -1337,8 +1337,8 @@ end
 			emotePanel.Visible = false
 			humanoid.WalkSpeed = data.WalkSpeed or (State.isMovingEmote and 8 or 16)
 
-			if emoteData.AutoMove then
-    			startAutoMove()
+			if data.AutoMove then
+				startAutoMove()
 			end
 		end)
 	end
