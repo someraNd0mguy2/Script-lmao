@@ -470,7 +470,7 @@ local EMOTE_DATA = {
 			Url = "https://raw.githubusercontent.com/someraNd0mguy2/SONGSname.mp3-usebale-/refs/heads/main/%5BROBLOX%5D%20Dance%20With%20Your%20Eyes%20Closed%20EMOTE.mp3" }
   },
 	{ Name = "Skipping", ID = "rbxassetid://115270771117279", IsMovingEmote = true, IsLooping = true, WalkSpeed = 7.5, Moveable = true, AutoMove = true},
-	{ Name = "BHop", ID = "rbxassetid://134484705368874", IsMovingEmote = true, IsLooping = true, AnimSpeed = 1.4, WalkSpeed = 12.5, Moveable = true, AutoMove = true},
+	{ Name = "BHop", ID = "rbxassetid://134484705368874", IsMovingEmote = true, IsLooping = true, AnimSpeed = 1.5, WalkSpeed = 12.5, Moveable = true, AutoMove = true},
 
 -- poses section, since im lazy to identify them in separations.
 	{ Name = "IMPOSSIBLE, THIS ISN'T THE CAR 🟣⚡️", ID = "rbxassetid://130825608045596" },
@@ -1009,23 +1009,53 @@ end -- This is the end of the selectStyle function
 		end
 	end
 
-	local function startAutoMove()
-		if not humanoid or not rootPart then return end
-		
-		stopAutoMove() 
-		
-		-- FIX 2: Fetches RunService directly and uses RenderStepped to override default Roblox controls
-		autoMoveConnection = game:GetService("RunService").RenderStepped:Connect(function()
+local function startAutoMove(isMoveable)
+	if not humanoid or not rootPart then return end
+	
+	stopAutoMove() 
+	
+	-- Safely attempt to hook into Roblox's PlayerModule to read raw Joystick/WASD input
+	local controls = nil
+	pcall(function()
+		local PlayerModule = require(player:WaitForChild("PlayerScripts"):WaitForChild("PlayerModule"))
+		controls = PlayerModule:GetControls()
+	end)
+	
+	autoMoveConnection = game:GetService("RunService").RenderStepped:Connect(function()
+		if humanoid.Health > 0 then
 			
-			-- FIX 3: Removed the 'State.isEmoting' check. If it was false for a split second, it cancelled the movement instantly. 
-			-- Now it safely relies on stopEmote() to cancel the movement instead.
-			if humanoid.Health > 0 then
-				humanoid:Move(rootPart.CFrame.LookVector, false)
-			else
-				stopAutoMove()
+			-- If Moveable is set to true in the emote data, allow steering
+			if isMoveable then
+				local turnDir = Vector3.new(0, 0, 0)
+				
+				if controls then
+					-- Method A: Use PlayerModule (Best for Joystick & Mobile)
+					local moveVec = controls:GetMoveVector()
+					if moveVec.Magnitude > 0 then
+						turnDir = workspace.CurrentCamera.CFrame:VectorToWorldSpace(moveVec)
+						turnDir = Vector3.new(turnDir.X, 0, turnDir.Z).Unit
+					end
+				else
+					-- Method B: Fallback to reading MoveDirection before it gets overwritten
+					local inputDir = humanoid.MoveDirection
+					if inputDir.Magnitude > 0.1 then
+						turnDir = inputDir
+					end
+				end
+				
+				-- Apply the rotation smoothly if the player is trying to turn
+				if turnDir.Magnitude > 0 then
+					rootPart.CFrame = rootPart.CFrame:Lerp(CFrame.lookAt(rootPart.Position, rootPart.Position + turnDir), 0.1)
+				end
 			end
-		end)
-	end
+			
+			-- Continually push the character forward in whatever direction they are now facing
+			humanoid:Move(rootPart.CFrame.LookVector, false)
+		else
+			stopAutoMove()
+		end
+	end)
+end
 
 	local function stopEmote()
     -- 1. stop auto move
@@ -1340,8 +1370,9 @@ end -- This is the end of the selectStyle function
 			humanoid.WalkSpeed = data.WalkSpeed or (State.isMovingEmote and 8 or 16)
 
 			if data.AutoMove then
-				startAutoMove()
+				startAutoMove(data.Moveable)
 			end
+
 		end)
 	end
 
