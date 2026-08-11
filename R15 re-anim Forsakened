@@ -355,7 +355,7 @@ local EMOTE_DATA = {
 	{ Name = "Low cortisol (V2)", ID = "rbxassetid://73977838462540", IsLooping = true},
 	{ Name = "Low cortisol (V3)", ID = "rbxassetid://116276049310823", IsLooping = true},
 
-	{ Name = "BANG BANG BANG (CSM)", ID = "rbxassetid://96459040879794", IsLooping = true, AnimSpeed = 1,
+	{ Name = "BANG BANG BANG (CSM)", ID = "rbxassetid://96459040879794", IsLooping = true, AnimSpeed = 1.003,
 		CustomSound = {
       FileName = "BangBangBang.mp3",
 			Url = "https://raw.githubusercontent.com/someraNd0mguy2/SONGSname.mp3-usebale-/main/BANG%20BANG%20BANG%20-%20Chainsaw%20Man%20Song%20(ft.%20%40starxrayne%20%20%26%20%40JamsDX%20).mp3" }
