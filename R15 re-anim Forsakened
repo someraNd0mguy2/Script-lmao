@@ -1000,30 +1000,32 @@ end -- This is the end of the selectStyle function
 
 	local activeSequenceToken = 0 -- Keep track of the current active sequence thread
 
-local autoMoveConnection = nil
+	local autoMoveConnection = nil -- FIX 1: Explicitly declare this so the script can track the loop
 
-local function stopAutoMove()
-	if autoMoveConnection then
-		autoMoveConnection:Disconnect()
-		autoMoveConnection = nil
-	end
-end
-
-local function startAutoMove()
-	if not humanoid or not rootPart then return end
-	
-	stopAutoMove() 
-	
-	-- Continuously feed the move direction into the humanoid
-	autoMoveConnection = RunService.RenderStepped:Connect(function()
-		if humanoid and humanoid.Health > 0 and rootPart then
-			-- Tells the Humanoid to walk forward relative to the character's current facing direction
-			humanoid:Move(rootPart.CFrame.LookVector, false)
-		else
-			stopAutoMove()
+	local function stopAutoMove()
+		if autoMoveConnection then
+			autoMoveConnection:Disconnect()
+			autoMoveConnection = nil
 		end
-	end)
-end
+	end
+
+	local function startAutoMove()
+		if not humanoid or not rootPart then return end
+		
+		stopAutoMove() 
+		
+		-- FIX 2: Fetches RunService directly and uses RenderStepped to override default Roblox controls
+		autoMoveConnection = game:GetService("RunService").RenderStepped:Connect(function()
+			
+			-- FIX 3: Removed the 'State.isEmoting' check. If it was false for a split second, it cancelled the movement instantly. 
+			-- Now it safely relies on stopEmote() to cancel the movement instead.
+			if humanoid.Health > 0 then
+				humanoid:Move(rootPart.CFrame.LookVector, false)
+			else
+				stopAutoMove()
+			end
+		end)
+	end
 
 	local function stopEmote()
     -- 1. stop auto move
