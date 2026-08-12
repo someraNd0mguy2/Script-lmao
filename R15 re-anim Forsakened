@@ -355,7 +355,7 @@ local EMOTE_DATA = {
 	{ Name = "Low cortisol (V2)", ID = "rbxassetid://73977838462540", IsLooping = true},
 	{ Name = "Low cortisol (V3)", ID = "rbxassetid://116276049310823", IsLooping = true},
 
-	{ Name = "BANG BANG BANG (CSM)", ID = "rbxassetid://96459040879794", IsLooping = true, AnimSpeed = 1.035,
+	{ Name = "BANG BANG BANG (CSM)", ID = "rbxassetid://96459040879794", IsLooping = true, AnimSpeed = 1.00125,
 		CustomSound = {
       FileName = "BangBangBang.mp3",
 			Url = "https://raw.githubusercontent.com/someraNd0mguy2/SONGSname.mp3-usebale-/main/BANG%20BANG%20BANG%20-%20Chainsaw%20Man%20Song%20(ft.%20%40starxrayne%20%20%26%20%40JamsDX%20).mp3" }
@@ -492,6 +492,27 @@ local EMOTE_DATA = {
 }
 
 
+-- ### Ambience Soundtrack / Background Music ###
+local AmbienceTracks = {
+    {
+        Name = "Chainsaw Man (Bang Bang)",
+        Url = "https://raw.githubusercontent.com/someraNd0mguy2/SONGSname.mp3-usebale-/main/BANG%20BANG%20BANG%20-%20Chainsaw%20Man%20Song%20(ft.%20%40starxrayne%20%20%26%20%40JamsDX%20).mp3",
+        Volume = 0.5
+    },
+    {
+        Name = "Chill Lofi",
+        Url = "https://raw.githubusercontent.com/example/path/to/chill_lofi.mp3", -- Replace with real raw github link
+        Volume = 0.4
+    },
+    {
+        Name = "Rain & Thunder",
+        Url = "https://raw.githubusercontent.com/example/path/to/rain.mp3", -- Replace with real raw github link
+        Volume = 0.6
+    }
+}
+
+
+
 -- ### Preload All Style Animations in Background ###
 -- Pre-fetches all animation assets into client memory so style switching is instant
 task.spawn(function()
@@ -544,6 +565,34 @@ local function loadTrack(animator, assetId, looped, priority)
     end
 end
 
+-- Ambience soundstack support
+local function getAmbienceAsset(url)
+    if not url or url == "" then return nil end
+    
+    -- Create a safe file name out of the URL
+    local fileName = "ambience_" .. url:match("([^/]+)$")
+    fileName = fileName:gsub("%%20", "_"):gsub("[^%w%._-]", "")
+    
+    -- Check if it's already downloaded
+    if isfile(fileName) then
+        return getcustomasset(fileName)
+    end
+    
+    -- Download and save it
+    local success, result = pcall(function()
+        return game:HttpGet(url)
+    end)
+    
+    if success then
+        writefile(fileName, result)
+        return getcustomasset(fileName)
+    end
+    
+    return nil
+end
+
+
+-- UI STUFF DOWN HERE
 -- ### UI Settings ###
 local IMG_BLOCK = "rbxassetid://81303931345144"
 local IMG_PUNCH = "rbxassetid://113322091360332"
@@ -627,6 +676,93 @@ searchBox.BackgroundColor3, searchBox.TextColor3 = Color3.fromRGB(30, 30, 30), C
 searchBox.PlaceholderText, searchBox.Text = "Search...", ""
 searchBox.FontFace, searchBox.TextSize = FONT_THIN, 13
 Instance.new("UICorner", searchBox).CornerRadius = UDim.new(0, 6)
+
+
+-- ### Ambience UI Button & Scrolling Panel ###
+local ambienceToggleBtn = Instance.new("TextButton", screenGui)
+ambienceToggleBtn.Name, ambienceToggleBtn.Size = "AmbienceBtn", UDim2.new(0, 110, 0, 35)
+ambienceToggleBtn.Position, ambienceToggleBtn.AnchorPoint = UDim2.new(0.54, 0, 0, 60), Vector2.new(0.5, 0)
+ambienceToggleBtn.BackgroundColor3, ambienceToggleBtn.Text, ambienceToggleBtn.TextColor3 = Color3.fromRGB(40, 40, 40), "AMBIENCE", COLOR_WHITE
+ambienceToggleBtn.FontFace, ambienceToggleBtn.TextSize = FONT, 13
+Instance.new("UICorner", ambienceToggleBtn).CornerRadius = UDim.new(0, 8)
+
+local ambiencePanel = Instance.new("Frame", screenGui)
+ambiencePanel.Name, ambiencePanel.Visible = "AmbiencePanel", false
+ambiencePanel.Size, ambiencePanel.Position = UDim2.new(0, 160, 0, 200), UDim2.new(0, 54, 0, 105)
+ambiencePanel.AnchorPoint, ambiencePanel.BackgroundColor3 = Vector2.new(0.5, 0), Color3.fromRGB(25, 25, 25)
+Instance.new("UICorner", ambiencePanel).CornerRadius = UDim.new(0, 8)
+
+local ambScroll = Instance.new("ScrollingFrame", ambiencePanel)
+ambScroll.Size, ambScroll.Position = UDim2.new(1, -10, 1, -45), UDim2.new(0, 5, 0, 5)
+ambScroll.BackgroundTransparency = 1
+ambScroll.ScrollBarThickness = 4
+ambScroll.CanvasSize = UDim2.new(0, 0, 0, (#AmbienceTracks * 35))
+
+local ambLayout = Instance.new("UIListLayout", ambScroll)
+ambLayout.SortOrder = Enum.SortOrder.LayoutOrder
+ambLayout.Padding = UDim.new(0, 5)
+
+-- Generate buttons for each track in the table
+for i, trackInfo in ipairs(AmbienceTracks) do
+    local trackBtn = Instance.new("TextButton", ambScroll)
+    trackBtn.Size = UDim2.new(1, -10, 0, 30)
+    trackBtn.BackgroundColor3, trackBtn.TextColor3 = Color3.fromRGB(45, 45, 45), COLOR_WHITE
+    trackBtn.Text = trackInfo.Name
+    trackBtn.FontFace, trackBtn.TextSize = FONT, 12
+    Instance.new("UICorner", trackBtn).CornerRadius = UDim.new(0, 6)
+    
+    trackBtn.MouseButton1Click:Connect(function()
+        -- Stop current ambience if playing
+        if State.currentAmbienceSound then
+            State.currentAmbienceSound:Stop()
+            State.currentAmbienceSound:Destroy()
+        end
+        
+        -- Get custom asset from GitHub URL
+        local assetId = getAmbienceAsset(trackInfo.Url)
+        if assetId then
+            local sound = Instance.new("Sound", workspace)
+            sound.Name = "CustomAmbienceSound"
+            sound.SoundId = assetId
+            sound.Volume = trackInfo.Volume or 0.5
+            sound.Looped = true
+            sound:Play()
+            
+            State.currentAmbienceSound = sound
+            State.isAmbienceEnabled = true
+            State.ambiencePausedByMusic = false
+        end
+    end)
+end
+
+-- Stop Ambience Button (at the bottom of the panel)
+local stopAmbBtn = Instance.new("TextButton", ambiencePanel)
+stopAmbBtn.Size, stopAmbBtn.Position = UDim2.new(1, -10, 0, 30), UDim2.new(0, 5, 1, -35)
+stopAmbBtn.BackgroundColor3, stopAmbBtn.TextColor3 = Color3.fromRGB(150, 0, 0), COLOR_WHITE
+stopAmbBtn.Text = "STOP AMBIENCE"
+stopAmbBtn.FontFace, stopAmbBtn.TextSize = FONT, 12
+Instance.new("UICorner", stopAmbBtn).CornerRadius = UDim.new(0, 6)
+
+stopAmbBtn.MouseButton1Click:Connect(function()
+    if State.currentAmbienceSound then
+        State.currentAmbienceSound:Stop()
+        State.currentAmbienceSound:Destroy()
+        State.currentAmbienceSound = nil
+    end
+    State.isAmbienceEnabled = false
+    State.ambiencePausedByMusic = false
+end)
+
+-- Toggle Menu Logic
+ambienceToggleBtn.MouseButton1Click:Connect(function()
+    ambiencePanel.Visible = not ambiencePanel.Visible
+    if ambiencePanel.Visible then
+        if emotePanel then emotePanel.Visible = false end
+        if boomboxPanel then boomboxPanel.Visible = false end
+        if styleDropdown then styleDropdown.Visible = false end
+    end
+end)
+
 
 -- === Camera Toggle Options ===
 local cameraModes = {"Default", "HumanoidRootPart", "Head", "Torso"}
@@ -750,7 +886,6 @@ loopBtn.MouseButton1Click:Connect(function()
 	end
 end)
 
-
 local function showBillboard(text)
 	if not player.Character or not player.Character:FindFirstChild("Head") then return end
 	local head = player.Character.Head
@@ -788,6 +923,8 @@ stopMusicBtn.MouseButton1Click:Connect(function()
 		if sound then sound:Stop() end
 	end
 end)
+
+-- End of Ui shenanigans 1.0 (Not really lol)
 
 
 -- Ability Buttons Helper
@@ -907,10 +1044,27 @@ local State = {
     emoteTrack = nil,
     currentEmoteSound = nil,
     currentParticle = nil,
-    originalHipHeight = nil
+    originalHipHeight = nil,
+    currentAmbienceSound = nil,
+    isAmbienceEnabled = false,
+    ambiencePausedByMusic = false
 }
 
-	local slowToken, currentYaw, smoothness = 0, 0, 3
+local slowToken, currentYaw, smoothness = 0, 0, 3
+
+local function pauseAmbience()
+    if State.currentAmbienceSound and State.currentAmbienceSound.IsPlaying then
+        State.currentAmbienceSound:Pause()
+        State.ambiencePausedByMusic = true
+    end
+end
+
+local function resumeAmbience()
+    if State.ambiencePausedByMusic and State.currentAmbienceSound and State.isAmbienceEnabled then
+        State.currentAmbienceSound:Resume()
+        State.ambiencePausedByMusic = false
+    end
+end
 	
 	-- Reset Toggle UI on respawn
 	injuredBtn.Text = "Injured : Off"
