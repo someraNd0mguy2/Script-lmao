@@ -494,20 +494,19 @@ local EMOTE_DATA = {
 
 -- ### Ambience Soundtrack / Background Music ###
 local AmbienceTracks = {
-    {
-        Name = "Chainsaw Man (Bang Bang)",
-        Url = "https://raw.githubusercontent.com/someraNd0mguy2/SONGSname.mp3-usebale-/main/BANG%20BANG%20BANG%20-%20Chainsaw%20Man%20Song%20(ft.%20%40starxrayne%20%20%26%20%40JamsDX%20).mp3",
-        Volume = 0.5
+    { Name = "Bang bang bang (csm)",
+       Url = "https://raw.githubusercontent.com/someraNd0mguy2/SONGSname.mp3-usebale-/main/BANG%20BANG%20BANG%20-%20Chainsaw%20Man%20Song%20(ft.%20%40starxrayne%20%20%26%20%40JamsDX%20).mp3",
+       Volume = 1
     },
-    {
-        Name = "Chill Lofi",
-        Url = "https://raw.githubusercontent.com/example/path/to/chill_lofi.mp3", -- Replace with real raw github link
-        Volume = 0.4
+
+    { Name = "Chill Lofi",
+       Url = "https://raw.githubusercontent.com/example/path/to/chill_lofi.mp3", -- Replace with real raw github link
+       Volume = 0.7
     },
-    {
-        Name = "Rain & Thunder",
-        Url = "https://raw.githubusercontent.com/example/path/to/rain.mp3", -- Replace with real raw github link
-        Volume = 0.6
+
+    { Name = "Rain & Thunder",
+       Url = "https://raw.githubusercontent.com/example/path/to/rain.mp3", -- Replace with real raw github link
+       Volume = 0.7
     }
 }
 
@@ -650,13 +649,6 @@ emoteToggleBtn.BackgroundColor3, emoteToggleBtn.Text, emoteToggleBtn.TextColor3 
 emoteToggleBtn.FontFace, emoteToggleBtn.TextSize = FONT, 13
 Instance.new("UICorner", emoteToggleBtn).CornerRadius = UDim.new(0, 8)
 
-local boomboxToggleBtn = Instance.new("TextButton", screenGui)
-boomboxToggleBtn.Name, boomboxToggleBtn.Size = "BoomboxBtn", UDim2.new(0, 110, 0, 35)
-boomboxToggleBtn.Position, boomboxToggleBtn.AnchorPoint = UDim2.new(0.66, 0, 0, 60), Vector2.new(0.5, 0)
-boomboxToggleBtn.BackgroundColor3, boomboxToggleBtn.Text, boomboxToggleBtn.TextColor3 = Color3.fromRGB(40, 40, 40), "BOOMBOX", COLOR_WHITE
-boomboxToggleBtn.FontFace, boomboxToggleBtn.TextSize = FONT, 13
-Instance.new("UICorner", boomboxToggleBtn).CornerRadius = UDim.new(0, 8)
-
 local stopEmoteBtn = Instance.new("TextButton", screenGui)
 stopEmoteBtn.Name, stopEmoteBtn.Size = "StopEmoteBtn", UDim2.new(0, 120, 0, 40)
 stopEmoteBtn.Position, stopEmoteBtn.AnchorPoint = UDim2.new(0.5, 0, 0.8, 0), Vector2.new(0.5, 0.5)
@@ -678,19 +670,38 @@ searchBox.FontFace, searchBox.TextSize = FONT_THIN, 13
 Instance.new("UICorner", searchBox).CornerRadius = UDim.new(0, 6)
 
 
--- ### Ambience UI Button & Scrolling Panel ###
-local ambienceToggleBtn = Instance.new("TextButton", screenGui)
-ambienceToggleBtn.Name, ambienceToggleBtn.Size = "AmbienceBtn", UDim2.new(0, 110, 0, 35)
-ambienceToggleBtn.Position, ambienceToggleBtn.AnchorPoint = UDim2.new(0.54, 0, 0, 60), Vector2.new(0.5, 0)
+-- ### Audio Split Container ###
+local audioContainer = Instance.new("Frame", screenGui)
+audioContainer.Name = "AudioContainer"
+audioContainer.Size = UDim2.new(0, 180, 0, 35) -- Increased slightly to 180px for better text fit
+audioContainer.Position, audioContainer.AnchorPoint = UDim2.new(0.66, 0, 0, 60), Vector2.new(0.5, 0) -- Placed exactly where Boombox was
+audioContainer.BackgroundTransparency = 1
+
+-- Boombox Button (Left Half)
+local boomboxToggleBtn = Instance.new("TextButton", audioContainer)
+boomboxToggleBtn.Name = "BoomboxBtn"
+boomboxToggleBtn.Size = UDim2.new(0, 110, 0, 35)
+boomboxToggleBtn.Position = UDim2.new(0.66, 0, 0, 105)
+boomboxToggleBtn.AnchorPoint = Vector2.new(0, 0)
+boomboxToggleBtn.BackgroundColor3, boomboxToggleBtn.Text, boomboxToggleBtn.TextColor3 = Color3.fromRGB(40, 40, 40), "BOOMBOX", COLOR_WHITE
+boomboxToggleBtn.FontFace, boomboxToggleBtn.TextSize = FONT, 12
+Instance.new("UICorner", boomboxToggleBtn).CornerRadius = UDim.new(0, 8)
+
+-- Ambience Button (Right Half)
+local ambienceToggleBtn = Instance.new("TextButton", audioContainer)
+ambienceToggleBtn.Name = "AmbienceBtn"
+ambienceToggleBtn.Size =  UDim2.new(0, 110, 0, 35)
+ambienceToggleBtn.Position = UDim2.new(0.5, 2, 0, 0)
+ambienceToggleBtn.AnchorPoint = Vector2.new(0, 0)
 ambienceToggleBtn.BackgroundColor3, ambienceToggleBtn.Text, ambienceToggleBtn.TextColor3 = Color3.fromRGB(40, 40, 40), "AMBIENCE", COLOR_WHITE
-ambienceToggleBtn.FontFace, ambienceToggleBtn.TextSize = FONT, 13
+ambienceToggleBtn.FontFace, ambienceToggleBtn.TextSize = FONT, 12
 Instance.new("UICorner", ambienceToggleBtn).CornerRadius = UDim.new(0, 8)
 
 local ambiencePanel = Instance.new("Frame", screenGui)
 ambiencePanel.Name, ambiencePanel.Visible = "AmbiencePanel", false
-ambiencePanel.Size, ambiencePanel.Position = UDim2.new(0, 160, 0, 200), UDim2.new(0, 54, 0, 105)
-ambiencePanel.AnchorPoint, ambiencePanel.BackgroundColor3 = Vector2.new(0.5, 0), Color3.fromRGB(25, 25, 25)
-Instance.new("UICorner", ambiencePanel).CornerRadius = UDim.new(0, 8)
+ambiencePanel.Size = UDim2.new(0, 150, 0, 200)
+ambiencePanel.AnchorPoint = Vector2.new(0, 0) -- Removes the left-shifting
+ambiencePanel.Position = UDim2.new(0.5, 2, 0, 0) -- X matches the container, Y drops it directly below
 
 local ambScroll = Instance.new("ScrollingFrame", ambiencePanel)
 ambScroll.Size, ambScroll.Position = UDim2.new(1, -10, 1, -45), UDim2.new(0, 5, 0, 5)
