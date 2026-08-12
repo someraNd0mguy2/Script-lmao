@@ -673,26 +673,22 @@ Instance.new("UICorner", searchBox).CornerRadius = UDim.new(0, 6)
 -- ### Audio Split Container ###
 local audioContainer = Instance.new("Frame", screenGui)
 audioContainer.Name = "AudioContainer"
-audioContainer.Size = UDim2.new(0, 180, 0, 35) -- Increased slightly to 180px for better text fit
-audioContainer.Position, audioContainer.AnchorPoint = UDim2.new(0.66, 0, 0, 60), Vector2.new(0.5, 0) -- Placed exactly where Boombox was
+audioContainer.Size = UDim2.new(0, 180, 0, 35) -- Increased to 180px so both words fit
+audioContainer.Position, audioContainer.AnchorPoint = UDim2.new(0.66, 0, 0, 60), Vector2.new(0.5, 0)
 audioContainer.BackgroundTransparency = 1
 
 -- Boombox Button (Left Half)
 local boomboxToggleBtn = Instance.new("TextButton", audioContainer)
-boomboxToggleBtn.Name = "BoomboxBtn"
-boomboxToggleBtn.Size = UDim2.new(0, 110, 0, 35)
-boomboxToggleBtn.Position = UDim2.new(0.66, 0, 0, 105)
-boomboxToggleBtn.AnchorPoint = Vector2.new(0, 0)
+boomboxToggleBtn.Name, boomboxToggleBtn.Size = "BoomboxBtn", UDim2.new(0.5, -2, 1, 0)
+boomboxToggleBtn.Position = UDim2.new(0, 0, 0, 0)
 boomboxToggleBtn.BackgroundColor3, boomboxToggleBtn.Text, boomboxToggleBtn.TextColor3 = Color3.fromRGB(40, 40, 40), "BOOMBOX", COLOR_WHITE
 boomboxToggleBtn.FontFace, boomboxToggleBtn.TextSize = FONT, 12
 Instance.new("UICorner", boomboxToggleBtn).CornerRadius = UDim.new(0, 8)
 
 -- Ambience Button (Right Half)
 local ambienceToggleBtn = Instance.new("TextButton", audioContainer)
-ambienceToggleBtn.Name = "AmbienceBtn"
-ambienceToggleBtn.Size =  UDim2.new(0, 110, 0, 35)
+ambienceToggleBtn.Name, ambienceToggleBtn.Size = "AmbienceBtn", UDim2.new(0.5, -2, 1, 0)
 ambienceToggleBtn.Position = UDim2.new(0.5, 2, 0, 0)
-ambienceToggleBtn.AnchorPoint = Vector2.new(0, 0)
 ambienceToggleBtn.BackgroundColor3, ambienceToggleBtn.Text, ambienceToggleBtn.TextColor3 = Color3.fromRGB(40, 40, 40), "AMBIENCE", COLOR_WHITE
 ambienceToggleBtn.FontFace, ambienceToggleBtn.TextSize = FONT, 12
 Instance.new("UICorner", ambienceToggleBtn).CornerRadius = UDim.new(0, 8)
@@ -700,8 +696,8 @@ Instance.new("UICorner", ambienceToggleBtn).CornerRadius = UDim.new(0, 8)
 local ambiencePanel = Instance.new("Frame", screenGui)
 ambiencePanel.Name, ambiencePanel.Visible = "AmbiencePanel", false
 ambiencePanel.Size = UDim2.new(0, 150, 0, 200)
-ambiencePanel.AnchorPoint = Vector2.new(0, 0) -- Removes the left-shifting
-ambiencePanel.Position = UDim2.new(0.5, 2, 0, 0) -- X matches the container, Y drops it directly below
+ambiencePanel.Position = UDim2.new(0.66, 0, 0, 100)
+ambiencePanel.AnchorPoint = Vector2.new(0.5, 0)
 
 local ambScroll = Instance.new("ScrollingFrame", ambiencePanel)
 ambScroll.Size, ambScroll.Position = UDim2.new(1, -10, 1, -45), UDim2.new(0, 5, 0, 5)
@@ -838,8 +834,10 @@ end)
 -- Boombox Setup
 local boomboxPanel = Instance.new("Frame", screenGui)
 boomboxPanel.Name, boomboxPanel.Visible = "BoomboxPanel", false
-boomboxPanel.Size, boomboxPanel.Position = UDim2.new(0, 150, 0, 180), UDim2.new(0.66, 0, 0, 105)
-boomboxPanel.AnchorPoint, boomboxPanel.BackgroundColor3 = Vector2.new(0.5, 0), Color3.fromRGB(25, 25, 25)
+boomboxPanel.Size = UDim2.new(0, 150, 0, 180)
+boomboxPanel.Position = UDim2.new(0.66, 0, 0, 100)
+boomboxPanel.AnchorPoint = Vector2.new(0.5, 0)
+boomboxPanel.BackgroundColor3 = Color3.fromRGB(25, 25, 25)
 Instance.new("UICorner", boomboxPanel).CornerRadius = UDim.new(0, 8)
 
 local idInput = Instance.new("TextBox", boomboxPanel)
