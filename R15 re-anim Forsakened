@@ -492,6 +492,7 @@ local EMOTE_DATA = {
 }
 
 
+
 -- ### Ambience Soundtrack / Background Music ###
 local AmbienceTracks = {
     { Name = "Bang bang bang (csm)",
@@ -670,50 +671,53 @@ searchBox.PlaceholderText, searchBox.Text = "Search...", ""
 searchBox.FontFace, searchBox.TextSize = FONT_THIN, 13
 Instance.new("UICorner", searchBox).CornerRadius = UDim.new(0, 6)
 
-
--- ### Audio Split Container ###
-local audioContainer = Instance.new("Frame", screenGui)
-audioContainer.Name = "AudioContainer"
-audioContainer.Size = UDim2.new(0, 180, 0, 35)
-audioContainer.Position = UDim2.new(0.66, -15, 0, 60)  -- Shifted -15 left
-audioContainer.AnchorPoint = Vector2.new(0.5, 0)
-audioContainer.BackgroundTransparency = 1
-
--- Boombox Button (Left Half)
-local boomboxToggleBtn = Instance.new("TextButton", audioContainer)
-boomboxToggleBtn.Name, boomboxToggleBtn.Size = "BoomboxBtn", UDim2.new(0.5, -2, 1, 0)
-boomboxToggleBtn.Position = UDim2.new(0, 0, 0, 0)
+-- Boombox Button
+local boomboxToggleBtn = Instance.new("TextButton", screenGui)
+boomboxToggleBtn.Name, boomboxToggleBtn.Size = "BoomboxBtn", UDim2.new(0, 110, 0, 35)
+boomboxToggleBtn.Position, boomboxToggleBtn.AnchorPoint = UDim2.new(0.66, 0, 0, 60), Vector2.new(0.5, 0)
 boomboxToggleBtn.BackgroundColor3, boomboxToggleBtn.Text, boomboxToggleBtn.TextColor3 = Color3.fromRGB(40, 40, 40), "BOOMBOX", COLOR_WHITE
-boomboxToggleBtn.FontFace, boomboxToggleBtn.TextSize = FONT, 12
+boomboxToggleBtn.FontFace, boomboxToggleBtn.TextSize = FONT, 13
 Instance.new("UICorner", boomboxToggleBtn).CornerRadius = UDim.new(0, 8)
 
--- Ambience Button (Right Half)
-local ambienceToggleBtn = Instance.new("TextButton", audioContainer)
-ambienceToggleBtn.Name, ambienceToggleBtn.Size = "AmbienceBtn", UDim2.new(0.5, -2, 1, 0)
-ambienceToggleBtn.Position = UDim2.new(0.5, 2, 0, 0)
-ambienceToggleBtn.BackgroundColor3, ambienceToggleBtn.Text, ambienceToggleBtn.TextColor3 = Color3.fromRGB(40, 40, 40), "AMBIENCE", COLOR_WHITE
-ambienceToggleBtn.FontFace, ambienceToggleBtn.TextSize = FONT, 12
-Instance.new("UICorner", ambienceToggleBtn).CornerRadius = UDim.new(0, 8)
+-- Ambience Button
+local ambienceDropdownBtn = Instance.new("TextButton", screenGui)
+ambienceDropdownBtn.Name = "AmbienceDropdown"
+ambienceDropdownBtn.Size = UDim2.new(0, 150, 0, 35)
+-- Positioned on the left side of the screen
+ambienceDropdownBtn.Position = UDim2.new(0.2, 0, 0, 100) 
+ambienceDropdownBtn.AnchorPoint = Vector2.new(0.5, 0)
+ambienceDropdownBtn.BackgroundColor3 = Color3.fromRGB(35, 35, 35)
+ambienceDropdownBtn.Text = "Ambience ▼"
+ambienceDropdownBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
+ambienceDropdownBtn.Font = Enum.Font.GothamSemibold
+ambienceDropdownBtn.TextSize = 14
+Instance.new("UICorner", ambienceDropdownBtn).CornerRadius = UDim.new(0, 8)
 
--- ### Ambience Panel (Boombox Style Match) ###
-local ambiencePanel = Instance.new("Frame", screenGui)
+-- ### Ambience Panel ###
+local ambiencePanel = Instance.new("Frame", ambienceDropdownBtn)
 ambiencePanel.Name, ambiencePanel.Visible = "AmbiencePanel", false
-ambiencePanel.Size = UDim2.new(0, 180, 0, 200)
-ambiencePanel.Position, ambiencePanel.AnchorPoint = UDim2.new(0.66, -15, 0, 100), Vector2.new(0.5, 0)
+ambiencePanel.Size = UDim2.new(1, 0, 0, 180) -- Matches your Boombox height
+ambiencePanel.Position = UDim2.new(0, 0, 1, 5) -- Snaps 5 pixels directly below the button
 ambiencePanel.BackgroundColor3 = Color3.fromRGB(25, 25, 25)
-ambiencePanel.BorderSizePixel = 0
 Instance.new("UICorner", ambiencePanel).CornerRadius = UDim.new(0, 8)
 
 local ambScroll = Instance.new("ScrollingFrame", ambiencePanel)
 ambScroll.Size, ambScroll.Position = UDim2.new(1, -10, 1, -45), UDim2.new(0, 5, 0, 5)
 ambScroll.BackgroundTransparency = 1
 ambScroll.BorderSizePixel = 0
-ambScroll.ScrollBarThickness = 4
+ambScroll.ScrollBarThickness = 3
 ambScroll.CanvasSize = UDim2.new(0, 0, 0, (#AmbienceTracks * 35))
 
-local ambLayout = Instance.new("UIListLayout", ambScroll)
-ambLayout.SortOrder = Enum.SortOrder.LayoutOrder
-ambLayout.Padding = UDim.new(0, 5)
+local listLayout = Instance.new("UIListLayout", ambiencePanel)
+listLayout.SortOrder = Enum.SortOrder.LayoutOrder
+listLayout.Padding = UDim.new(0, 5)
+listLayout.HorizontalAlignment = Enum.HorizontalAlignment.Center
+
+-- Toggle Logic for ambiance dropdown
+ambienceDropdownBtn.MouseButton1Click:Connect(function()
+    ambiencePanel.Visible = not ambiencePanel.Visible
+    ambienceDropdownBtn.Text = ambiencePanel.Visible and "Ambience ▲" or "Ambience ▼"
+end)
 
 -- Track Selection Buttons
 for i, trackInfo in ipairs(AmbienceTracks) do
@@ -765,13 +769,12 @@ stopAmbBtn.MouseButton1Click:Connect(function()
     State.ambiencePausedByMusic = false
 end)
 
--- Toggle Menu Logic
+-- AmbienceBtn Toggle function
 ambienceToggleBtn.MouseButton1Click:Connect(function()
     ambiencePanel.Visible = not ambiencePanel.Visible
     if ambiencePanel.Visible then
+        if screenGui:FindFirstChild("BoomboxPanel") then screenGui.BoomboxPanel.Visible = false end
         if emotePanel then emotePanel.Visible = false end
-        if boomboxPanel then boomboxPanel.Visible = false end
-        if styleDropdown then styleDropdown.Visible = false end
     end
 end)
 
@@ -820,17 +823,12 @@ emoteList.Padding, emoteList.HorizontalAlignment = UDim.new(0, 5), Enum.Horizont
 
 -- ### Main Toggle Connections  (Connecting the toggles to work) ###
 
-local function closeAllPanelsExcept(activePanel)
-    if ambiencePanel and ambiencePanel ~= activePanel then ambiencePanel.Visible = false end
-    if boomboxPanel and boomboxPanel ~= activePanel then boomboxPanel.Visible = false end
-    if emotePanel and emotePanel ~= activePanel then emotePanel.Visible = false end
-end
-
 -- Emote Menu Toggle
-emoteToggleBtn.MouseButton1Click:Connect(function()
-    emotePanel.Visible = not emotePanel.Visible
-    if emotePanel.Visible then
-        closeAllPanelsExcept(emotePanel)
+emoteToggleBtn.MouseButton1Click:Connect(function() 
+    emotePanel.Visible = not emotePanel.Visible 
+    if emotePanel.Visible then 
+        if screenGui:FindFirstChild("BoomboxPanel") then screenGui.BoomboxPanel.Visible = false end
+        if ambiencePanel then ambiencePanel.Visible = false end
     end
 end)
 
@@ -890,11 +888,12 @@ Instance.new("UICorner", stopMusicBtn).CornerRadius = UDim.new(0, 6)
 
 local isLooped = false
 
--- Boombox Toggle
-boomboxToggleBtn.MouseButton1Click:Connect(function()
-    boomboxPanel.Visible = not boomboxPanel.Visible
-    if boomboxPanel.Visible then
-        closeAllPanelsExcept(boomboxPanel)
+-- BoomboxBtn toggle function
+BoomboxToggleBtn.MouseButton1Click:Connect(function() 
+    boomboxPanel.Visible = not boomboxPanel.Visible 
+    if boomboxPanel.Visible then 
+        if emotePanel then emotePanel.Visible = false end
+        if ambiencePanel then ambiencePanel.Visible = false end
     end
 end)
 
@@ -946,13 +945,6 @@ stopMusicBtn.MouseButton1Click:Connect(function()
 	end
 end)
 
--- Ambience Toggle
-ambienceToggleBtn.MouseButton1Click:Connect(function()
-    ambiencePanel.Visible = not ambiencePanel.Visible
-    if ambiencePanel.Visible then
-        closeAllPanelsExcept(ambiencePanel)
-    end
-end)
 
 -- End of Ui shenanigans 1.0 (Not really lol)
 
