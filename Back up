@@ -1,27 +1,3 @@
---[[  Q&A abt the script :D
-  - Q.1 : What is this script and how do I use it?
-  - A.1 : Its an r15 re-animate script (Reanimate? I hardly ever know her), just be in r15 and you're good to use it. (Most anims are r6 converted, but some of them are r15 aswell (by ts I mean the limbs won't act like it's r6)
-
-  - Q.2 : How do I add my own emotes or any other anim to this?
-  - A.2 : Go to these tables : ANIM_STYLES or EMOTE_DATA, then get the Anim ID (or emotes) then put them into the tables, use other anim samples that already existed
-  + e.g : Idle = "rbxassetid://98946450554814", -- replace the numbers keep the rbxassetid://
-  + There are some settings and config in here that you can change.
-
-  - Q.3 : Am I allowed to edit, skidded or anything that will change the script?
-  - A.3 : I mean, I did this already so, it's fair yall can do whatever you want.
-
-  - Q.4 : What about the Mp3 Songs/Music that I wanna add?
-  - A.4 : Go to github, Create a new repository, next to the green button "Code" click the 3 dot then "Upload file" from there just choose a mp3 file of your choice in your files. After that, Commit change then get the raw link of the file (must be raw else the script won't accept it)
-  + Should have the raw.githubusercontent.com in the https
-  + 'continuation of A.4' : Once you have the link of the file, go to the EMOTE_DATA table then just kinda figure it out yourself (examples of /e dance or any other emotes that has CustomSound in it)
-
-
-Ty for reading ts, I appreciate your time spending here xd
-This script itself wasn't original by me, I skidded some scrouce code from others, Lmao.
-]]
-
-
-
       --===================================--
 -- ___ Warning: Danger Zone, u have been warned. ___ --
       --===================================--
@@ -263,6 +239,7 @@ local ANIM_IDS = {
 
 
 
+
 --=======================================================
 -- I figured I'd put this here if anyone is looking into this script, I completely give credits to g4zwr (on YouTube aswell) and noli.0 on discord for making the r15 guest script. anything here that wasn't in their script is mine. So yeah, I will probably put the script they made in ScriptBlox, even tho THEIR SCRIPT IS ALREADY IN THERE- ehem.
 --=======================================================
@@ -314,11 +291,6 @@ local ANIM_IDS = {
     ID = "rbxassetid://YourAnimID"
 ]]
 --======================================
-
-
-
-
-
 
 -- ^^^### Emote Configurations (Also some settings above) ### ^^^
 
@@ -490,6 +462,64 @@ local EMOTE_DATA = {
 	{ Name = "test 2", ID = "rbxassetid://89676212115777"},
 	{ Name = "test 3", ID = "rbxassetid://89676212115777"}
 }
+
+-- ### Sounds and ambience background music ###
+local SoundService = game:GetService("SoundService")
+
+local soundtracks = {
+    ["Roblox ID Example"] = "rbxassetid://1234567890",
+    ["Numeric ID Example"] = "0987654321", -- This function will automatically format the ID (A shorter ver of rbxassetid)
+    ["Rat dance"] = "https://raw.githubusercontent.com/someraNd0mguy2/SONGSname.mp3-usebale-/main/CHESS%20TYPE%20BEAT%20(Slowed).mp3"
+}
+
+-- Helper function to detect format and return the correct asset string
+local function resolveAudioId(audioPath)
+    -- If it's an mp3 file, convert it using getcustomasset
+    if string.match(audioPath, "%.mp3$") then
+        return getcustomasset(audioPath)
+    -- If it's just numbers, format it as a roblox asset
+    elseif tonumber(audioPath) then
+        return "rbxassetid://" .. audioPath
+    -- If it already has rbxassetid://, just return it
+    else
+        return audioPath
+    end
+end
+
+local function playNextInPlaylist()
+    if currentTrackIndex > #playlistKeys then 
+        currentTrackIndex = 1 
+    end
+
+    local songName = playlistKeys[currentTrackIndex]
+
+    -- Here is that updated line safely inside the function:
+    bgmPlayer.SoundId = resolveAudioId(soundtracks[songName])
+
+    bgmPlayer.Looped = false 
+    bgmPlayer:Play()
+
+    if playlistConnection then playlistConnection:Disconnect() end
+
+    playlistConnection = bgmPlayer.Ended:Connect(function()
+        currentTrackIndex = currentTrackIndex + 1
+        playNextInPlaylist()
+    end)
+end
+
+-- Array for sequential playback
+local playlistKeys = {}
+for name, _ in pairs(soundtracks) do
+    table.insert(playlistKeys, name)
+end
+
+local currentTrackIndex = 1
+local playlistConnection = nil
+
+local bgmPlayer = Instance.new("Sound")
+bgmPlayer.Name = "CustomAmbienceBGM"
+bgmPlayer.Volume = 1
+bgmPlayer.Parent = SoundService 
 
 
 
@@ -798,6 +828,77 @@ stopMusicBtn.MouseButton1Click:Connect(function()
 	end
 end)
 
+-- ### BGM UI
+local bgmBtn = Instance.new("TextButton", screenGui)
+bgmBtn.Name = "BGMButton"
+bgmBtn.Size = UDim2.new(0, 100, 0, 30) -- Adjust to match your selectStyle button size
+-- Positions it perfectly next to the boombox button (adds 110 pixels to the right)
+bgmButton.Position, bgmButton.AnchorPoint = UDim2.new(0.9, 120, 0, 60), Vector2.new(0.5, 0)
+bgmBtn.BackgroundColor3, bgmBtn.Text, bgmBtn.TextColor3 = Color3.fromRGB(40, 40, 40), "AMBIENCE", COLOR_WHITE
+bgmBtn.FontFace, bgmButton.TextSize = FONT, 13
+Instance.new("UICorner", bgmButton).CornerRadius = UDim.new(0, 8)
+
+local bgmDropdown = Instance.new("ScrollingFrame")
+bgmDropdown.Name = "BGMDropdown"
+bgmDropdown.Parent = bgmBtn
+bgmDropdown.Position = UDim2.new(0.9, 120, 0, 105)
+bgmDropdown.Size = UDim2.new(1, 0, 0, 120)
+bgmDropdown.Visible = false -- Hidden by default
+bgmDropdown.AnchorPoint, bgmDropdown.BackgroundColor3 = Vector2.new(0.5, 0), Color3.fromRGB(25, 25, 25)
+bgmDropdown.ScrollBarThickness = 4
+Instance.new("UICorner", bgmDropdown).CornerRadius = UDim.new(0, 8)
+
+local listLayout = Instance.new("UIListLayout", bgmDropdown)
+
+-- Open/Close dropdown when clicking the main BGM button
+bgmBtn.MouseButton1Click:Connect(function()
+    bgmDropdown.Visible = not bgmDropdown.Visible
+end)
+
+for _, songName in ipairs(playlistKeys) do
+    local songOption = Instance.new("TextButton")
+    songOption.Parent = bgmDropdown
+    songOption.Size = UDim2.new(1, 0, 0, 25)
+    songOption.Text = songName
+    songOption.BackgroundColor3 = Color3.fromRGB(55, 55, 55)
+    songOption.TextColor3 = Color3.fromRGB(255, 255, 255)
+    
+    -- When a specific song in the dropdown is clicked (This is your Snippet!)
+    songOption.MouseButton1Click:Connect(function()
+        bgmDropdown.Visible = false -- Close the dropdown menu
+        bgmBtn.Text = "BGM: " .. songName -- Optional: Updates button to show what's playing
+        
+        -- Stop the auto-loop
+        if playlistConnection then 
+            playlistConnection:Disconnect() 
+            playlistConnection = nil
+        end
+        
+        -- Play the selected song on loop
+        if soundtracks[songName] then
+            bgmPlayer.SoundId = resolveAudioId(soundtracks[songName])
+            bgmPlayer.Looped = true 
+            bgmPlayer:Play()
+        end
+    end)
+end
+
+local stopBgmBtn = Instance.new("TextButton", bgmDropdown)
+stopBgmBtn.Name = "StopBGMButton"
+stopBgmBtn.Size = UDim2.new(0, 80, 0, 30)
+stopBgmBtn.Position, stopBgmBtn.AnchorPoint = UDim2.new(0.9, 120, 0, 135), Vector2.new(0.5, 0)
+stopBgmBtn.BackgroundColor3, stopBgmBtn.Text, stopBgmBtn.TextColor3 = Color3.fromRGB(150, 40, 40), "STOP BGM", COLOR_WHITE
+stopBgmBtn.FontFace, stopBgmBtn.TextSize = FONT, 13
+Instance.new("UICorner", stopBgmBtn).CornerRadius = UDim.new(0, 8)
+
+stopBgmBtn.MouseButton1Click:Connect(function()
+    if playlistConnection then 
+        playlistConnection:Disconnect()
+        playlistConnection = nil
+    end
+    bgmPlayer:Stop()
+    bgmBtn.Text = "Ambience / BGM" -- Reset main button text
+end)
 
 -- End of Ui shenanigans 1.0 (Not really lol)
 
@@ -1551,6 +1652,9 @@ end
 
 	State.currentMovementAnim = initialIdle
 end
+
+-- Start the background music playlist as soon as the script loads
+playNextInPlaylist()
 
 -- Reset still works :]
 player.CharacterAdded:Connect(setupCharacter)
