@@ -467,9 +467,9 @@ local EMOTE_DATA = {
 local SoundService = game:GetService("SoundService")
 
 local soundtracks = {
-    ["Roblox ID Example"] = "rbxassetid://1234567890",
-    ["Numeric ID Example"] = "124460367514427", 
-    ["Rat dance"] = "https://raw.githubusercontent.com/someraNd0mguy2/SONGSname.mp3-usebale-/main/CHESS%20TYPE%20BEAT%20(Slowed).mp3"
+    ["Rat dance"] = "https://raw.githubusercontent.com/someraNd0mguy2/SONGSname.mp3-usebale-/main/CHESS%20TYPE%20BEAT%20(Slowed).mp3",
+    ["Roblox ID Example"] = "rbxassetid://97296738811384",
+    ["Numeric ID Example"] = "124460367514427"
 }
 
 -- 1. Initialize variables BEFORE they are used in functions
@@ -622,14 +622,14 @@ local COLOR_WHITE, COLOR_GREY, COLOR_LOCKED = Color3.new(1, 1, 1), Color3.new(0.
 -- ### UI Buttons Construction ###
 local switchAnimBtn = Instance.new("TextButton", screenGui)
 switchAnimBtn.Name, switchAnimBtn.Size = "SwitchAnimBtn", UDim2.new(0, 150, 0, 35)
-switchAnimBtn.Position = UDim2.new(0, 180, 0, 20)
+switchAnimBtn.Position = UDim2.new(0, 180, 0, 35)
 switchAnimBtn.BackgroundColor3, switchAnimBtn.Text, switchAnimBtn.TextColor3 = Color3.fromRGB(40, 40, 40), "STYLE: DEFAULT ▼", COLOR_WHITE
 switchAnimBtn.FontFace, switchAnimBtn.TextSize = FONT, 13
 Instance.new("UICorner", switchAnimBtn).CornerRadius = UDim.new(0, 8)
 
 local styleDropdown = Instance.new("ScrollingFrame", screenGui)
 styleDropdown.Name, styleDropdown.Visible = "StyleDropdown", false
-styleDropdown.Size, styleDropdown.Position = UDim2.new(0, 150, 0, 120), UDim2.new(0, 180, 0, 60)
+styleDropdown.Size, styleDropdown.Position = UDim2.new(0, 150, 0, 120), UDim2.new(0, 180, 0, 75)
 styleDropdown.BackgroundColor3, styleDropdown.BorderSizePixel = Color3.fromRGB(30, 30, 30), 0
 styleDropdown.ScrollBarThickness, styleDropdown.AutomaticCanvasSize = 4, Enum.AutomaticSize.Y
 Instance.new("UICorner", styleDropdown)
@@ -660,7 +660,7 @@ Instance.new("UICorner", stopEmoteBtn).CornerRadius = UDim.new(0, 8)
 
 local emotePanel = Instance.new("Frame", screenGui)
 emotePanel.Name, emotePanel.Visible = "EmotePanel", false
-emotePanel.Size, emotePanel.Position = UDim2.new(0, 160, 0, 300), UDim2.new(0.9, 0, 0, 105)
+emotePanel.Size, emotePanel.Position = UDim2.new(0, 160, 0, 300), UDim2.new(0.9, 30, 0, 105)
 emotePanel.AnchorPoint, emotePanel.BackgroundTransparency = Vector2.new(0.5, 0), 1
 
 local searchBox = Instance.new("TextBox", emotePanel)
@@ -673,7 +673,7 @@ Instance.new("UICorner", searchBox).CornerRadius = UDim.new(0, 6)
 -- Boombox Button
 local boomboxToggleBtn = Instance.new("TextButton", screenGui)
 boomboxToggleBtn.Name, boomboxToggleBtn.Size = "BoomboxBtn", UDim2.new(0, 110, 0, 35)
-boomboxToggleBtn.Position, boomboxToggleBtn.AnchorPoint = UDim2.new(0.66, 0, 0, 60), Vector2.new(0.5, 0)
+boomboxToggleBtn.Position, boomboxToggleBtn.AnchorPoint = UDim2.new(0.66, -30, 0, 60), Vector2.new(0.5, 0)
 boomboxToggleBtn.BackgroundColor3, boomboxToggleBtn.Text, boomboxToggleBtn.TextColor3 = Color3.fromRGB(40, 40, 40), "BOOMBOX", COLOR_WHITE
 boomboxToggleBtn.FontFace, boomboxToggleBtn.TextSize = FONT, 13
 Instance.new("UICorner", boomboxToggleBtn).CornerRadius = UDim.new(0, 8)
@@ -744,7 +744,7 @@ end)
 -- Boombox Setup
 local boomboxPanel = Instance.new("Frame", screenGui)
 boomboxPanel.Name, boomboxPanel.Visible = "BoomboxPanel", false
-boomboxPanel.Size, boomboxPanel.Position = UDim2.new(0, 150, 0, 180), UDim2.new(0.66, 30, 0, 105)
+boomboxPanel.Size, boomboxPanel.Position = UDim2.new(0, 150, 0, 180), UDim2.new(0.66, -30, 0, 105)
 boomboxPanel.AnchorPoint, boomboxPanel.BackgroundColor3 = Vector2.new(0.5, 0), Color3.fromRGB(25, 25, 25)
 Instance.new("UICorner", boomboxPanel).CornerRadius = UDim.new(0, 8)
 
@@ -846,7 +846,7 @@ end)
 local bgmBtn = Instance.new("TextButton", screenGui)
 bgmBtn.Name = "BGMButton"
 bgmBtn.Size = UDim2.new(0, 110, 0, 35) -- Matches Boombox size
-bgmBtn.Position = UDim2.new(0.66, -115, 0, 60) -- Positioned exactly to the left of Boombox (115px gap)
+bgmBtn.Position = UDim2.new(0.66, -60, 0, 60) -- Positioned exactly to the left of Boombox
 bgmBtn.AnchorPoint = Vector2.new(0.5, 0)
 bgmBtn.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
 bgmBtn.Text = "AMBIENCE"
@@ -875,7 +875,7 @@ dropdownPadding.PaddingRight = UDim.new(0, 5)
 
 local listLayout = Instance.new("UIListLayout", bgmDropdown)
 listLayout.SortOrder = Enum.SortOrder.LayoutOrder
-listLayout.Padding = UDim.new(0, 2.5) -- Adds a tiny gap between songs
+listLayout.Padding = UDim.new(0, 3) -- Adds a tiny gap between songs
 
 -- Open/Close dropdown when clicking the main BGM button
 bgmBtn.MouseButton1Click:Connect(function()
