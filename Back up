@@ -645,7 +645,7 @@ Instance.new("UICorner", stopBtn).CornerRadius = UDim.new(0, 8)
 
 local emoteToggleBtn = Instance.new("TextButton", screenGui)
 emoteToggleBtn.Name, emoteToggleBtn.Size = "EmoteBtn", UDim2.new(0, 110, 0, 35)
-emoteToggleBtn.Position, emoteToggleBtn.AnchorPoint = UDim2.new(0.9, 0, 0, 60), Vector2.new(0.5, 0)
+emoteToggleBtn.Position, emoteToggleBtn.AnchorPoint = UDim2.new(0.9, 30, 0, 60), Vector2.new(0.5, 0)
 emoteToggleBtn.BackgroundColor3, emoteToggleBtn.Text, emoteToggleBtn.TextColor3 = Color3.fromRGB(40, 40, 40), "EMOTES", COLOR_WHITE
 emoteToggleBtn.FontFace, emoteToggleBtn.TextSize = FONT, 13
 Instance.new("UICorner", emoteToggleBtn).CornerRadius = UDim.new(0, 8)
@@ -711,7 +711,6 @@ camToggleBtn.MouseButton1Click:Connect(function()
 end)
 
 local emoteMenu = Instance.new("ScrollingFrame", emotePanel)
--- We pushed the menu down from Y=35 to Y=70 and made it shorter to fit the button
 emoteMenu.Size, emoteMenu.Position = UDim2.new(1, 0, 1, -70), UDim2.new(0, 0, 0, 70) 
 emoteMenu.BackgroundColor3 = Color3.fromRGB(25, 25, 25)
 emoteMenu.BorderSizePixel, emoteMenu.ScrollBarThickness = 0, 4
@@ -745,7 +744,7 @@ end)
 -- Boombox Setup
 local boomboxPanel = Instance.new("Frame", screenGui)
 boomboxPanel.Name, boomboxPanel.Visible = "BoomboxPanel", false
-boomboxPanel.Size, boomboxPanel.Position = UDim2.new(0, 150, 0, 180), UDim2.new(0.66, 0, 0, 105)
+boomboxPanel.Size, boomboxPanel.Position = UDim2.new(0, 150, 0, 180), UDim2.new(0.66, 30, 0, 105)
 boomboxPanel.AnchorPoint, boomboxPanel.BackgroundColor3 = Vector2.new(0.5, 0), Color3.fromRGB(25, 25, 25)
 Instance.new("UICorner", boomboxPanel).CornerRadius = UDim.new(0, 8)
 
@@ -856,10 +855,10 @@ bgmBtn.FontFace = FONT
 bgmBtn.TextSize = 13
 Instance.new("UICorner", bgmBtn).CornerRadius = UDim.new(0, 8)
 
-local bgmDropdown = Instance.new("ScrollingFrame", screenGui) 
+local bgmDropdown = Instance.new("ScrollingFrame", bgmBtn) 
 bgmDropdown.Name = "BGMDropdown"
 bgmDropdown.Size = UDim2.new(0, 150, 0, 160) -- Matches Boombox panel width
-bgmDropdown.Position = UDim2.new(0.66, -115, 0, 105) -- Matches Boombox panel drop height
+bgmDropdown.Position = UDim2.new(0.5, 0, 1, 5) -- Matches Boombox panel drop height
 bgmDropdown.AnchorPoint = Vector2.new(0.5, 0)
 bgmDropdown.Visible = false
 bgmDropdown.BackgroundColor3 = Color3.fromRGB(25, 25, 25) -- Matches Boombox dark background
