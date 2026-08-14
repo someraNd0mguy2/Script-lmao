@@ -468,24 +468,53 @@ local SoundService = game:GetService("SoundService")
 
 local soundtracks = {
     ["Roblox ID Example"] = "rbxassetid://1234567890",
-    ["Numeric ID Example"] = "0987654321", -- This function will automatically format the ID (A shorter ver of rbxassetid)
+    ["Numeric ID Example"] = "124460367514427", 
     ["Rat dance"] = "https://raw.githubusercontent.com/someraNd0mguy2/SONGSname.mp3-usebale-/main/CHESS%20TYPE%20BEAT%20(Slowed).mp3"
 }
 
--- Helper function to detect format and return the correct asset string
+-- 1. Initialize variables BEFORE they are used in functions
+local bgmPlayer = Instance.new("Sound")
+bgmPlayer.Name = "CustomAmbienceBGM"
+bgmPlayer.Volume = 1
+bgmPlayer.Parent = SoundService
+
+local currentTrackIndex = 1
+local playlistConnection = nil
+local playlistKeys = {}
+
+-- Variables above are also settings
+-- Array for sequential playback (Note: pairs() randomizes order)
+for name, _ in pairs(soundtracks) do
+    table.insert(playlistKeys, name)
+end
+
+-- 2. Fixed helper function to download and cache GitHub .mp3 files
 local function resolveAudioId(audioPath)
-    -- If it's an mp3 file, convert it using getcustomasset
-    if string.match(audioPath, "%.mp3$") then
-        return getcustomasset(audioPath)
+    -- If it's a web URL pointing to an mp3
+    if string.match(audioPath, "^http.*%.mp3$") or string.match(audioPath, "%.mp3$") then
+        -- Extract just the file name from the URL so we can save it cleanly
+        local fileName = "custom_bgm_" .. string.match(audioPath, "([^/]+)$") 
+        
+        -- Only download it if we haven't already saved it to the executor's workspace
+        if not isfile(fileName) then
+            local audioData = game:HttpGet(audioPath)
+            writefile(fileName, audioData)
+        end
+        
+        -- Return the local custom asset path
+        return getcustomasset(fileName)
+        
     -- If it's just numbers, format it as a roblox asset
     elseif tonumber(audioPath) then
-        return "rbxassetid://" .. audioPath
+        return "rbxassetid://" .. tostring(audioPath)
+        
     -- If it already has rbxassetid://, just return it
     else
         return audioPath
     end
 end
 
+-- 3. Function now safely accesses pre-defined variables
 local function playNextInPlaylist()
     if currentTrackIndex > #playlistKeys then 
         currentTrackIndex = 1 
@@ -493,13 +522,13 @@ local function playNextInPlaylist()
 
     local songName = playlistKeys[currentTrackIndex]
 
-    -- Here is that updated line safely inside the function:
     bgmPlayer.SoundId = resolveAudioId(soundtracks[songName])
-
     bgmPlayer.Looped = false 
     bgmPlayer:Play()
 
-    if playlistConnection then playlistConnection:Disconnect() end
+    if playlistConnection then 
+        playlistConnection:Disconnect() 
+    end
 
     playlistConnection = bgmPlayer.Ended:Connect(function()
         currentTrackIndex = currentTrackIndex + 1
@@ -507,24 +536,10 @@ local function playNextInPlaylist()
     end)
 end
 
--- Array for sequential playback
-local playlistKeys = {}
-for name, _ in pairs(soundtracks) do
-    table.insert(playlistKeys, name)
-end
-
-local currentTrackIndex = 1
-local playlistConnection = nil
-
-local bgmPlayer = Instance.new("Sound")
-bgmPlayer.Name = "CustomAmbienceBGM"
-bgmPlayer.Volume = 1
-bgmPlayer.Parent = SoundService 
-
 
 
 -- ### Preload All Style Animations in Background ###
--- Pre-fetches all animation assets into client memory so style switching is instant
+-- Pre-fetches all animation assets into client memory so style switching is fast
 task.spawn(function()
     local animsToPreload = {}
     for _, style in ipairs(ANIM_STYLES) do
@@ -833,48 +848,53 @@ local bgmBtn = Instance.new("TextButton", screenGui)
 bgmBtn.Name = "BGMButton"
 bgmBtn.Size = UDim2.new(0, 100, 0, 30) -- Adjust to match your selectStyle button size
 -- Positions it perfectly next to the boombox button (adds 110 pixels to the right)
-bgmButton.Position, bgmButton.AnchorPoint = UDim2.new(0.9, 120, 0, 60), Vector2.new(0.5, 0)
-bgmBtn.BackgroundColor3, bgmBtn.Text, bgmBtn.TextColor3 = Color3.fromRGB(40, 40, 40), "AMBIENCE", COLOR_WHITE
-bgmBtn.FontFace, bgmButton.TextSize = FONT, 13
-Instance.new("UICorner", bgmButton).CornerRadius = UDim.new(0, 8)
+bgmBtn.Position = UDim2.new(0.66, -110, 0, 60)
+bgmBtn.AnchorPoint = Vector2.new(0.5, 0)
+bgmBtn.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
+bgmBtn.Text = "AMBIENCE"
+bgmBtn.TextColor3 = COLOR_WHITE
+bgmBtn.FontFace = FONT
+bgmBtn.TextSize = 13
+Instance.new("UICorner", bgmBtn).CornerRadius = UDim.new(0, 8)
 
-local bgmDropdown = Instance.new("ScrollingFrame")
+local bgmDropdown = Instance.new("ScrollingFrame", bgmBtn)
 bgmDropdown.Name = "BGMDropdown"
-bgmDropdown.Parent = bgmBtn
-bgmDropdown.Position = UDim2.new(0.9, 120, 0, 105)
-bgmDropdown.Size = UDim2.new(1, 0, 0, 120)
-bgmDropdown.Visible = false -- Hidden by default
-bgmDropdown.AnchorPoint, bgmDropdown.BackgroundColor3 = Vector2.new(0.5, 0), Color3.fromRGB(25, 25, 25)
+-- Drops perfectly below the main button
+bgmDropdown.AnchorPoint = Vector2.new(0.5, 0)
+bgmDropdown.Position = UDim2.new(0.5, 0, 1, 5) 
+bgmDropdown.Size = UDim2.new(1, 10, 0, 120) -- Slightly wider to accommodate the scrollbar
+bgmDropdown.Visible = false 
+bgmDropdown.BackgroundColor3 = Color3.fromRGB(25, 25, 25)
 bgmDropdown.ScrollBarThickness = 4
+bgmDropdown.BorderSizePixel = 0
 Instance.new("UICorner", bgmDropdown).CornerRadius = UDim.new(0, 8)
 
 local listLayout = Instance.new("UIListLayout", bgmDropdown)
+listLayout.SortOrder = Enum.SortOrder.LayoutOrder
+listLayout.Padding = UDim.new(0, 2) -- Adds a tiny gap between songs
 
 -- Open/Close dropdown when clicking the main BGM button
 bgmBtn.MouseButton1Click:Connect(function()
     bgmDropdown.Visible = not bgmDropdown.Visible
 end)
 
-for _, songName in ipairs(playlistKeys) do
-    local songOption = Instance.new("TextButton")
-    songOption.Parent = bgmDropdown
+for i, songName in ipairs(playlistKeys) do
+    local songOption = Instance.new("TextButton", bgmDropdown)
     songOption.Size = UDim2.new(1, 0, 0, 25)
     songOption.Text = songName
     songOption.BackgroundColor3 = Color3.fromRGB(55, 55, 55)
     songOption.TextColor3 = Color3.fromRGB(255, 255, 255)
+    songOption.LayoutOrder = i -- Keeps the loop ordered
     
-    -- When a specific song in the dropdown is clicked (This is your Snippet!)
     songOption.MouseButton1Click:Connect(function()
-        bgmDropdown.Visible = false -- Close the dropdown menu
-        bgmBtn.Text = "BGM: " .. songName -- Optional: Updates button to show what's playing
+        bgmDropdown.Visible = false 
+        bgmBtn.Text = "BGM: " .. songName 
         
-        -- Stop the auto-loop
         if playlistConnection then 
             playlistConnection:Disconnect() 
             playlistConnection = nil
         end
         
-        -- Play the selected song on loop
         if soundtracks[songName] then
             bgmPlayer.SoundId = resolveAudioId(soundtracks[songName])
             bgmPlayer.Looped = true 
@@ -885,10 +905,13 @@ end
 
 local stopBgmBtn = Instance.new("TextButton", bgmDropdown)
 stopBgmBtn.Name = "StopBGMButton"
-stopBgmBtn.Size = UDim2.new(0, 80, 0, 30)
-stopBgmBtn.Position, stopBgmBtn.AnchorPoint = UDim2.new(0.9, 120, 0, 135), Vector2.new(0.5, 0)
-stopBgmBtn.BackgroundColor3, stopBgmBtn.Text, stopBgmBtn.TextColor3 = Color3.fromRGB(150, 40, 40), "STOP BGM", COLOR_WHITE
-stopBgmBtn.FontFace, stopBgmBtn.TextSize = FONT, 13
+stopBgmBtn.Size = UDim2.new(1, 0, 0, 30) 
+stopBgmBtn.BackgroundColor3 = Color3.fromRGB(150, 40, 40)
+stopBgmBtn.Text = "STOP BGM"
+stopBgmBtn.TextColor3 = COLOR_WHITE
+stopBgmBtn.FontFace = FONT
+stopBgmBtn.TextSize = 13
+stopBgmBtn.LayoutOrder = #playlistKeys + 1 -- Forces this button to the very bottom
 Instance.new("UICorner", stopBgmBtn).CornerRadius = UDim.new(0, 8)
 
 stopBgmBtn.MouseButton1Click:Connect(function()
@@ -897,7 +920,12 @@ stopBgmBtn.MouseButton1Click:Connect(function()
         playlistConnection = nil
     end
     bgmPlayer:Stop()
-    bgmBtn.Text = "Ambience / BGM" -- Reset main button text
+    bgmBtn.Text = "AMBIENCE" 
+    bgmDropdown.Visible = false
+end)
+-- Automatically expands the scrolling frame canvas size so you can scroll through all songs
+listLayout:GetPropertyChangedSignal("AbsoluteContentSize"):Connect(function()
+    bgmDropdown.CanvasSize = UDim2.new(0, 0, 0, listLayout.AbsoluteContentSize.Y)
 end)
 
 -- End of Ui shenanigans 1.0 (Not really lol)
