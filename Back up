@@ -846,9 +846,8 @@ end)
 -- ### BGM UI
 local bgmBtn = Instance.new("TextButton", screenGui)
 bgmBtn.Name = "BGMButton"
-bgmBtn.Size = UDim2.new(0, 100, 0, 30) -- Adjust to match your selectStyle button size
--- Positions it perfectly next to the boombox button (adds 110 pixels to the right)
-bgmBtn.Position = UDim2.new(0.66, -110, 0, 60)
+bgmBtn.Size = UDim2.new(0, 110, 0, 35) -- Matches Boombox size
+bgmBtn.Position = UDim2.new(0.66, -115, 0, 60) -- Positioned exactly to the left of Boombox (115px gap)
 bgmBtn.AnchorPoint = Vector2.new(0.5, 0)
 bgmBtn.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
 bgmBtn.Text = "AMBIENCE"
@@ -857,21 +856,27 @@ bgmBtn.FontFace = FONT
 bgmBtn.TextSize = 13
 Instance.new("UICorner", bgmBtn).CornerRadius = UDim.new(0, 8)
 
-local bgmDropdown = Instance.new("ScrollingFrame", bgmBtn)
+local bgmDropdown = Instance.new("ScrollingFrame", screenGui) 
 bgmDropdown.Name = "BGMDropdown"
--- Drops perfectly below the main button
+bgmDropdown.Size = UDim2.new(0, 150, 0, 160) -- Matches Boombox panel width
+bgmDropdown.Position = UDim2.new(0.66, -115, 0, 105) -- Matches Boombox panel drop height
 bgmDropdown.AnchorPoint = Vector2.new(0.5, 0)
-bgmDropdown.Position = UDim2.new(0.5, 0, 1, 5) 
-bgmDropdown.Size = UDim2.new(1, 10, 0, 120) -- Slightly wider to accommodate the scrollbar
-bgmDropdown.Visible = false 
-bgmDropdown.BackgroundColor3 = Color3.fromRGB(25, 25, 25)
+bgmDropdown.Visible = false
+bgmDropdown.BackgroundColor3 = Color3.fromRGB(25, 25, 25) -- Matches Boombox dark background
 bgmDropdown.ScrollBarThickness = 4
 bgmDropdown.BorderSizePixel = 0
 Instance.new("UICorner", bgmDropdown).CornerRadius = UDim.new(0, 8)
 
+-- Adds padding so the inner buttons don't touch the very edges (like the Boombox panel)
+local dropdownPadding = Instance.new("UIPadding", bgmDropdown)
+dropdownPadding.PaddingTop = UDim.new(0, 5)
+dropdownPadding.PaddingBottom = UDim.new(0, 5)
+dropdownPadding.PaddingLeft = UDim.new(0, 5)
+dropdownPadding.PaddingRight = UDim.new(0, 5)
+
 local listLayout = Instance.new("UIListLayout", bgmDropdown)
 listLayout.SortOrder = Enum.SortOrder.LayoutOrder
-listLayout.Padding = UDim.new(0, 2) -- Adds a tiny gap between songs
+listLayout.Padding = UDim.new(0, 2.5) -- Adds a tiny gap between songs
 
 -- Open/Close dropdown when clicking the main BGM button
 bgmBtn.MouseButton1Click:Connect(function()
@@ -880,11 +885,14 @@ end)
 
 for i, songName in ipairs(playlistKeys) do
     local songOption = Instance.new("TextButton", bgmDropdown)
-    songOption.Size = UDim2.new(1, 0, 0, 25)
+    songOption.Size = UDim2.new(1, 0, 0, 30)
     songOption.Text = songName
-    songOption.BackgroundColor3 = Color3.fromRGB(55, 55, 55)
-    songOption.TextColor3 = Color3.fromRGB(255, 255, 255)
-    songOption.LayoutOrder = i -- Keeps the loop ordered
+    songOption.BackgroundColor3 = Color3.fromRGB(35, 35, 35) -- Inner button color to match Boombox
+    songOption.TextColor3 = COLOR_WHITE
+    songOption.FontFace = FONT
+    songOption.TextSize = 13
+    songOption.LayoutOrder = i
+    Instance.new("UICorner", songOption).CornerRadius = UDim.new(0, 6) -- Rounded inner buttons
     
     songOption.MouseButton1Click:Connect(function()
         bgmDropdown.Visible = false 
@@ -905,14 +913,14 @@ end
 
 local stopBgmBtn = Instance.new("TextButton", bgmDropdown)
 stopBgmBtn.Name = "StopBGMButton"
-stopBgmBtn.Size = UDim2.new(1, 0, 0, 30) 
-stopBgmBtn.BackgroundColor3 = Color3.fromRGB(150, 40, 40)
+stopBgmBtn.Size = UDim2.new(1, 0, 0, 30)
+stopBgmBtn.BackgroundColor3 = Color3.fromRGB(150, 0, 0) -- Matches the Boombox STOP button red
 stopBgmBtn.Text = "STOP BGM"
 stopBgmBtn.TextColor3 = COLOR_WHITE
 stopBgmBtn.FontFace = FONT
 stopBgmBtn.TextSize = 13
-stopBgmBtn.LayoutOrder = #playlistKeys + 1 -- Forces this button to the very bottom
-Instance.new("UICorner", stopBgmBtn).CornerRadius = UDim.new(0, 8)
+stopBgmBtn.LayoutOrder = #playlistKeys + 1
+Instance.new("UICorner", stopBgmBtn).CornerRadius = UDim.new(0, 6)
 
 stopBgmBtn.MouseButton1Click:Connect(function()
     if playlistConnection then 
@@ -923,9 +931,10 @@ stopBgmBtn.MouseButton1Click:Connect(function()
     bgmBtn.Text = "AMBIENCE" 
     bgmDropdown.Visible = false
 end)
+
 -- Automatically expands the scrolling frame canvas size so you can scroll through all songs
 listLayout:GetPropertyChangedSignal("AbsoluteContentSize"):Connect(function()
-    bgmDropdown.CanvasSize = UDim2.new(0, 0, 0, listLayout.AbsoluteContentSize.Y)
+    bgmDropdown.CanvasSize = UDim2.new(0, 0, 0, listLayout.AbsoluteContentSize.Y + 10)
 end)
 
 -- End of Ui shenanigans 1.0 (Not really lol)
@@ -1681,9 +1690,9 @@ end
 	State.currentMovementAnim = initialIdle
 end
 
--- Start the background music playlist as soon as the script loads
-playNextInPlaylist()
-
 -- Reset still works :]
 player.CharacterAdded:Connect(setupCharacter)
 if player.Character then setupCharacter(player.Character) end
+
+-- Calling this function at the very end ensures the music starts exactly when the script loads
+playNextInPlaylist()
