@@ -622,14 +622,14 @@ local COLOR_WHITE, COLOR_GREY, COLOR_LOCKED = Color3.new(1, 1, 1), Color3.new(0.
 -- ### UI Buttons Construction ###
 local switchAnimBtn = Instance.new("TextButton", screenGui)
 switchAnimBtn.Name, switchAnimBtn.Size = "SwitchAnimBtn", UDim2.new(0, 150, 0, 35)
-switchAnimBtn.Position = UDim2.new(0, 180, 0, 35)
+switchAnimBtn.Position = UDim2.new(0, 180, 0, 60)
 switchAnimBtn.BackgroundColor3, switchAnimBtn.Text, switchAnimBtn.TextColor3 = Color3.fromRGB(40, 40, 40), "STYLE: DEFAULT ▼", COLOR_WHITE
 switchAnimBtn.FontFace, switchAnimBtn.TextSize = FONT, 13
 Instance.new("UICorner", switchAnimBtn).CornerRadius = UDim.new(0, 8)
 
 local styleDropdown = Instance.new("ScrollingFrame", screenGui)
 styleDropdown.Name, styleDropdown.Visible = "StyleDropdown", false
-styleDropdown.Size, styleDropdown.Position = UDim2.new(0, 150, 0, 120), UDim2.new(0, 180, 0, 75)
+styleDropdown.Size, styleDropdown.Position = UDim2.new(0, 150, 0, 120), UDim2.new(0, 180, 0, 100)
 styleDropdown.BackgroundColor3, styleDropdown.BorderSizePixel = Color3.fromRGB(30, 30, 30), 0
 styleDropdown.ScrollBarThickness, styleDropdown.AutomaticCanvasSize = 4, Enum.AutomaticSize.Y
 Instance.new("UICorner", styleDropdown)
@@ -638,14 +638,14 @@ styleListLayout.Padding = UDim.new(0, 2)
 
 local stopBtn = Instance.new("TextButton", screenGui)
 stopBtn.Name, stopBtn.Size = "StopScriptBtn", UDim2.new(0, 130, 0, 35)
-stopBtn.Position, stopBtn.AnchorPoint = UDim2.new(0.78, 0, 0, 60), Vector2.new(0.5, 0)
+stopBtn.Position, stopBtn.AnchorPoint = UDim2.new(0.78, 20, 0, 60), Vector2.new(0.5, 0)
 stopBtn.BackgroundColor3, stopBtn.Text, stopBtn.TextColor3 = Color3.fromRGB(150, 0, 0), "STOP SCRIPT", COLOR_WHITE
 stopBtn.FontFace, stopBtn.TextSize = FONT, 13
 Instance.new("UICorner", stopBtn).CornerRadius = UDim.new(0, 8)
 
 local emoteToggleBtn = Instance.new("TextButton", screenGui)
 emoteToggleBtn.Name, emoteToggleBtn.Size = "EmoteBtn", UDim2.new(0, 110, 0, 35)
-emoteToggleBtn.Position, emoteToggleBtn.AnchorPoint = UDim2.new(0.9, 30, 0, 60), Vector2.new(0.5, 0)
+emoteToggleBtn.Position, emoteToggleBtn.AnchorPoint = UDim2.new(0.9, 35, 0, 60), Vector2.new(0.5, 0)
 emoteToggleBtn.BackgroundColor3, emoteToggleBtn.Text, emoteToggleBtn.TextColor3 = Color3.fromRGB(40, 40, 40), "EMOTES", COLOR_WHITE
 emoteToggleBtn.FontFace, emoteToggleBtn.TextSize = FONT, 13
 Instance.new("UICorner", emoteToggleBtn).CornerRadius = UDim.new(0, 8)
@@ -660,7 +660,7 @@ Instance.new("UICorner", stopEmoteBtn).CornerRadius = UDim.new(0, 8)
 
 local emotePanel = Instance.new("Frame", screenGui)
 emotePanel.Name, emotePanel.Visible = "EmotePanel", false
-emotePanel.Size, emotePanel.Position = UDim2.new(0, 160, 0, 300), UDim2.new(0.9, 30, 0, 105)
+emotePanel.Size, emotePanel.Position = UDim2.new(0, 160, 0, 300), UDim2.new(0.9, 35, 0, 105)
 emotePanel.AnchorPoint, emotePanel.BackgroundTransparency = Vector2.new(0.5, 0), 1
 
 local searchBox = Instance.new("TextBox", emotePanel)
@@ -673,7 +673,7 @@ Instance.new("UICorner", searchBox).CornerRadius = UDim.new(0, 6)
 -- Boombox Button
 local boomboxToggleBtn = Instance.new("TextButton", screenGui)
 boomboxToggleBtn.Name, boomboxToggleBtn.Size = "BoomboxBtn", UDim2.new(0, 110, 0, 35)
-boomboxToggleBtn.Position, boomboxToggleBtn.AnchorPoint = UDim2.new(0.66, -30, 0, 60), Vector2.new(0.5, 0)
+boomboxToggleBtn.Position, boomboxToggleBtn.AnchorPoint = UDim2.new(0.66, 5, 0, 60), Vector2.new(0.5, 0)
 boomboxToggleBtn.BackgroundColor3, boomboxToggleBtn.Text, boomboxToggleBtn.TextColor3 = Color3.fromRGB(40, 40, 40), "BOOMBOX", COLOR_WHITE
 boomboxToggleBtn.FontFace, boomboxToggleBtn.TextSize = FONT, 13
 Instance.new("UICorner", boomboxToggleBtn).CornerRadius = UDim.new(0, 8)
@@ -744,7 +744,7 @@ end)
 -- Boombox Setup
 local boomboxPanel = Instance.new("Frame", screenGui)
 boomboxPanel.Name, boomboxPanel.Visible = "BoomboxPanel", false
-boomboxPanel.Size, boomboxPanel.Position = UDim2.new(0, 150, 0, 180), UDim2.new(0.66, -30, 0, 105)
+boomboxPanel.Size, boomboxPanel.Position = UDim2.new(0, 150, 0, 180), UDim2.new(0.66, 5, 0, 105)
 boomboxPanel.AnchorPoint, boomboxPanel.BackgroundColor3 = Vector2.new(0.5, 0), Color3.fromRGB(25, 25, 25)
 Instance.new("UICorner", boomboxPanel).CornerRadius = UDim.new(0, 8)
 
@@ -846,7 +846,7 @@ end)
 local bgmBtn = Instance.new("TextButton", screenGui)
 bgmBtn.Name = "BGMButton"
 bgmBtn.Size = UDim2.new(0, 110, 0, 35) -- Matches Boombox size
-bgmBtn.Position = UDim2.new(0.66, -60, 0, 60) -- Positioned exactly to the left of Boombox
+bgmBtn.Position = UDim2.new(0.66, -10, 0, 60) -- Positioned exactly to the left of Boombox
 bgmBtn.AnchorPoint = Vector2.new(0.5, 0)
 bgmBtn.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
 bgmBtn.Text = "AMBIENCE"
@@ -1689,9 +1689,9 @@ end
 	State.currentMovementAnim = initialIdle
 end
 
+-- Calling this function ensures the music starts exactly when the script loads
+playNextInPlaylist()
+
 -- Reset still works :]
 player.CharacterAdded:Connect(setupCharacter)
 if player.Character then setupCharacter(player.Character) end
-
--- Calling this function at the very end ensures the music starts exactly when the script loads
-playNextInPlaylist()
