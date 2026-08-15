@@ -638,7 +638,7 @@ styleListLayout.Padding = UDim.new(0, 2)
 
 local stopBtn = Instance.new("TextButton", screenGui)
 stopBtn.Name, stopBtn.Size = "StopScriptBtn", UDim2.new(0, 130, 0, 35)
-stopBtn.Position, stopBtn.AnchorPoint = UDim2.new(0.78, 30, 0, 60), Vector2.new(0.5, 0)
+stopBtn.Position, stopBtn.AnchorPoint = UDim2.new(0.78, 20, 0, 60), Vector2.new(0.5, 0)
 stopBtn.BackgroundColor3, stopBtn.Text, stopBtn.TextColor3 = Color3.fromRGB(150, 0, 0), "STOP SCRIPT", COLOR_WHITE
 stopBtn.FontFace, stopBtn.TextSize = FONT, 13
 Instance.new("UICorner", stopBtn).CornerRadius = UDim.new(0, 8)
@@ -673,7 +673,7 @@ Instance.new("UICorner", searchBox).CornerRadius = UDim.new(0, 6)
 -- Boombox Button
 local boomboxToggleBtn = Instance.new("TextButton", screenGui)
 boomboxToggleBtn.Name, boomboxToggleBtn.Size = "BoomboxBtn", UDim2.new(0, 110, 0, 35)
-boomboxToggleBtn.Position, boomboxToggleBtn.AnchorPoint = UDim2.new(0.66, 25, 0, 60), Vector2.new(0.5, 0)
+boomboxToggleBtn.Position, boomboxToggleBtn.AnchorPoint = UDim2.new(0.66, 5, 0, 60), Vector2.new(0.5, 0)
 boomboxToggleBtn.BackgroundColor3, boomboxToggleBtn.Text, boomboxToggleBtn.TextColor3 = Color3.fromRGB(40, 40, 40), "BOOMBOX", COLOR_WHITE
 boomboxToggleBtn.FontFace, boomboxToggleBtn.TextSize = FONT, 13
 Instance.new("UICorner", boomboxToggleBtn).CornerRadius = UDim.new(0, 8)
@@ -744,7 +744,7 @@ end)
 -- Boombox Setup
 local boomboxPanel = Instance.new("Frame", screenGui)
 boomboxPanel.Name, boomboxPanel.Visible = "BoomboxPanel", false
-boomboxPanel.Size, boomboxPanel.Position = UDim2.new(0, 150, 0, 180), UDim2.new(0.66, 25, 0, 105)
+boomboxPanel.Size, boomboxPanel.Position = UDim2.new(0, 150, 0, 180), UDim2.new(0.66, 5, 0, 105)
 boomboxPanel.AnchorPoint, boomboxPanel.BackgroundColor3 = Vector2.new(0.5, 0), Color3.fromRGB(25, 25, 25)
 Instance.new("UICorner", boomboxPanel).CornerRadius = UDim.new(0, 8)
 
@@ -846,7 +846,7 @@ end)
 local bgmBtn = Instance.new("TextButton", screenGui)
 bgmBtn.Name = "BGMButton"
 bgmBtn.Size = UDim2.new(0, 110, 0, 35) -- Matches Boombox size
-bgmBtn.Position = UDim2.new(0.66, 20, 0, 60) -- Positioned exactly to the left of Boombox
+bgmBtn.Position = UDim2.new(0.66, -10, 0, 60) -- Positioned exactly to the left of Boombox
 bgmBtn.AnchorPoint = Vector2.new(0.5, 0)
 bgmBtn.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
 bgmBtn.Text = "AMBIENCE"
