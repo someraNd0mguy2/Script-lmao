@@ -1668,7 +1668,7 @@ end
 			if tracks.Head.Length > 0 then tracks.Head.TimePosition = (yawMapped / (math.pi * 2)) * tracks.Head.Length end
 		end
 
-		local now = os.clock(
+		local now = os.clock()
 		if now < punchCdEnd and not State.isPunching then setOverlay(punchUI, true, tostring(math.ceil(punchCdEnd - now))) end
 		if State.isBlocking then setOverlay(blockUI, true)
 		elseif now < blockCdEnd then setOverlay(blockUI, true, string.format("%.2f", blockCdEnd - now))
