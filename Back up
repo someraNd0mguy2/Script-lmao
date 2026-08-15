@@ -635,13 +635,15 @@ styleDropdown.ScrollBarThickness, styleDropdown.AutomaticCanvasSize = 4, Enum.Au
 Instance.new("UICorner", styleDropdown)
 local styleListLayout = Instance.new("UIListLayout", styleDropdown)
 styleListLayout.Padding = UDim.new(0, 2)
+-- the end of selectStyle Ui
 
 local stopBtn = Instance.new("TextButton", screenGui)
 stopBtn.Name, stopBtn.Size = "StopScriptBtn", UDim2.new(0, 130, 0, 35)
-stopBtn.Position, stopBtn.AnchorPoint = UDim2.new(0.78, 30, 0, 60), Vector2.new(0.5, 0)
+stopBtn.Position, stopBtn.AnchorPoint = UDim2.new(0.9, 30, 0, 60), Vector2.new(0.5, 0)
 stopBtn.BackgroundColor3, stopBtn.Text, stopBtn.TextColor3 = Color3.fromRGB(150, 0, 0), "STOP SCRIPT", COLOR_WHITE
 stopBtn.FontFace, stopBtn.TextSize = FONT, 13
 Instance.new("UICorner", stopBtn).CornerRadius = UDim.new(0, 8)
+-- the end of "stop script" Ui
 
 local emoteToggleBtn = Instance.new("TextButton", screenGui)
 emoteToggleBtn.Name, emoteToggleBtn.Size = "EmoteBtn", UDim2.new(0, 110, 0, 35)
@@ -669,15 +671,6 @@ searchBox.BackgroundColor3, searchBox.TextColor3 = Color3.fromRGB(30, 30, 30), C
 searchBox.PlaceholderText, searchBox.Text = "Search...", ""
 searchBox.FontFace, searchBox.TextSize = FONT_THIN, 13
 Instance.new("UICorner", searchBox).CornerRadius = UDim.new(0, 6)
-
--- Boombox Button
-local boomboxToggleBtn = Instance.new("TextButton", screenGui)
-boomboxToggleBtn.Name, boomboxToggleBtn.Size = "BoomboxBtn", UDim2.new(0, 110, 0, 35)
-boomboxToggleBtn.Position, boomboxToggleBtn.AnchorPoint = UDim2.new(0.66, 25, 0, 60), Vector2.new(0.5, 0)
-boomboxToggleBtn.BackgroundColor3, boomboxToggleBtn.Text, boomboxToggleBtn.TextColor3 = Color3.fromRGB(40, 40, 40), "BOOMBOX", COLOR_WHITE
-boomboxToggleBtn.FontFace, boomboxToggleBtn.TextSize = FONT, 13
-Instance.new("UICorner", boomboxToggleBtn).CornerRadius = UDim.new(0, 8)
-
 
 -- === Camera Toggle Options ===
 local cameraModes = {"Default", "HumanoidRootPart", "Head", "Torso"}
@@ -719,6 +712,7 @@ Instance.new("UICorner", emoteMenu)
 
 local emoteList = Instance.new("UIListLayout", emoteMenu)
 emoteList.Padding, emoteList.HorizontalAlignment = UDim.new(0, 5), Enum.HorizontalAlignment.Center
+-- the end of Emote Ui
 
 -- ### Main Toggle Connections  (Connecting the toggles to work) ###
 
@@ -741,7 +735,15 @@ searchBox:GetPropertyChangedSignal("Text"):Connect(function()
 	end
 end)
 
--- Boombox Setup
+
+-- Boombox Button (also boombox ui)
+local boomboxToggleBtn = Instance.new("TextButton", screenGui)
+boomboxToggleBtn.Name, boomboxToggleBtn.Size = "BoomboxBtn", UDim2.new(0, 110, 0, 35)
+boomboxToggleBtn.Position, boomboxToggleBtn.AnchorPoint = UDim2.new(0.9, 25, 0, 60), Vector2.new(0.5, 0)
+boomboxToggleBtn.BackgroundColor3, boomboxToggleBtn.Text, boomboxToggleBtn.TextColor3 = Color3.fromRGB(40, 40, 40), "BOOMBOX", COLOR_WHITE
+boomboxToggleBtn.FontFace, boomboxToggleBtn.TextSize = FONT, 13
+Instance.new("UICorner", boomboxToggleBtn).CornerRadius = UDim.new(0, 8)
+
 local boomboxPanel = Instance.new("Frame", screenGui)
 boomboxPanel.Name, boomboxPanel.Visible = "BoomboxPanel", false
 boomboxPanel.Size, boomboxPanel.Position = UDim2.new(0, 150, 0, 180), UDim2.new(0.66, 25, 0, 105)
@@ -781,7 +783,7 @@ stopMusicBtn.Size, stopMusicBtn.Position = UDim2.new(1, -10, 0, 30), UDim2.new(0
 stopMusicBtn.BackgroundColor3, stopMusicBtn.TextColor3 = Color3.fromRGB(150, 0, 0), COLOR_WHITE
 stopMusicBtn.Text = "STOP"
 stopMusicBtn.FontFace, stopMusicBtn.TextSize = FONT, 13
-Instance.new("UICorner", stopMusicBtn).CornerRadius = UDim.new(0, 6)
+Instance.new("UICorner", stopMusicBtn).CornerRadius = UDim.new(0, 6)  -- the end of boombox Ui
 
 local isLooped = false
 
@@ -846,7 +848,7 @@ end)
 local bgmBtn = Instance.new("TextButton", screenGui)
 bgmBtn.Name = "BGMButton"
 bgmBtn.Size = UDim2.new(0, 110, 0, 35) -- Matches Boombox size
-bgmBtn.Position = UDim2.new(0.66, 20, 0, 60) -- Positioned exactly to the left of Boombox
+bgmBtn.Position = UDim2.new(0.9, 20, 0, 60) -- Positioned exactly to the left of Boombox
 bgmBtn.AnchorPoint = Vector2.new(0.5, 0)
 bgmBtn.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
 bgmBtn.Text = "AMBIENCE"
