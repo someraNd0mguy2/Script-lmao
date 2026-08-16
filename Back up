@@ -722,6 +722,7 @@ emoteToggleBtn.MouseButton1Click:Connect(function()
 	if emotePanel.Visible then 
 		if screenGui:FindFirstChild("BoomboxPanel") then screenGui.BoomboxPanel.Visible = false end
 		styleDropdown.Visible = false
+		bgmDropdown.Visible = false
 	end
 end)
 
@@ -739,14 +740,14 @@ end)
 -- Boombox Button (also boombox ui)
 local boomboxToggleBtn = Instance.new("TextButton", screenGui)
 boomboxToggleBtn.Name, boomboxToggleBtn.Size = "BoomboxBtn", UDim2.new(0, 110, 0, 35)
-boomboxToggleBtn.Position, boomboxToggleBtn.AnchorPoint = UDim2.new(0.85, -200, 0, 60), Vector2.new(0.5, 0)
+boomboxToggleBtn.Position, boomboxToggleBtn.AnchorPoint = UDim2.new(0.85, -165, 0, 60), Vector2.new(0.5, 0)
 boomboxToggleBtn.BackgroundColor3, boomboxToggleBtn.Text, boomboxToggleBtn.TextColor3 = Color3.fromRGB(40, 40, 40), "BOOMBOX", COLOR_WHITE
 boomboxToggleBtn.FontFace, boomboxToggleBtn.TextSize = FONT, 13
 Instance.new("UICorner", boomboxToggleBtn).CornerRadius = UDim.new(0, 8)
 
 local boomboxPanel = Instance.new("Frame", screenGui)
 boomboxPanel.Name, boomboxPanel.Visible = "BoomboxPanel", false
-boomboxPanel.Size, boomboxPanel.Position = UDim2.new(0, 150, 0, 180), UDim2.new(0.85, -200, 0, 105)
+boomboxPanel.Size, boomboxPanel.Position = UDim2.new(0, 150, 0, 180), UDim2.new(0.85, -165, 0, 105)
 boomboxPanel.AnchorPoint, boomboxPanel.BackgroundColor3 = Vector2.new(0.5, 0), Color3.fromRGB(25, 25, 25)
 Instance.new("UICorner", boomboxPanel).CornerRadius = UDim.new(0, 8)
 
@@ -793,6 +794,7 @@ boomboxToggleBtn.MouseButton1Click:Connect(function()
 	if boomboxPanel.Visible then 
 		emotePanel.Visible = false 
 		styleDropdown.Visible = false
+		bgmDropdown.Visible = false
 	end
 end)
 
@@ -848,7 +850,7 @@ end)
 local bgmBtn = Instance.new("TextButton", screenGui)
 bgmBtn.Name = "BGMButton"
 bgmBtn.Size = UDim2.new(0, 110, 0, 35) -- Matches Boombox size
-bgmBtn.Position = UDim2.new(0.8, -250, 0, 60) -- Positioned exactly to the left of Boombox
+bgmBtn.Position = UDim2.new(0.8, -215, 0, 60) -- Positioned exactly to the left of Boombox
 bgmBtn.AnchorPoint = Vector2.new(0.5, 0)
 bgmBtn.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
 bgmBtn.Text = "AMBIENCE"
@@ -860,7 +862,7 @@ Instance.new("UICorner", bgmBtn).CornerRadius = UDim.new(0, 8)
 local bgmDropdown = Instance.new("ScrollingFrame", screenGui)
 bgmDropdown.Name = "BGMDropdown"
 bgmDropdown.Size = UDim2.new(0, 175, 0, 160) -- Matches Boombox panel width
-bgmDropdown.Position = UDim2.new(0.8, -250, 0, 105) -- Matches Boombox panel drop height
+bgmDropdown.Position = UDim2.new(0.8, -215, 0, 105) -- Matches Boombox panel drop height
 bgmDropdown.AnchorPoint = Vector2.new(0.5, 0)
 bgmDropdown.Visible = false
 bgmDropdown.BackgroundColor3 = Color3.fromRGB(25, 25, 25) -- Matches Boombox dark background
@@ -882,6 +884,11 @@ listLayout.Padding = UDim.new(0, 3) -- Adds a tiny gap between songs
 -- Open/Close dropdown when clicking the main BGM button
 bgmBtn.MouseButton1Click:Connect(function()
     bgmDropdown.Visible = not bgmDropdown.Visible
+    if bgmDropdown.Visible then
+		  if screenGui:FindFirstChild("BoomboxPanel") then screenGui.BoomboxPanel.Visible = false end
+		  emotePanel.Visible = false 
+		  styleDropdown.Visible = false
+    end
 end)
 
 for i, songName in ipairs(playlistKeys) do
@@ -891,7 +898,7 @@ for i, songName in ipairs(playlistKeys) do
     songOption.BackgroundColor3 = Color3.fromRGB(35, 35, 35) -- Inner button color to match Boombox
     songOption.TextColor3 = COLOR_WHITE
     songOption.FontFace = FONT
-    songOption.TextSize = 13
+    songOption.TextSize = 12
     songOption.LayoutOrder = i
     Instance.new("UICorner", songOption).CornerRadius = UDim.new(0, 6) -- Rounded inner buttons
     
@@ -919,7 +926,7 @@ stopBgmBtn.BackgroundColor3 = Color3.fromRGB(150, 0, 0) -- Matches the Boombox S
 stopBgmBtn.Text = "STOP BGM"
 stopBgmBtn.TextColor3 = COLOR_WHITE
 stopBgmBtn.FontFace = FONT
-stopBgmBtn.TextSize = 13
+stopBgmBtn.TextSize = 12
 stopBgmBtn.LayoutOrder = #playlistKeys + 1
 Instance.new("UICorner", stopBgmBtn).CornerRadius = UDim.new(0, 6)
 
