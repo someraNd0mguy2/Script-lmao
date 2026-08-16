@@ -720,8 +720,8 @@ emoteList.Padding, emoteList.HorizontalAlignment = UDim.new(0, 5), Enum.Horizont
 emoteToggleBtn.MouseButton1Click:Connect(function() 
 	emotePanel.Visible = not emotePanel.Visible 
 	if emotePanel.Visible then 
-		if screenGui:FindFirstChild("BoomboxPanel") then screenGui.BoomboxPanel.Visible = false end
-		if screenGui:FindFirstChild("bgmDropdown") then screenGui.bgmDropdown.Visible = false end
+		boomboxPanel.Visible = false 
+		bgmDropdown.Visible = false 
 		styleDropdown.Visible = false
 	end
 end)
@@ -792,7 +792,7 @@ local isLooped = false
 boomboxToggleBtn.MouseButton1Click:Connect(function() 
 	boomboxPanel.Visible = not boomboxPanel.Visible 
 	if boomboxPanel.Visible then
-		if screenGui:FindFirstChild("bgmDropdown") then screenGui.bgmDropdown.Visible = false end
+		bgmDropdown.Visible = false 
 		emotePanel.Visible = false 
 		styleDropdown.Visible = false
 	end
@@ -885,8 +885,8 @@ listLayout.Padding = UDim.new(0, 3) -- Adds a tiny gap between songs
 bgmBtn.MouseButton1Click:Connect(function()
     bgmDropdown.Visible = not bgmDropdown.Visible
     if bgmDropdown.Visible then
-		  if screenGui:FindFirstChild("BoomboxPanel") then screenGui.BoomboxPanel.Visible = false end
-		  emotePanel.Visible = false 
+		  boomboxPanel.Visible = false
+		  emotePanel.Visible = false
 		  styleDropdown.Visible = false
     end
 end)
