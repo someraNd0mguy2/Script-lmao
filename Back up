@@ -853,7 +853,7 @@ bgmBtn.Size = UDim2.new(0, 110, 0, 35) -- Matches Boombox size
 bgmBtn.Position = UDim2.new(0.8, -200, 0, 60) -- Positioned exactly to the left of Boombox
 bgmBtn.AnchorPoint = Vector2.new(0.5, 0)
 bgmBtn.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
-bgmBtn.Text = "AMBIENCE"
+bgmBtn.Text = "AMBIENCE/BGM"
 bgmBtn.TextColor3 = COLOR_WHITE
 bgmBtn.FontFace = FONT
 bgmBtn.TextSize = 13
@@ -861,7 +861,7 @@ Instance.new("UICorner", bgmBtn).CornerRadius = UDim.new(0, 8)
 
 local bgmDropdown = Instance.new("ScrollingFrame", screenGui)
 bgmDropdown.Name = "BGMDropdown"
-bgmDropdown.Size = UDim2.new(0, 175, 0, 160) -- Matches Boombox panel width
+bgmDropdown.Size = UDim2.new(0, 110, 0, 160) -- Matches Boombox panel width
 bgmDropdown.Position = UDim2.new(0.8, -200, 0, 105) -- Matches Boombox panel drop height
 bgmDropdown.AnchorPoint = Vector2.new(0.5, 0)
 bgmDropdown.Visible = false
@@ -936,7 +936,7 @@ stopBgmBtn.MouseButton1Click:Connect(function()
         playlistConnection = nil
     end
     bgmPlayer:Stop()
-    bgmBtn.Text = "AMBIENCE" 
+    bgmBtn.Text = "AMBIENCE/BGM" 
     bgmDropdown.Visible = false
 end)
 
