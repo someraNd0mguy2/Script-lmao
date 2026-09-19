@@ -395,7 +395,7 @@ local EMOTE_DATA = {
   },
 	{ Name = "Parrot Dance (MC)", ID = "rbxassetid://101810746304426", IsLooping = true},
 	{ Name = "Smug Dancin", ID = "rbxassetid://121934635382614", IsLooping = true},
-	{ Name = "Rampage", ID = "rbxassetid://79183639768418", IsLooping = true},
+	{ Name = "Number", ID = "rbxassetid://79183639768418", IsLooping = true},
 	{ Name = "Otsukare Summer", ID = "rbxassetid://96239426856784", IsLooping = true},
 	{ Name = "Yuji jumping (V1)", ID = "rbxassetid://134831504136116", IsLooping = true},
 	{ Name = "Yuji jumping (V2)", ID = "rbxassetid://124496563760646", IsLooping = true},
@@ -600,8 +600,8 @@ local IMG_SPRINT = "rbxassetid://89719285639088"
 local IMG_SHIFTLOCK = "rbxassetid://127436401745505"
 local IMG_LOCK = "rbxassetid://4823190108"
 
--- The settings of anims (default for index 1) --
-local WALK_SPEED, RUN_ANIM_SPEED, SPRINT_SPEED, NORMAL_SPEED = 1, 1.6, 26, 12
+-- The settings of anims (default for index 1, I would rec use the features thats provided already in the styles) --
+local WALK_SPEED, RUN_ANIM_SPEED, SPRINT_SPEED, NORMAL_SPEED = 1.15, 1.75, 26, 12
 local INJURED_HEALTH_THRESHOLD = 50
 local LUNGE_STUDS, LUNGE_TIME, LUNGE_DURATION = 7, 0.325, 0.1
 local PUNCH_CD, BLOCK_CD, BLOCK_DURATION = 1, 0, 2 -- re-edit ts if you want
