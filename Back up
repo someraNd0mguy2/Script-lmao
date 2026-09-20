@@ -469,7 +469,7 @@ local SoundService = game:GetService("SoundService")
 
 -- Keeps songs in an exact order instead of randomizing:
 local playlistKeys = {
-    "rbxassetid://97296738811384",
+    "97296738811384",
     "https://raw.githubusercontent.com/someraNd0mguy2/SONGSname.mp3-usebale-/main/CHESS%20TYPE%20BEAT%20(Slowed).mp3",
     "138863509657081"
 }
