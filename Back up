@@ -463,13 +463,15 @@ local EMOTE_DATA = {
 	{ Name = "test 3", ID = "rbxassetid://89676212115777"}
 }
 
+
 -- ### Sounds and ambience background music ###
 local SoundService = game:GetService("SoundService")
 
-local soundtracks = {
-    ["Rat dance"] = "https://raw.githubusercontent.com/someraNd0mguy2/SONGSname.mp3-usebale-/main/CHESS%20TYPE%20BEAT%20(Slowed).mp3",
-    ["Roblox ID Example"] = "rbxassetid://97296738811384",
-    ["Numeric ID Example"] = "124460367514427"
+-- Keeps songs in an exact order instead of randomizing:
+local playlistKeys = {
+    "rbxassetid://97296738811384",
+    "https://raw.githubusercontent.com/someraNd0mguy2/SONGSname.mp3-usebale-/main/CHESS%20TYPE%20BEAT%20(Slowed).mp3",
+    "138863509657081"
 }
 
 -- 1. Initialize variables BEFORE they are used in functions
