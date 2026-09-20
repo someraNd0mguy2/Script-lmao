@@ -468,10 +468,10 @@ local EMOTE_DATA = {
 local SoundService = game:GetService("SoundService")
 
 -- Keeps songs in an exact order instead of randomizing:
-local playlistKeys = {
-    "97296738811384",
-    "https://raw.githubusercontent.com/someraNd0mguy2/SONGSname.mp3-usebale-/main/CHESS%20TYPE%20BEAT%20(Slowed).mp3",
-    "138863509657081"
+local soundtracks = {
+    ["Rat dance"] = "https://raw.githubusercontent.com/someraNd0mguy2/SONGSname.mp3-usebale-/main/CHESS%20TYPE%20BEAT%20(Slowed).mp3",
+    ["Smt idk"] = "97296738811384",
+    ["Numeric ID Example"] = "124460367514427"
 }
 
 -- 1. Initialize variables BEFORE they are used in functions
