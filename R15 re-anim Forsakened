@@ -1,27 +1,3 @@
---[[  Q&A abt the script :D
-  - Q.1 : What is this script and how do I use it?
-  - A.1 : Its an r15 re-animate script (Reanimate? I hardly ever know her), just be in r15 and you're good to use it. (Most anims are r6 converted, but some of them are r15 aswell (by ts I mean the limbs won't act like it's r6)
-
-  - Q.2 : How do I add my own emotes or any other anim to this?
-  - A.2 : Go to these tables : ANIM_STYLES or EMOTE_DATA, then get the Anim ID (or emotes) then put them into the tables, use other anim samples that already existed
-  + e.g : Idle = "rbxassetid://98946450554814", -- replace the numbers keep the rbxassetid://
-  + There are some settings and config in here that you can change.
-
-  - Q.3 : Am I allowed to edit, skidded or anything that will change the script?
-  - A.3 : I mean, I did this already so, it's fair yall can do whatever you want.
-
-  - Q.4 : What about the Mp3 Songs/Music that I wanna add?
-  - A.4 : Go to github, Create a new repository, next to the green button "Code" click the 3 dot then "Upload file" from there just choose a mp3 file of your choice in your files. After that, Commit change then get the raw link of the file (must be raw else the script won't accept it)
-  + Should have the raw.githubusercontent.com in the https
-  + 'continuation of A.4' : Once you have the link of the file, go to the EMOTE_DATA table then just kinda figure it out yourself (examples of /e dance or any other emotes that has CustomSound in it)
-
-
-Ty for reading ts, I appreciate your time spending here xd
-This script itself wasn't original by me, I skidded some scrouce code from others, Lmao.
-]]
-
-
-
       --===================================--
 -- ___ Warning: Danger Zone, u have been warned. ___ --
       --===================================--
@@ -47,15 +23,9 @@ Duration = 7;
 })
 
 game.StarterGui:SetCore("SendNotification", {
-Title = "";
+Title = "Version 0.85";
 Text = "Ehnormalsb/NotError on roblox";
 Duration = 7;
-})
-
-game.StarterGui:SetCore("SendNotification", {
-Title = "Lily.";
-Text = "You asked for this update 🥀";
-Duration = 5;
 })
 
 -- srry about the notifs
@@ -110,14 +80,18 @@ end
 
 -- ### Animations Styles (Configuration) ###
 local ANIM_STYLES = {
-	{ Name = "Default Guest 1337 (Forsaken Survivors)",
+	{ Name = "Default Guest 1337 (Forsaken Survivor)",
 		Idle = "rbxassetid://98946450554814",
 		Walk = "rbxassetid://87493540718854",
 		Run = "rbxassetid://127998320083590",
 		Punch = "rbxassetid://129358357219637",
 		Block = "rbxassetid://115622052244085",
 		InjuredIdle = "rbxassetid://73905365652295",
-		InjuredWalk = "rbxassetid://101924559363550"
+		InjuredWalk = "rbxassetid://101924559363550",
+		InjuredRun = "rbxassetid://84285879089698",
+
+    -- Speed settings (Optional per-style overrides)
+    InjuredRunAnimSpeed = 1.35
 	},
 
 	{ Name = "Empty (0 ids) -put in whatever animation ids you want or desire",
@@ -128,6 +102,7 @@ local ANIM_STYLES = {
 		Block = "rbxassetid://0000000000",
 		InjuredIdle = "rbxassetid://0000000000",
 		InjuredWalk = "rbxassetid://0000000000",
+		InjuredRun = "rbxassetid://0000000000",
 
     -- Speed test
 		RunAnimSpeed = 1,
@@ -136,6 +111,7 @@ local ANIM_STYLES = {
 		InjuredWalkAnimSpeed = 1, -- Unique injured walk anim speed
 		IdleAnimSpeed = 1,  -- Unique idle speed
 		InjuredIdleAnimSpeed = 1, -- Unique injured idle anim speed
+    InjuredRunAnimSpeed = 1, -- Unique injured run anim speed
 		NormalSpeed = 10
 	},
 
@@ -147,6 +123,9 @@ local ANIM_STYLES = {
 		Block = "rbxassetid://115622052244085",
 		InjuredIdle = "rbxassetid://73905365652295",
 		InjuredWalk = "rbxassetid://101924559363550",
+		InjuredRun = "rbxassetid://84285879089698",
+
+    InjuredRunAnimSpeed = 1.35,
 		NormalSpeed = 12
 	},
 
@@ -158,6 +137,9 @@ local ANIM_STYLES = {
 		Block = "rbxassetid://115622052244085",
 		InjuredIdle = "rbxassetid://73905365652295",
 		InjuredWalk = "rbxassetid://101924559363550",
+		InjuredRun = "rbxassetid://84285879089698",
+
+    InjuredRunAnimSpeed = 1.35,
 		NormalSpeed = 12
 	},
 
@@ -169,10 +151,13 @@ local ANIM_STYLES = {
 		Block = "rbxassetid://115622052244085",
 		InjuredIdle = "rbxassetid://73905365652295",
 		InjuredWalk = "rbxassetid://101924559363550",
+		InjuredRun = "rbxassetid://84285879089698",
+
 		-- Custom Speeds settings for this style:
 		RunAnimSpeed = 2.4,
 		SprintSpeed = 27.5,
 		WalkAnimSpeed = 1, -- You can also add custom walk speeds
+    InjuredRunAnimSpeed = 1.35,
 		NormalSpeed = 10
 	},
 
@@ -184,10 +169,13 @@ local ANIM_STYLES = {
 		Block = "rbxassetid://115622052244085",
 		InjuredIdle = "rbxassetid://73905365652295",
 		InjuredWalk = "rbxassetid://101924559363550",
+		InjuredRun = "rbxassetid://84285879089698",
+
 		-- Custom Speeds settings for this style:
 		RunAnimSpeed = 2.25,
 		SprintSpeed = 27.25,
 		WalkAnimSpeed = 1,
+    InjuredRunAnimSpeed = 1.35,
 		NormalSpeed = 10
 	},
 
@@ -199,9 +187,12 @@ local ANIM_STYLES = {
 		Block = "rbxassetid://115622052244085",
 		InjuredIdle = "rbxassetid://73905365652295",
 		InjuredWalk = "rbxassetid://101924559363550",
+		InjuredRun = "rbxassetid://84285879089698",
+
 		RunAnimSpeed = 1.275,
 		SprintSpeed = 27.25,
 		WalkAnimSpeed = 1,
+    InjuredRunAnimSpeed = 1.35,
 		NormalSpeed = 10
 	},
 
@@ -213,11 +204,14 @@ local ANIM_STYLES = {
 		Block = "rbxassetid://115622052244085",
 		InjuredIdle = "rbxassetid://73905365652295",
 		InjuredWalk = "rbxassetid://101924559363550",
+		InjuredRun = "rbxassetid://84285879089698",
+
 		NormalSpeed = 10,
+    InjuredRunAnimSpeed = 1.35,
 		WalkAnimSpeed = 1,
 		SprintSpeed = 27.25,
 		RunAnimSpeed = 2.25,
-		IdleAnimSpeed = 1  -- Unique idle speed
+		IdleAnimSpeed = 1
 	},
 
 	{ Name = "Civilian (DOD)",
@@ -228,11 +222,14 @@ local ANIM_STYLES = {
 		Block = "rbxassetid://115622052244085",
 		InjuredIdle = "rbxassetid://73905365652295",
 		InjuredWalk = "rbxassetid://101924559363550",
+		InjuredRun = "rbxassetid://84285879089698",
+
 		RunAnimSpeed = 13,
 		SprintSpeed = 26,
 		WalkAnimSpeed = 10, -- You can also add custom walkspeeds
 		NormalSpeed = 11,
-		IdleAnimSpeed = 0.7  -- Unique idle speed
+		IdleAnimSpeed = 0.7,
+    InjuredRunAnimSpeed = 1.35
 	},
 
 	{ Name = "Mayhem SG (idle)",
@@ -242,7 +239,10 @@ local ANIM_STYLES = {
 		Punch = "rbxassetid://129358357219637",
 		Block = "rbxassetid://115622052244085",
 		InjuredIdle = "rbxassetid://73905365652295",
-		InjuredWalk = "rbxassetid://101924559363550" }
+		InjuredWalk = "rbxassetid://101924559363550",
+		InjuredRun = "rbxassetid://84285879089698",
+
+    InjuredRunAnimSpeed = 1.35 }  -- this { is for ending the set of style
 }
 
 
@@ -257,9 +257,11 @@ local ANIM_IDS = {
 	Block = ANIM_STYLES[1].Block,
 	InjuredIdle = ANIM_STYLES[1].InjuredIdle,
 	InjuredWalk = ANIM_STYLES[1].InjuredWalk,
-	Head = "rbxassetid://74100161379681",
+  InjuredRun = ANIM_STYLES[1].InjuredRun,
+	Head = "rbxassetid://74100161379681"
 }
 -- It will use the index set animation you want to use (put it 2 and it will use the 2nd set whenever the script is executed)
+
 
 
 
@@ -314,11 +316,6 @@ local ANIM_IDS = {
     ID = "rbxassetid://YourAnimID"
 ]]
 --======================================
-
-
-
-
-
 
 -- ^^^### Emote Configurations (Also some settings above) ### ^^^
 
@@ -423,7 +420,7 @@ local EMOTE_DATA = {
   },
 	{ Name = "Parrot Dance (MC)", ID = "rbxassetid://101810746304426", IsLooping = true},
 	{ Name = "Smug Dancin", ID = "rbxassetid://121934635382614", IsLooping = true},
-	{ Name = "Rampage", ID = "rbxassetid://79183639768418", IsLooping = true},
+	{ Name = "Number", ID = "rbxassetid://79183639768418", IsLooping = true},
 	{ Name = "Otsukare Summer", ID = "rbxassetid://96239426856784", IsLooping = true},
 	{ Name = "Yuji jumping (V1)", ID = "rbxassetid://134831504136116", IsLooping = true},
 	{ Name = "Yuji jumping (V2)", ID = "rbxassetid://124496563760646", IsLooping = true},
@@ -484,7 +481,7 @@ local EMOTE_DATA = {
 	{ Name = "Jonathan Pose", ID = "rbxassetid://116505117247744", IsLooping = true},
 	{ Name = "Jotaro Jojo's Pose", ID = "rbxassetid://137985052211397", IsLooping = true},
 	{ Name = "Chill.", ID = "rbxassetid://78848614632586", IsLooping = true},
-	{ Name = "Pose 28 🥀😭 (Lily)", ID = "rbxassetid://139228722899224", IsLooping = true},
+	{ Name = "Pose 28 🥀😭", ID = "rbxassetid://139228722899224", IsLooping = true},
 	{ Name = "Azure idle", ID = "rbxassetid://74443937226830", IsLooping = true},
 	{ Name = "test", ID = "rbxassetid://89676212115777"},
 	{ Name = "test 2", ID = "rbxassetid://89676212115777"},
@@ -492,9 +489,92 @@ local EMOTE_DATA = {
 }
 
 
+-- ### Sounds and ambience background music ###
+local SoundService = game:GetService("SoundService")
+
+-- Keeps songs in an exact order instead of randomizing:
+local soundtracks = {
+    { Name = "Rat dance", Url = "https://raw.githubusercontent.com/someraNd0mguy2/SONGSname.mp3-usebale-/main/CHESS%20TYPE%20BEAT%20(Slowed).mp3" },
+    { Name = "Smt idk", Url = "97296738811384" },
+    { Name = "Numeric ID Example", Url = "124460367514427" }
+}
+
+-- 1. Initialize variables BEFORE they are used in functions
+local bgmPlayer = Instance.new("Sound")
+bgmPlayer.Name = "CustomAmbienceBGM"
+bgmPlayer.Volume = 1
+bgmPlayer.Parent = SoundService
+
+local currentTrackIndex = 1
+local playlistConnection = nil
+
+-- 2. Helper function with safety checks to download and cache GitHub .mp3 files
+local function resolveAudioId(audioPath)
+    if string.match(audioPath, "^http.*%.mp3$") or string.match(audioPath, "%.mp3$") then
+        local fileName = "custom_bgm_" .. string.match(audioPath, "([^/]+)$") 
+        
+        if not isfile(fileName) then
+            local success, result = pcall(function() return game:HttpGet(audioPath) end)
+            if success and result then 
+                writefile(fileName, result) 
+            else 
+                warn("Failed to download audio: " .. tostring(audioPath))
+                return nil 
+            end
+        end
+        
+        return getcustomasset(fileName)
+    elseif tonumber(audioPath) then
+        return "rbxassetid://" .. tostring(audioPath)
+    else
+        return audioPath
+    end
+end
+
+-- 3. Function now safely accesses pre-defined variables
+local function playNextInPlaylist()
+    if currentTrackIndex > #soundtracks then 
+        currentTrackIndex = 1 
+    end
+
+    local currentSong = soundtracks[currentTrackIndex]
+    local resolvedId = resolveAudioId(currentSong.Url)
+
+    -- If the song failed to resolve or load, skip it automatically so the playlist doesn't break
+    if not resolvedId then
+        warn("[BGM] Skipping broken track: " .. currentSong.Name)
+        currentTrackIndex = currentTrackIndex + 1
+        task.delay(0.5, playNextInPlaylist)
+        return
+    end
+
+    local success, err = pcall(function()
+        bgmPlayer.SoundId = resolvedId
+        bgmPlayer.Looped = false 
+        bgmPlayer:Play()
+    end)
+
+    if not success then
+        warn("[BGM] Error playing " .. currentSong.Name .. ": " .. tostring(err))
+        currentTrackIndex = currentTrackIndex + 1
+        task.delay(0.5, playNextInPlaylist)
+        return
+    end
+
+    if playlistConnection then 
+        playlistConnection:Disconnect() 
+    end
+
+    playlistConnection = bgmPlayer.Ended:Connect(function()
+        currentTrackIndex = currentTrackIndex + 1
+        playNextInPlaylist()
+    end)
+end
+
+
 
 -- ### Preload All Style Animations in Background ###
--- Pre-fetches all animation assets into client memory so style switching is instant
+-- Pre-fetches all animation assets into client memory so style switching is fast
 task.spawn(function()
     local animsToPreload = {}
     for _, style in ipairs(ANIM_STYLES) do
@@ -555,8 +635,8 @@ local IMG_SPRINT = "rbxassetid://89719285639088"
 local IMG_SHIFTLOCK = "rbxassetid://127436401745505"
 local IMG_LOCK = "rbxassetid://4823190108"
 
--- The settings of anims (default for index 1) --
-local WALK_SPEED, RUN_ANIM_SPEED, SPRINT_SPEED, NORMAL_SPEED = 1, 1.6, 26, 12
+-- The settings of anims (default for index 1, I would rec use the features thats provided already in the styles) --
+local WALK_SPEED, RUN_ANIM_SPEED, SPRINT_SPEED, NORMAL_SPEED = 1.15, 1.75, 26, 12
 local INJURED_HEALTH_THRESHOLD = 50
 local LUNGE_STUDS, LUNGE_TIME, LUNGE_DURATION = 7, 0.325, 0.1
 local PUNCH_CD, BLOCK_CD, BLOCK_DURATION = 1, 0, 2 -- re-edit ts if you want
@@ -577,30 +657,32 @@ local COLOR_WHITE, COLOR_GREY, COLOR_LOCKED = Color3.new(1, 1, 1), Color3.new(0.
 -- ### UI Buttons Construction ###
 local switchAnimBtn = Instance.new("TextButton", screenGui)
 switchAnimBtn.Name, switchAnimBtn.Size = "SwitchAnimBtn", UDim2.new(0, 150, 0, 35)
-switchAnimBtn.Position = UDim2.new(0, 180, 0, 20)
+switchAnimBtn.Position = UDim2.new(0, 180, 0, 60)
 switchAnimBtn.BackgroundColor3, switchAnimBtn.Text, switchAnimBtn.TextColor3 = Color3.fromRGB(40, 40, 40), "STYLE: DEFAULT ▼", COLOR_WHITE
 switchAnimBtn.FontFace, switchAnimBtn.TextSize = FONT, 13
 Instance.new("UICorner", switchAnimBtn).CornerRadius = UDim.new(0, 8)
 
 local styleDropdown = Instance.new("ScrollingFrame", screenGui)
 styleDropdown.Name, styleDropdown.Visible = "StyleDropdown", false
-styleDropdown.Size, styleDropdown.Position = UDim2.new(0, 150, 0, 120), UDim2.new(0, 180, 0, 60)
+styleDropdown.Size, styleDropdown.Position = UDim2.new(0, 150, 0, 120), UDim2.new(0, 180, 0, 100)
 styleDropdown.BackgroundColor3, styleDropdown.BorderSizePixel = Color3.fromRGB(30, 30, 30), 0
 styleDropdown.ScrollBarThickness, styleDropdown.AutomaticCanvasSize = 4, Enum.AutomaticSize.Y
 Instance.new("UICorner", styleDropdown)
 local styleListLayout = Instance.new("UIListLayout", styleDropdown)
 styleListLayout.Padding = UDim.new(0, 2)
+-- the end of selectStyle Ui
 
 local stopBtn = Instance.new("TextButton", screenGui)
 stopBtn.Name, stopBtn.Size = "StopScriptBtn", UDim2.new(0, 130, 0, 35)
-stopBtn.Position, stopBtn.AnchorPoint = UDim2.new(0.78, 0, 0, 60), Vector2.new(0.5, 0)
+stopBtn.Position, stopBtn.AnchorPoint = UDim2.new(0.9, -90, 0, 60), Vector2.new(0.5, 0)
 stopBtn.BackgroundColor3, stopBtn.Text, stopBtn.TextColor3 = Color3.fromRGB(150, 0, 0), "STOP SCRIPT", COLOR_WHITE
 stopBtn.FontFace, stopBtn.TextSize = FONT, 13
 Instance.new("UICorner", stopBtn).CornerRadius = UDim.new(0, 8)
+-- the end of "stop script" Ui
 
 local emoteToggleBtn = Instance.new("TextButton", screenGui)
 emoteToggleBtn.Name, emoteToggleBtn.Size = "EmoteBtn", UDim2.new(0, 110, 0, 35)
-emoteToggleBtn.Position, emoteToggleBtn.AnchorPoint = UDim2.new(0.9, 0, 0, 60), Vector2.new(0.5, 0)
+emoteToggleBtn.Position, emoteToggleBtn.AnchorPoint = UDim2.new(0.9, 35, 0, 60), Vector2.new(0.5, 0)
 emoteToggleBtn.BackgroundColor3, emoteToggleBtn.Text, emoteToggleBtn.TextColor3 = Color3.fromRGB(40, 40, 40), "EMOTES", COLOR_WHITE
 emoteToggleBtn.FontFace, emoteToggleBtn.TextSize = FONT, 13
 Instance.new("UICorner", emoteToggleBtn).CornerRadius = UDim.new(0, 8)
@@ -615,7 +697,7 @@ Instance.new("UICorner", stopEmoteBtn).CornerRadius = UDim.new(0, 8)
 
 local emotePanel = Instance.new("Frame", screenGui)
 emotePanel.Name, emotePanel.Visible = "EmotePanel", false
-emotePanel.Size, emotePanel.Position = UDim2.new(0, 160, 0, 300), UDim2.new(0.9, 0, 0, 105)
+emotePanel.Size, emotePanel.Position = UDim2.new(0, 160, 0, 300), UDim2.new(0.9, 35, 0, 105)
 emotePanel.AnchorPoint, emotePanel.BackgroundTransparency = Vector2.new(0.5, 0), 1
 
 local searchBox = Instance.new("TextBox", emotePanel)
@@ -624,15 +706,6 @@ searchBox.BackgroundColor3, searchBox.TextColor3 = Color3.fromRGB(30, 30, 30), C
 searchBox.PlaceholderText, searchBox.Text = "Search...", ""
 searchBox.FontFace, searchBox.TextSize = FONT_THIN, 13
 Instance.new("UICorner", searchBox).CornerRadius = UDim.new(0, 6)
-
--- Boombox Button
-local boomboxToggleBtn = Instance.new("TextButton", screenGui)
-boomboxToggleBtn.Name, boomboxToggleBtn.Size = "BoomboxBtn", UDim2.new(0, 110, 0, 35)
-boomboxToggleBtn.Position, boomboxToggleBtn.AnchorPoint = UDim2.new(0.66, 0, 0, 60), Vector2.new(0.5, 0)
-boomboxToggleBtn.BackgroundColor3, boomboxToggleBtn.Text, boomboxToggleBtn.TextColor3 = Color3.fromRGB(40, 40, 40), "BOOMBOX", COLOR_WHITE
-boomboxToggleBtn.FontFace, boomboxToggleBtn.TextSize = FONT, 13
-Instance.new("UICorner", boomboxToggleBtn).CornerRadius = UDim.new(0, 8)
-
 
 -- === Camera Toggle Options ===
 local cameraModes = {"Default", "HumanoidRootPart", "Head", "Torso"}
@@ -666,7 +739,6 @@ camToggleBtn.MouseButton1Click:Connect(function()
 end)
 
 local emoteMenu = Instance.new("ScrollingFrame", emotePanel)
--- We pushed the menu down from Y=35 to Y=70 and made it shorter to fit the button
 emoteMenu.Size, emoteMenu.Position = UDim2.new(1, 0, 1, -70), UDim2.new(0, 0, 0, 70) 
 emoteMenu.BackgroundColor3 = Color3.fromRGB(25, 25, 25)
 emoteMenu.BorderSizePixel, emoteMenu.ScrollBarThickness = 0, 4
@@ -675,6 +747,7 @@ Instance.new("UICorner", emoteMenu)
 
 local emoteList = Instance.new("UIListLayout", emoteMenu)
 emoteList.Padding, emoteList.HorizontalAlignment = UDim.new(0, 5), Enum.HorizontalAlignment.Center
+-- the end of Emote Ui
 
 -- ### Main Toggle Connections  (Connecting the toggles to work) ###
 
@@ -682,7 +755,8 @@ emoteList.Padding, emoteList.HorizontalAlignment = UDim.new(0, 5), Enum.Horizont
 emoteToggleBtn.MouseButton1Click:Connect(function() 
 	emotePanel.Visible = not emotePanel.Visible 
 	if emotePanel.Visible then 
-		if screenGui:FindFirstChild("BoomboxPanel") then screenGui.BoomboxPanel.Visible = false end
+		boomboxPanel.Visible = false 
+		bgmDropdown.Visible = false 
 		styleDropdown.Visible = false
 	end
 end)
@@ -697,10 +771,18 @@ searchBox:GetPropertyChangedSignal("Text"):Connect(function()
 	end
 end)
 
--- Boombox Setup
+
+-- Boombox Button (also boombox Ui)
+local boomboxToggleBtn = Instance.new("TextButton", screenGui)
+boomboxToggleBtn.Name, boomboxToggleBtn.Size = "BoomboxBtn", UDim2.new(0, 110, 0, 35)
+boomboxToggleBtn.Position, boomboxToggleBtn.AnchorPoint = UDim2.new(0.85, -150, 0, 60), Vector2.new(0.5, 0)
+boomboxToggleBtn.BackgroundColor3, boomboxToggleBtn.Text, boomboxToggleBtn.TextColor3 = Color3.fromRGB(40, 40, 40), "BOOMBOX", COLOR_WHITE
+boomboxToggleBtn.FontFace, boomboxToggleBtn.TextSize = FONT, 13
+Instance.new("UICorner", boomboxToggleBtn).CornerRadius = UDim.new(0, 8)
+
 local boomboxPanel = Instance.new("Frame", screenGui)
 boomboxPanel.Name, boomboxPanel.Visible = "BoomboxPanel", false
-boomboxPanel.Size, boomboxPanel.Position = UDim2.new(0, 150, 0, 180), UDim2.new(0.66, 0, 0, 105)
+boomboxPanel.Size, boomboxPanel.Position = UDim2.new(0, 150, 0, 180), UDim2.new(0.85, -150, 0, 105)
 boomboxPanel.AnchorPoint, boomboxPanel.BackgroundColor3 = Vector2.new(0.5, 0), Color3.fromRGB(25, 25, 25)
 Instance.new("UICorner", boomboxPanel).CornerRadius = UDim.new(0, 8)
 
@@ -737,14 +819,15 @@ stopMusicBtn.Size, stopMusicBtn.Position = UDim2.new(1, -10, 0, 30), UDim2.new(0
 stopMusicBtn.BackgroundColor3, stopMusicBtn.TextColor3 = Color3.fromRGB(150, 0, 0), COLOR_WHITE
 stopMusicBtn.Text = "STOP"
 stopMusicBtn.FontFace, stopMusicBtn.TextSize = FONT, 13
-Instance.new("UICorner", stopMusicBtn).CornerRadius = UDim.new(0, 6)
+Instance.new("UICorner", stopMusicBtn).CornerRadius = UDim.new(0, 6)  -- the end of boombox Ui
 
 local isLooped = false
 
 -- BoomboxBtn toggle function
 boomboxToggleBtn.MouseButton1Click:Connect(function() 
 	boomboxPanel.Visible = not boomboxPanel.Visible 
-	if boomboxPanel.Visible then 
+	if boomboxPanel.Visible then
+		bgmDropdown.Visible = false 
 		emotePanel.Visible = false 
 		styleDropdown.Visible = false
 	end
@@ -798,6 +881,104 @@ stopMusicBtn.MouseButton1Click:Connect(function()
 	end
 end)
 
+-- ### BGM UI
+local bgmBtn = Instance.new("TextButton", screenGui)
+bgmBtn.Name = "BGMButton"
+bgmBtn.Size = UDim2.new(0, 110, 0, 35) -- Matches Boombox size
+bgmBtn.Position = UDim2.new(0.8, -200, 0, 60) -- Positioned exactly to the left of Boombox
+bgmBtn.AnchorPoint = Vector2.new(0.5, 0)
+bgmBtn.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
+bgmBtn.Text = "AMBIENCE/BGM"
+bgmBtn.TextColor3 = COLOR_WHITE
+bgmBtn.FontFace = FONT
+bgmBtn.TextSize = 13
+Instance.new("UICorner", bgmBtn).CornerRadius = UDim.new(0, 8)
+
+local bgmDropdown = Instance.new("ScrollingFrame", screenGui)
+bgmDropdown.Name = "BGMDropdown"
+bgmDropdown.Size = UDim2.new(0, 110, 0, 160) -- Matches Boombox panel width
+bgmDropdown.Position = UDim2.new(0.8, -200, 0, 105) -- Matches Boombox panel drop height
+bgmDropdown.AnchorPoint = Vector2.new(0.5, 0)
+bgmDropdown.Visible = false
+bgmDropdown.BackgroundColor3 = Color3.fromRGB(25, 25, 25) -- Matches Boombox dark background
+bgmDropdown.ScrollBarThickness = 4
+bgmDropdown.BorderSizePixel = 0
+Instance.new("UICorner", bgmDropdown).CornerRadius = UDim.new(0, 8)
+
+-- Adds padding so the inner buttons don't touch the very edges (like the Boombox panel)
+local dropdownPadding = Instance.new("UIPadding", bgmDropdown)
+dropdownPadding.PaddingTop = UDim.new(0, 5)
+dropdownPadding.PaddingBottom = UDim.new(0, 5)
+dropdownPadding.PaddingLeft = UDim.new(0, 5)
+dropdownPadding.PaddingRight = UDim.new(0, 5)
+
+local listLayout = Instance.new("UIListLayout", bgmDropdown)
+listLayout.SortOrder = Enum.SortOrder.LayoutOrder
+listLayout.Padding = UDim.new(0, 3) -- Adds a tiny gap between songs
+
+-- Open/Close dropdown when clicking the main BGM button
+bgmBtn.MouseButton1Click:Connect(function()
+    bgmDropdown.Visible = not bgmDropdown.Visible
+    if bgmDropdown.Visible then
+		  boomboxPanel.Visible = false
+		  emotePanel.Visible = false
+		  styleDropdown.Visible = false
+    end
+end)
+
+for i, songName in ipairs(playlistKeys) do
+    local songOption = Instance.new("TextButton", bgmDropdown)
+    songOption.Size = UDim2.new(1, 0, 0, 30)
+    songOption.Text = songName
+    songOption.BackgroundColor3 = Color3.fromRGB(35, 35, 35) -- Inner button color to match Boombox
+    songOption.TextColor3 = COLOR_WHITE
+    songOption.FontFace = FONT
+    songOption.TextSize = 12
+    songOption.LayoutOrder = i
+    Instance.new("UICorner", songOption).CornerRadius = UDim.new(0, 6) -- Rounded inner buttons
+    
+    songOption.MouseButton1Click:Connect(function()
+        bgmDropdown.Visible = false 
+        bgmBtn.Text = "BGM: " .. songName 
+        
+        if playlistConnection then 
+            playlistConnection:Disconnect() 
+            playlistConnection = nil
+        end
+        
+        if soundtracks[songName] then
+            bgmPlayer.SoundId = resolveAudioId(soundtracks[songName])
+            bgmPlayer.Looped = true 
+            bgmPlayer:Play()
+        end
+    end)
+end
+
+local stopBgmBtn = Instance.new("TextButton", bgmDropdown)
+stopBgmBtn.Name = "StopBGMButton"
+stopBgmBtn.Size = UDim2.new(1, 0, 0, 30)
+stopBgmBtn.BackgroundColor3 = Color3.fromRGB(150, 0, 0) -- Matches the Boombox STOP button red
+stopBgmBtn.Text = "STOP BGM"
+stopBgmBtn.TextColor3 = COLOR_WHITE
+stopBgmBtn.FontFace = FONT
+stopBgmBtn.TextSize = 12
+stopBgmBtn.LayoutOrder = #playlistKeys + 1
+Instance.new("UICorner", stopBgmBtn).CornerRadius = UDim.new(0, 6)
+
+stopBgmBtn.MouseButton1Click:Connect(function()
+    if playlistConnection then 
+        playlistConnection:Disconnect()
+        playlistConnection = nil
+    end
+    bgmPlayer:Stop()
+    bgmBtn.Text = "AMBIENCE/BGM" 
+    bgmDropdown.Visible = false
+end)
+
+-- Automatically expands the scrolling frame canvas size so you can scroll through all songs
+listLayout:GetPropertyChangedSignal("AbsoluteContentSize"):Connect(function()
+    bgmDropdown.CanvasSize = UDim2.new(0, 0, 0, listLayout.AbsoluteContentSize.Y + 10)
+end)
 
 -- End of Ui shenanigans 1.0 (Not really lol)
 
@@ -826,10 +1007,10 @@ local shiftlockUI = makeAbilityButton("ShiftLock", IMG_SHIFTLOCK, "CTRL", "CTRL"
 local punchUI = makeAbilityButton("Punch", IMG_PUNCH, "E", "E", 75, UDim2.new(1, -30, 1, -185))
 local blockUI = makeAbilityButton("Block", IMG_BLOCK, "Q", "Q", 75, UDim2.new(1, -115, 1, -185))
 
--- ### Injured Button Thing ###
+-- ### Injured Button Thing 🔥🔥🔥 ###
 local injuredBtn = Instance.new("TextButton", screenGui)
 injuredBtn.Name, injuredBtn.Size = "InjuredToggleBtn", UDim2.new(0, 75, 0, 30)
-injuredBtn.Position, injuredBtn.AnchorPoint = UDim2.new(1, -190, 1, -235), Vector2.new(1, 1)
+injuredBtn.Position, injuredBtn.AnchorPoint = UDim2.new(1, -180, 1, -235), Vector2.new(1, 1)
 injuredBtn.BackgroundColor3, injuredBtn.Text, injuredBtn.TextColor3 = Color3.fromRGB(100, 0, 0), "Injured : Off", COLOR_WHITE
 injuredBtn.FontFace, injuredBtn.TextSize = FONT, 11
 Instance.new("UICorner", injuredBtn).CornerRadius = UDim.new(0, 6)
@@ -896,6 +1077,7 @@ local function setupCharacter(character)
     if tracks.Run then tracks.Run.Looped = true end
     if tracks.InjuredIdle then tracks.InjuredIdle.Looped = true end
     if tracks.InjuredWalk then tracks.InjuredWalk.Looped = true end
+    if tracks.InjuredRun then tracks.InjuredRun.Looped = true end
 
     if tracks.Punch then tracks.Punch.Priority = Enum.AnimationPriority.Action4 end
     if tracks.Block then tracks.Block.Priority = Enum.AnimationPriority.Action4 end
@@ -906,7 +1088,7 @@ local function setupCharacter(character)
         tracks.Head:AdjustWeight(0.5)
     end
 
-
+-- States
 local State = { 
     isSprinting = false,
     isBlocking = false,
@@ -956,6 +1138,7 @@ local State = {
        ANIM_IDS.Block = style.Block
        ANIM_IDS.InjuredIdle = style.InjuredIdle
        ANIM_IDS.InjuredWalk = style.InjuredWalk
+       ANIM_IDS.InjuredRun = style.InjuredRun or style.Run  -- (Fallback to normal Run if nil)
 
        local isCurrentlyIdle = (State.currentMovementAnim == tracks.Idle or State.currentMovementAnim == tracks.InjuredIdle)
 
@@ -972,6 +1155,7 @@ local State = {
        tracks.Run = loadTrack(animator, style.Run, true, movementPriority)
        tracks.InjuredIdle = loadTrack(animator, style.InjuredIdle, true, idlePriority)
        tracks.InjuredWalk = loadTrack(animator, style.InjuredWalk, true, movementPriority)
+       tracks.InjuredRun = loadTrack(animator, ANIM_IDS.InjuredRun, true, movementPriority)
        tracks.Punch = loadTrack(animator, style.Punch, false, Enum.AnimationPriority.Action4)
        tracks.Block = loadTrack(animator, style.Block, false, Enum.AnimationPriority.Action4)
 
@@ -1013,15 +1197,15 @@ end -- This is the end of the selectStyle function
 
 
 
--- functional stuff that will work
 
+-- functional stuff that will work
 --(if you want the older version for the code down below, the old one is right next to this sentence) local function getBaseSpeed() return State.isSprinting and SPRINT_SPEED or NORMAL_SPEED end
 
 	local function getBaseSpeed() 
 		local style = ANIM_STYLES[currentStyleIndex]
 		local sprintSpeed = style.SprintSpeed or SPRINT_SPEED
 		local normalSpeed = style.NormalSpeed or NORMAL_SPEED
-		return State.isSprinting and sprintSpeed or normalSpeed 
+		return State.isSprinting and sprintSpeed or normalSpeed
 	end
 
 	local activeSequenceToken = 0 -- Keep track of the current active sequence thread
@@ -1156,6 +1340,7 @@ end
 		tracks.Idle:Stop(0.2); tracks.Walk:Stop(0.2); tracks.Run:Stop(0.2) 
 		if tracks.InjuredIdle then tracks.InjuredIdle:Stop(0.2) end
 		if tracks.InjuredWalk then tracks.InjuredWalk:Stop(0.2) end
+    if tracks.InjuredRun then tracks.InjuredRun:Stop(0.2) end
 	end
 
 	local function playMovementAnim(track, fadeTime)
@@ -1174,7 +1359,9 @@ end
 		elseif track == tracks.InjuredIdle then
 			track:AdjustSpeed(style.InjuredIdleAnimSpeed or 1)
 		elseif track == tracks.Run then 
-			track:AdjustSpeed(style.RunAnimSpeed or RUN_ANIM_SPEED) 
+			track:AdjustSpeed(style.RunAnimSpeed or RUN_ANIM_SPEED)
+		elseif track == tracks.InjuredRun then
+			track:AdjustSpeed(style.InjuredRunAnimSpeed or style.RunAnimSpeed or RUN_ANIM_SPEED)
 		end
 		
 		State.currentMovementAnim = track
@@ -1470,11 +1657,22 @@ end
 		if not character.Parent or humanoid.Health <= 0 then return end
 		local moving = humanoid.MoveDirection.Magnitude > 0.1
 		local isInjured = State.forceInjured or (humanoid.Health <= INJURED_HEALTH_THRESHOLD)
-		
+
 		if moving and State.isEmoting and not State.isMovingEmote then stopEmote() end
 		
 		if not State.isPunching and not State.isEmoting then
-			local targetAnim = moving and (State.isSprinting and tracks.Run or (isInjured and tracks.InjuredWalk or tracks.Walk)) or (isInjured and tracks.InjuredIdle or tracks.Idle)
+    local targetAnim
+    
+    if moving then
+        if State.isSprinting then
+            targetAnim = isInjured and (tracks.InjuredRun or tracks.Run) or tracks.Run
+        else
+            targetAnim = isInjured and tracks.InjuredWalk or tracks.Walk
+        end
+    else
+        targetAnim = isInjured and tracks.InjuredIdle or tracks.Idle
+    end
+
 			playMovementAnim(targetAnim)
 		elseif State.isEmoting or State.isPunching then
 			stopAllMovement(); State.currentMovementAnim = nil
@@ -1551,6 +1749,9 @@ end
 
 	State.currentMovementAnim = initialIdle
 end
+
+-- Calling this function ensures the music starts exactly when the script loads
+playNextInPlaylist()
 
 -- Reset still works :]
 player.CharacterAdded:Connect(setupCharacter)
