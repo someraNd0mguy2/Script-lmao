@@ -242,7 +242,8 @@ local ANIM_STYLES = {
 		InjuredWalk = "rbxassetid://101924559363550",
 		InjuredRun = "rbxassetid://84285879089698",
 
-    InjuredRunAnimSpeed = 1.35 }  -- this { is for ending the set of style
+    InjuredRunAnimSpeed = 1.35 
+	}  -- this { is for ending the set of style
 }
 
 
