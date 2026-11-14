@@ -23,7 +23,7 @@ Duration = 7;
 })
 
 game.StarterGui:SetCore("SendNotification", {
-Title = "Version 0.85";
+Title = "Version 0.895";
 Text = "Ehnormalsb/NotError on roblox";
 Duration = 7;
 })
@@ -1345,28 +1345,29 @@ end
 	end
 
 	local function playMovementAnim(track, fadeTime)
-		if State.currentMovementAnim == track then return end
-		stopAllMovement()
-		track:Play(fadeTime or 0.25)
+    if not track then return end -- ADD THIS SAFETY GUARD
+    if State.currentMovementAnim == track then return end
+    stopAllMovement()
+    track:Play(fadeTime or 0.25)
+    
+    local style = ANIM_STYLES[currentStyleIndex]
 		
-		local style = ANIM_STYLES[currentStyleIndex]
-		
-		if track == tracks.Walk then 
-			track:AdjustSpeed(style.WalkAnimSpeed or WALK_SPEED) 
-		elseif track == tracks.InjuredWalk then
-			track:AdjustSpeed(style.InjuredWalkAnimSpeed or WALK_SPEED)
-		elseif track == tracks.Idle then
-			track:AdjustSpeed(style.IdleAnimSpeed or 1)
-		elseif track == tracks.InjuredIdle then
-			track:AdjustSpeed(style.InjuredIdleAnimSpeed or 1)
-		elseif track == tracks.Run then 
-			track:AdjustSpeed(style.RunAnimSpeed or RUN_ANIM_SPEED)
-		elseif track == tracks.InjuredRun then
-			track:AdjustSpeed(style.InjuredRunAnimSpeed or style.RunAnimSpeed or RUN_ANIM_SPEED)
-		end
-		
-		State.currentMovementAnim = track
-	end
+    if track == tracks.Walk then 
+        track:AdjustSpeed(style.WalkAnimSpeed or WALK_SPEED) 
+    elseif track == tracks.InjuredWalk then
+        track:AdjustSpeed(style.InjuredWalkAnimSpeed or WALK_SPEED)
+    elseif track == tracks.Idle then
+        track:AdjustSpeed(style.IdleAnimSpeed or 1)
+    elseif track == tracks.InjuredIdle then
+        track:AdjustSpeed(style.InjuredIdleAnimSpeed or 1)
+    elseif track == tracks.Run then 
+        track:AdjustSpeed(style.RunAnimSpeed or RUN_ANIM_SPEED) 
+    elseif track == tracks.InjuredRun then
+        track:AdjustSpeed(style.InjuredRunAnimSpeed or style.RunAnimSpeed or RUN_ANIM_SPEED)
+    end
+    
+    State.currentMovementAnim = track
+end
 
 	-- Repopulate Emote Menu with Audio Support
 	for _, child in ipairs(emoteMenu:GetChildren()) do if child:IsA("TextButton") then child:Destroy() end end
@@ -1521,7 +1522,7 @@ end
         	track:AdjustSpeed(data.AnimSpeed or 1)
         end
 
-				-- FIXED: Automatically stop and reset state when a one-time emote ends
+				-- Automatically stop and reset state when a one-time emote ends
 				if not data.IsLooping then
 					task.spawn(function()
 						track.Stopped:Wait()
@@ -1577,7 +1578,7 @@ end
 
 			State.isMovingEmote = data.IsMovingEmote or false
 			
-			-- THIS WAS FIXED: Added 'data.Sequence ~= nil' so the Stop button appears for sequences
+			-- Added 'data.Sequence ~= nil' so the Stop button appears for sequences
 			stopEmoteBtn.Visible = (data.IsLooping or data.IsMovingEmote or data.Sequence ~= nil)
 			
 			emotePanel.Visible = false
@@ -1698,37 +1699,39 @@ end
     -- Removing that line stops the script from acting like cruise-control, allowing you to stop and move freely.
 
 		-- Handle Head Rotation Track based on Injured State or Emoting
-		if isInjured or State.isEmoting then
-			if tracks.Head.IsPlaying then
-				tracks.Head:Stop(0.1)
-			end
-		else
+if tracks.Head then
+    if isInjured or State.isEmoting then
+        if tracks.Head.IsPlaying then
+            tracks.Head:Stop(0.1)
+        end
+    else
 			if not tracks.Head.IsPlaying then
 				tracks.Head:Play(0.1, 1, 0)
 				tracks.Head:AdjustWeight(0.5)
 			end
 		end
 
-		local targetYaw = 0
-		if not (State.isPunching or State.isEmoting or isInjured) then
-			local camDirObjSpace = rootPart.CFrame:VectorToObjectSpace(camera.CFrame.LookVector)
-			local rawYaw = -math.atan2(camDirObjSpace.X, -camDirObjSpace.Z)
-			local absYaw = math.abs(rawYaw)
+    local targetYaw = 0
+    if not (State.isPunching or State.isEmoting or isInjured) then
+        local camDirObjSpace = rootPart.CFrame:VectorToObjectSpace(camera.CFrame.LookVector)
+        local rawYaw = -math.atan2(camDirObjSpace.X, -camDirObjSpace.Z)
+        local absYaw = math.abs(rawYaw)
 	
 			-- Look straight forward (0) if camera is directly behind (<= 35 deg) 
 			-- OR if camera is directly in front (>= 170 deg, which is 180 minus 10, note this is optional so its your choice)
-			if absYaw <= math.rad(35) or absYaw >= math.rad(170) then
-				targetYaw = 0
-			else
-				targetYaw = math.clamp(rawYaw, -math.rad(65), math.rad(65))
-			end
-		end
-	
-		if not isInjured and not State.isEmoting then
-			currentYaw = currentYaw + (targetYaw - currentYaw) * math.min(dt * smoothness, 1)
-			local yawMapped = (currentYaw < 0 and currentYaw + (math.pi * 2) or currentYaw)
-			if tracks.Head.Length > 0 then tracks.Head.TimePosition = (yawMapped / (math.pi * 2)) * tracks.Head.Length end
-		end
+        if absYaw <= math.rad(35) or absYaw >= math.rad(170) then
+            targetYaw = 0
+        else
+            targetYaw = math.clamp(rawYaw, -math.rad(65), math.rad(65))
+        end
+    end
+
+    if not isInjured and not State.isEmoting then
+        currentYaw = currentYaw + (targetYaw - currentYaw) * math.min(dt * smoothness, 1)
+        local yawMapped = (currentYaw < 0 and currentYaw + (math.pi * 2) or currentYaw)
+        if tracks.Head.Length > 0 then tracks.Head.TimePosition = (yawMapped / (math.pi * 2)) * tracks.Head.Length end
+    end
+end
 
 		local now = os.clock()
 		if now < punchCdEnd and not State.isPunching then setOverlay(punchUI, true, tostring(math.ceil(punchCdEnd - now))) end
