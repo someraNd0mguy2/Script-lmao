@@ -23,7 +23,7 @@ Duration = 7;
 })
 
 game.StarterGui:SetCore("SendNotification", {
-Title = "Version 0.895";
+Title = "Version 0.9";
 Text = "Ehnormalsb/NotError on roblox";
 Duration = 7;
 })
@@ -927,10 +927,10 @@ bgmBtn.MouseButton1Click:Connect(function()
     end
 end)
 
-for i, songName in ipairs(playlistKeys) do
+for i, songData in ipairs(soundtracks) do
     local songOption = Instance.new("TextButton", bgmDropdown)
     songOption.Size = UDim2.new(1, 0, 0, 30)
-    songOption.Text = songName
+    songOption.Text = songData.Name
     songOption.BackgroundColor3 = Color3.fromRGB(35, 35, 35) -- Inner button color to match Boombox
     songOption.TextColor3 = COLOR_WHITE
     songOption.FontFace = FONT
@@ -940,15 +940,17 @@ for i, songName in ipairs(playlistKeys) do
     
     songOption.MouseButton1Click:Connect(function()
         bgmDropdown.Visible = false 
-        bgmBtn.Text = "BGM: " .. songName 
+        bgmBtn.Text = "BGM: " .. songData.Name 
+        currentTrackIndex = i
         
         if playlistConnection then 
             playlistConnection:Disconnect() 
             playlistConnection = nil
         end
         
-        if soundtracks[songName] then
-            bgmPlayer.SoundId = resolveAudioId(soundtracks[songName])
+        local resolvedId = resolveAudioId(songData.Url)
+        if resolvedId then
+            bgmPlayer.SoundId = resolvedId
             bgmPlayer.Looped = true 
             bgmPlayer:Play()
         end
@@ -963,7 +965,7 @@ stopBgmBtn.Text = "STOP BGM"
 stopBgmBtn.TextColor3 = COLOR_WHITE
 stopBgmBtn.FontFace = FONT
 stopBgmBtn.TextSize = 12
-stopBgmBtn.LayoutOrder = #playlistKeys + 1
+stopBgmBtn.LayoutOrder = #soundtracks + 1
 Instance.new("UICorner", stopBgmBtn).CornerRadius = UDim.new(0, 6)
 
 stopBgmBtn.MouseButton1Click:Connect(function()
