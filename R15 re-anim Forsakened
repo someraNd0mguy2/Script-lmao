@@ -23,7 +23,7 @@ Duration = 7;
 })
 
 game.StarterGui:SetCore("SendNotification", {
-Title = "Version 0.9";
+Title = "Version 0.895";
 Text = "Ehnormalsb/NotError on roblox";
 Duration = 7;
 })
@@ -91,7 +91,7 @@ local ANIM_STYLES = {
 		InjuredRun = "rbxassetid://84285879089698",
 
     -- Speed settings (Optional per-style overrides)
-    InjuredRunAnimSpeed = 1.35
+    InjuredRunAnimSpeed = 1.5
 	},
 
 	{ Name = "Empty (0 ids) -put in whatever animation ids you want or desire",
@@ -125,7 +125,7 @@ local ANIM_STYLES = {
 		InjuredWalk = "rbxassetid://101924559363550",
 		InjuredRun = "rbxassetid://84285879089698",
 
-    InjuredRunAnimSpeed = 1.35,
+    InjuredRunAnimSpeed = 1.5,
 		NormalSpeed = 12
 	},
 
@@ -139,7 +139,7 @@ local ANIM_STYLES = {
 		InjuredWalk = "rbxassetid://101924559363550",
 		InjuredRun = "rbxassetid://84285879089698",
 
-    InjuredRunAnimSpeed = 1.35,
+    InjuredRunAnimSpeed = 1.5,
 		NormalSpeed = 12
 	},
 
@@ -157,7 +157,7 @@ local ANIM_STYLES = {
 		RunAnimSpeed = 2.4,
 		SprintSpeed = 27.5,
 		WalkAnimSpeed = 1, -- You can also add custom walk speeds
-    InjuredRunAnimSpeed = 1.35,
+    InjuredRunAnimSpeed = 1.5,
 		NormalSpeed = 10
 	},
 
@@ -175,7 +175,7 @@ local ANIM_STYLES = {
 		RunAnimSpeed = 2.25,
 		SprintSpeed = 27.25,
 		WalkAnimSpeed = 1,
-    InjuredRunAnimSpeed = 1.35,
+    InjuredRunAnimSpeed = 1.5,
 		NormalSpeed = 10
 	},
 
@@ -192,7 +192,7 @@ local ANIM_STYLES = {
 		RunAnimSpeed = 1.275,
 		SprintSpeed = 27.25,
 		WalkAnimSpeed = 1,
-    InjuredRunAnimSpeed = 1.35,
+    InjuredRunAnimSpeed = 1.5,
 		NormalSpeed = 10
 	},
 
@@ -207,7 +207,7 @@ local ANIM_STYLES = {
 		InjuredRun = "rbxassetid://84285879089698",
 
 		NormalSpeed = 10,
-    InjuredRunAnimSpeed = 1.35,
+    InjuredRunAnimSpeed = 1.5,
 		WalkAnimSpeed = 1,
 		SprintSpeed = 27.25,
 		RunAnimSpeed = 2.25,
@@ -229,7 +229,7 @@ local ANIM_STYLES = {
 		WalkAnimSpeed = 10, -- You can also add custom walkspeeds
 		NormalSpeed = 11,
 		IdleAnimSpeed = 0.7,
-    InjuredRunAnimSpeed = 1.35
+    InjuredRunAnimSpeed = 1.5
 	},
 
 	{ Name = "Mayhem SG (idle)",
@@ -242,7 +242,7 @@ local ANIM_STYLES = {
 		InjuredWalk = "rbxassetid://101924559363550",
 		InjuredRun = "rbxassetid://84285879089698",
 
-    InjuredRunAnimSpeed = 1.35 
+    InjuredRunAnimSpeed = 1.5 
 	}  -- this { is for ending the set of style
 }
 
