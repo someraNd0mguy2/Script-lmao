@@ -805,10 +805,10 @@ local shiftlockUI = makeAbilityButton("ShiftLock", IMG_SHIFTLOCK, "CTRL", "CTRL"
 local punchUI = makeAbilityButton("Punch", IMG_PUNCH, "E", "E", 75, UDim2.new(1, -30, 1, -185))
 local blockUI = makeAbilityButton("Block", IMG_BLOCK, "Q", "Q", 75, UDim2.new(1, -115, 1, -185))
 
--- ### Injured Button Thing 🔥🔥🔥 ###
+-- ### Injured Button ###
 local injuredBtn = Instance.new("TextButton", screenGui)
 injuredBtn.Name, injuredBtn.Size = "InjuredToggleBtn", UDim2.new(0, 75, 0, 30)
-injuredBtn.Position, injuredBtn.AnchorPoint = UDim2.new(1, -180, 1, -235), Vector2.new(1, 1)
+injuredBtn.Position, injuredBtn.AnchorPoint = UDim2.new(1, -165, 1, -235), Vector2.new(1, 1)
 injuredBtn.BackgroundColor3, injuredBtn.Text, injuredBtn.TextColor3 = Color3.fromRGB(100, 0, 0), "Injured : Off", COLOR_WHITE
 injuredBtn.FontFace, injuredBtn.TextSize = FONT, 11
 Instance.new("UICorner", injuredBtn).CornerRadius = UDim.new(0, 6)
