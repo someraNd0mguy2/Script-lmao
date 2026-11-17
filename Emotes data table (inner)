@@ -1,0 +1,216 @@
+--======================================
+-- Emotes Configurations, I guess?-
+--[[ 
+   Name = "Whatever you put in here"  -- The name of the emote,
+
+   ID = "rbxassetid://YourAnimID",  -- Put the ID of the anim or emote you want here, use a logger or smt to get it,
+
+   WalkSpeed = number  -- Character movement speed while emoting,
+
+   AnimSpeed = number   -- The animation itself speed),
+
+   IsLooping = true / false  --Means it will loop the animation and the music aswell,
+
+   IsMovingEmote = true  -- Means that you can move while using the emote,
+
+	 CustomSound = {
+    FileName = "YourMusicThatYouCanName.mp3",  -- Name whatever you like
+		Url = "TheLinkFile.Mp3ThatYouPutInHere" }  -- The raw link of your file in github,
+
+    HeightOffset = number  -- The offert your character you want to set higher or lower (Mostly useless ngl),
+
+    -- this config, I will probably fix it
+    Phase2Start = number,  -- The exact second you want the part to speed up (you'll need to align this)
+    Phase2Speed = number  -- How fast you want the 2nd part to play,
+
+	  SequenceType = "AnimsLooped/Intro", -- Tells the handler to use that Type of Sequence.
+    Sequence = {
+		  { ID = "rbxassetid://102806201875589", Duration = 0.5 }, -- first anim plays
+		  { ID = "rbxassetid://106544616318711", Duration = 0.5 }, -- second anim plays
+		  { ID = "rbxassetid://127080445177635", Duration = 0.5 }, -- third anim plays
+		  { ID = "rbxassetid://72037992741389",  Duration = 0.3 }  -- This last anim (or track) will loop / Will loop back the whole anim thing (You can add more Phase if you want)
+     }
+
+		  Moveable = true / false  -- If true then it allows the player to turn freely using their movement on devices without needing shiftlock (false is just not letting them turn freely with default movement)
+
+		  AutoMove = true / false  -- the emote will move on it owns if its true (false will stay in place and the user is required to move)
+
+
+    -- By only having these two will result in a 1 time anim played.
+    Name = "Whatever you put in here"
+    ID = "rbxassetid://YourAnimID"
+]]
+-- ====================================== --
+
+-- ^^^### Emote Configurations (Also some settings above) ### ^^^
+
+return {
+	{ Name = "/e dance 1",
+		ID = "rbxassetid://89676212115777", IsLooping = true,
+		CustomSound = {
+      FileName = "Cyberfantasia.mp3",
+			Url = "https://github.com/someraNd0mguy2/SONGSname.mp3-usebale-/raw/refs/heads/main/tn-shi%20-%20Cyberfantasia.mp3" }
+	},
+-- Audio for /e dance 1 is just for fun ykyk
+	{ Name = "/e dance 2", ID = "rbxassetid://116571017721759", IsLooping = true},
+	{ Name = "/e dance 3", ID = "rbxassetid://78240649545370", IsLooping = true},
+	{ Name = "/e retro dance", ID = "rbxassetid://112167105910889", IsLooping = true},
+	{ Name = "Dance Potion", ID = "rbxassetid://129385001500617", IsLooping = true},
+	{ Name = "/e wave", ID = "rbxassetid://116146360657398"},
+	{ Name = "/e point", ID = "rbxassetid://82179945186939"},
+	{ Name = "/e laugh", ID = "rbxassetid://113442867466734"},
+	{ Name = "/e cheer", ID = "rbxassetid://84812130090897", AnimSpeed = 1.325},
+	{ Name = "/e sit", ID = "rbxassetid://115023539891047", IsLooping = true},
+-- /e lmao text
+
+	{ Name = "Retro Sit", ID = "rbxassetid://70887364787031", IsLooping = true},
+	{ Name = "Retro Sit (V2)", ID = "rbxassetid://120736576017702", IsLooping = true},
+	{ Name = "Steep Steps Sit", ID = "rbxassetid://96928249373469", IsLooping = true},
+	{ Name = "Sit", ID = "rbxassetid://120346451518207", IsLooping = true},
+	{ Name = "Sit (V2)", ID = "rbxassetid://110141993456103", IsLooping = true},
+	{ Name = "Sit (V3)", ID = "rbxassetid://89130915166852", IsLooping = true},
+	{ Name = "Sit (V4)", ID = "rbxassetid://132432660810949", IsLooping = true, HeightOffset = 0.0075},
+	{ Name = "Legs Kicking", ID = "rbxassetid://80113376828780", IsLooping = true},
+	{ Name = "(BT) Plains Thinking Phase", ID = "rbxassetid://96513369166239", IsLooping = true},
+	{ Name = "(BT) Noobadoor Stance", ID = "rbxassetid://120240990220965", IsLooping = true, AnimSpeed = 0.5},
+
+-- Your entire pfy in the past years, trust me :
+	{ Name = "Low cortisol (V1)", ID = "rbxassetid://108330858686045", IsLooping = true},
+	{ Name = "Low cortisol (V2)", ID = "rbxassetid://73977838462540", IsLooping = true},
+	{ Name = "Low cortisol (V3)", ID = "rbxassetid://116276049310823", IsLooping = true},
+
+	{ Name = "BANG BANG BANG (CSM)", ID = "rbxassetid://96459040879794", IsLooping = true, AnimSpeed = 1.0295,
+		CustomSound = {
+      FileName = "BangBangBang.mp3",
+			Url = "https://raw.githubusercontent.com/someraNd0mguy2/SONGSname.mp3-usebale-/main/BANG%20BANG%20BANG%20-%20Chainsaw%20Man%20Song%20(ft.%20%40starxrayne%20%20%26%20%40JamsDX%20).mp3" }
+  },
+
+	{ Name = "Rat Dance (V1)", ID = "rbxassetid://79878714311433", IsLooping = true, AnimSpeed = 0.975,
+		CustomSound = {
+      FileName = "ChessTypeBeat.mp3",
+			Url = "https://raw.githubusercontent.com/someraNd0mguy2/SONGSname.mp3-usebale-/main/CHESS%20TYPE%20BEAT%20(Slowed).mp3" }
+  },
+
+	{ Name = "Rat Dance (V2)", ID = "rbxassetid://119386711855761", IsLooping = true, AnimSpeed = 1.5,
+		CustomSound = {
+      FileName = "ChessTypeBeat.mp3",
+			Url = "https://raw.githubusercontent.com/someraNd0mguy2/SONGSname.mp3-usebale-/main/CHESS%20TYPE%20BEAT%20(Slowed).mp3" }
+  },
+
+	{ Name = "Rat Dance (V3)", ID = "rbxassetid://73555079460637", IsLooping = true,
+		CustomSound = {
+      FileName = "ChessTypeBeat.mp3",
+			Url = "https://raw.githubusercontent.com/someraNd0mguy2/SONGSname.mp3-usebale-/main/CHESS%20TYPE%20BEAT%20(Slowed).mp3" }
+  },
+
+	{ Name = "Rat Dance (V4)", ID = "rbxassetid://86334552898234", IsLooping = true,
+		CustomSound = {
+      FileName = "ChessTypeBeat.mp3",
+			Url = "https://raw.githubusercontent.com/someraNd0mguy2/SONGSname.mp3-usebale-/main/CHESS%20TYPE%20BEAT%20(Slowed).mp3" }
+  },
+
+	{ Name = "Rat Dance (V5)", ID = "rbxassetid://130278319509843", IsLooping = true, AnimSpeed = 0.95,
+		CustomSound = {
+      FileName = "ChessTypeBeat.mp3",
+			Url = "https://raw.githubusercontent.com/someraNd0mguy2/SONGSname.mp3-usebale-/main/CHESS%20TYPE%20BEAT%20(Slowed).mp3" }
+  },
+
+	{ Name = "Rat Dance (V6)", ID = "rbxassetid://86798743613035", IsLooping = true,
+		CustomSound = {
+      FileName = "ChessTypeBeat.mp3",
+			Url = "https://raw.githubusercontent.com/someraNd0mguy2/SONGSname.mp3-usebale-/main/CHESS%20TYPE%20BEAT%20(Slowed).mp3" }
+},
+	{ Name = "Rat Dance..?", ID = "rbxassetid://119386711855761", IsLooping = true, AnimSpeed = 1.5,
+		CustomSound = {
+      FileName = "ChessButBadApple.mp3",
+			Url = "https://raw.githubusercontent.com/someraNd0mguy2/SONGSname.mp3-usebale-/main/Bad%20Apple!!%20but%20it's%20Chess%20Type%20Beat%20(FULL%20Version).mp3" }
+  },
+	{ Name = "Conga (Variant 1)", ID = "rbxassetid://126452924444711", IsMovingEmote = true, IsLooping = true, WalkSpeed = 8.5, Moveable = true, AutoMove = true},
+	{ Name = "California Girls (V1)", ID = "rbxassetid://76389296606994", IsLooping = true},
+	{ Name = "California Girls (V2)", ID = "rbxassetid://78796496757269", IsLooping = true},
+	{ Name = "Bag Up", ID = "rbxassetid://88570432473654", IsLooping = true},
+	{ Name = "Metro Man (V1)", ID = "rbxassetid://79481824762169", IsLooping = true},
+	{ Name = "Metro Man (V2)", ID = "rbxassetid://74656859305745", IsLooping = true},
+	{ Name = "Metro Man (V3)", ID = "rbxassetid://126215232581064", IsLooping = true,
+    Phase2Start = 2.15,  -- The exact second the 2nd part begins (you'll need to align this)
+    Phase2Speed = 1.325   -- How fast you want the 2nd part to play
+  },
+	{ Name = "Subject Three", ID = "rbxassetid://111993447655346", IsLooping = true},
+	{ Name = "Caramelldansen", ID = "rbxassetid://102908521825429", IsLooping = true},
+	{ Name = "Unemployment", ID = "rbxassetid://87033513223989", IsLooping = true},
+	{ Name = "Lost In Paradise", ID = "rbxassetid://79664884985828", IsLooping = true, AnimSpeed = 1.25},
+	{ Name = "Dance if you carried", ID = "rbxassetid://85924918188334", IsLooping = true},
+	{ Name = "Dance if you carried (Headlock)", ID = "rbxassetid://85924918188334", IsLooping = true,
+		CustomSound = {
+      FileName = "Headlock_Forsaken.mp3",
+			Url = "https://raw.githubusercontent.com/someraNd0mguy2/SONGSname.mp3-usebale-/refs/heads/main/_%20Headlock%20Forsaken%20remix.mp3" }
+  },
+	{ Name = "Parrot Dance (MC)", ID = "rbxassetid://101810746304426", IsLooping = true},
+	{ Name = "Smug Dancin", ID = "rbxassetid://121934635382614", IsLooping = true},
+	{ Name = "Number", ID = "rbxassetid://79183639768418", IsLooping = true},
+	{ Name = "Otsukare Summer", ID = "rbxassetid://96239426856784", IsLooping = true},
+	{ Name = "Yuji jumping (V1)", ID = "rbxassetid://134831504136116", IsLooping = true},
+	{ Name = "Yuji jumping (V2)", ID = "rbxassetid://124496563760646", IsLooping = true},
+	{ Name = "Take the L", ID = "rbxassetid://81437777446514", IsLooping = true},
+	{ Name = "Angels of Delusion", ID = "rbxassetid://99893613768286", IsLooping = true},
+	{ Name = "Nervy Dance", ID = "rbxassetid://87354775848784", IsLooping = true, AnimSpeed = 1.3},
+	{ Name = "Jumpstyle", ID = "rbxassetid://87824676803611", IsLooping = true},
+	{ Name = "Who Win's (Wally West)", ID = "rbxassetid://109447419896836", IsLooping = true},
+	{ Name = "Sturdy", ID = "rbxassetid://119641433612039", IsLooping = true},
+	{ Name = "Squingle (DOD)", ID = "rbxassetid://137421579830901", IsLooping = true},
+	{ Name = "Gangnam Style (DOD)", ID = "rbxassetid://112342491908786", IsLooping = true},
+	{ Name = "Kwik Flip (AVGN Bot)", ID = "rbxassetid://123170612946963", IsLooping = true, AnimSpeed = 1.0825,
+		CustomSound = {
+      FileName = "KwikFlipYTPMV.mp3",
+			Url = "https://raw.githubusercontent.com/someraNd0mguy2/SONGSname.mp3-usebale-/refs/heads/main/Kwik%20Flip%20%20YTPMV.mp3" }
+  },
+	{ Name = "Kwik Flip (AVGN Bot) [V2]", ID = "rbxassetid://76820525290498", IsLooping = true,
+		CustomSound = {
+      FileName = "KwikFlipYTPMV.mp3",
+			Url = "https://raw.githubusercontent.com/someraNd0mguy2/SONGSname.mp3-usebale-/refs/heads/main/Kwik%20Flip%20%20YTPMV.mp3" }
+  },
+	{	Name = "Alter Ego",
+    IsLooping = true, -- Sequences usually shouldn't hard-loop, but Part 4 can loop if needed
+    SequenceType = "AnimsLooped", -- Tells the handler to use Option A
+		Sequence = {
+			{ ID = "rbxassetid://102806201875589", Duration = 0.4 }, -- Tweak threshold to match your track lengths (oh btw they go in an order)
+			{ ID = "rbxassetid://106544616318711", Duration = 0.4 },
+			{ ID = "rbxassetid://127080445177635", Duration = 0.4 },
+			{ ID = "rbxassetid://72037992741389",  Duration = 0.4 }
+		}
+	},
+	-- Example of Option C (Intro Sequence -> Infinite Pose/Dance on Part 4)
+  { Name = "Alter Ego Intro", IsLooping = true,
+	  SequenceType = "Intro", -- Tells the handler to use Option B
+    Sequence = {
+		  { ID = "rbxassetid://102806201875589", Duration = 0.5 }, -- Intro Phase 1
+		  { ID = "rbxassetid://106544616318711", Duration = 0.5 }, -- Intro Phase 2
+		  { ID = "rbxassetid://127080445177635", Duration = 0.5 }, -- Intro Phase 3
+		  { ID = "rbxassetid://72037992741389",  Duration = 0.3 }  -- This track loops infinitely!
+     }
+  },
+  { Name = "Hakari (Lonely)", ID = "rbxassetid://118465124106910", IsLooping = true,
+    CustomSound = {
+      FileName = "L0nelyLonely.mp3",
+			Url = "https://raw.githubusercontent.com/someraNd0mguy2/SONGSname.mp3-usebale-/refs/heads/main/lonely%20lonely%20dante%20extended.mp3" }
+  },
+	{ Name = "Dancin with ur eyes closed", ID = "rbxassetid://117991470645633", IsLooping = true, AnimSpeed = 0.91,
+    CustomSound = {
+      FileName = "Dwyec.mp3",
+			Url = "https://raw.githubusercontent.com/someraNd0mguy2/SONGSname.mp3-usebale-/refs/heads/main/%5BROBLOX%5D%20Dance%20With%20Your%20Eyes%20Closed%20EMOTE.mp3" }
+  },
+	{ Name = "Skipping", ID = "rbxassetid://115270771117279", IsMovingEmote = true, IsLooping = true, WalkSpeed = 7.5, Moveable = true, AutoMove = true},
+	{ Name = "BHop", ID = "rbxassetid://134484705368874", IsMovingEmote = true, IsLooping = true, AnimSpeed = 1.5, WalkSpeed = 12.5, Moveable = true, AutoMove = true},
+
+-- poses section, since im lazy to identify them in separations.
+	{ Name = "IMPOSSIBLE, THIS ISN'T THE CAR 🟣⚡️", ID = "rbxassetid://130825608045596" },
+	{ Name = "Jojo's 'Come at me'", ID = "rbxassetid://84961998273178", IsLooping = true},
+	{ Name = "Jonathan Pose", ID = "rbxassetid://116505117247744", IsLooping = true},
+	{ Name = "Jotaro Jojo's Pose", ID = "rbxassetid://137985052211397", IsLooping = true},
+	{ Name = "Chill.", ID = "rbxassetid://78848614632586", IsLooping = true},
+	{ Name = "Pose 28 🥀😭", ID = "rbxassetid://139228722899224", IsLooping = true},
+	{ Name = "Azure idle", ID = "rbxassetid://74443937226830", IsLooping = true},
+	{ Name = "test", ID = "rbxassetid://89676212115777"},
+	{ Name = "test 2", ID = "rbxassetid://89676212115777"},
+	{ Name = "test 3", ID = "rbxassetid://89676212115777"}
+}
