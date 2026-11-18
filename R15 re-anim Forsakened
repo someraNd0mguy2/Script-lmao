@@ -472,102 +472,280 @@ styleListLayout.Padding = UDim.new(0, 2)
 local masterVolume = 1
 local bopIntensity = 50 -- Default bop strength (0 to 200)
 
+-- 1. Square Settings Button with an Outline (UIStroke)
 local settingsBtn = Instance.new("TextButton", screenGui)
 settingsBtn.Name = "SettingsBtn"
-settingsBtn.Size = UDim2.new(0, 130, 0, 35)
+settingsBtn.Size = UDim2.new(0, 42, 0, 40) -- Square sizing
 settingsBtn.Position = UDim2.new(0, 335, 0, 60)
 settingsBtn.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
-settingsBtn.Text = "⛭ Settings ✧"
+settingsBtn.Text = "《|⚙️|》"
 settingsBtn.TextColor3 = COLOR_WHITE
 settingsBtn.FontFace = FONT
-settingsBtn.TextSize = 13
+settingsBtn.TextSize = 18
 Instance.new("UICorner", settingsBtn).CornerRadius = UDim.new(0, 8)
 
--- 65% Screen Scaled Panel (Centered)
+local settingsBtnStroke = Instance.new("UIStroke", settingsBtn)
+settingsBtnStroke.Color = Color3.fromRGB(120, 120, 120)
+settingsBtnStroke.Thickness = 2
+
+-- 2. 65% Screen Scaled Panel with Top-to-Bottom Gray-to-Black Gradient & UIStroke
 local settingsPanel = Instance.new("Frame", screenGui)
 settingsPanel.Name = "SettingsPanel"
 settingsPanel.Visible = false
 settingsPanel.Size = UDim2.new(0.65, 0, 0.65, 0)
 settingsPanel.Position = UDim2.new(0.5, 0, 0.5, 0)
 settingsPanel.AnchorPoint = Vector2.new(0.5, 0.5)
-settingsPanel.BackgroundColor3 = Color3.fromRGB(25, 25, 25)
-Instance.new("UICorner", settingsPanel).CornerRadius = UDim.new(0, 12)
+settingsPanel.BackgroundColor3 = Color3.new(1, 1, 1)
+Instance.new("UICorner", settingsPanel).CornerRadius = UDim.new(0, 14)
+
+local panelStroke = Instance.new("UIStroke", settingsPanel)
+panelStroke.Color = Color3.fromRGB(90, 90, 90)
+panelStroke.Thickness = 2
+
+-- Balanced Vertical Gradient (Gray at top fading down to dark black)
+local panelGradient = Instance.new("UIGradient", settingsPanel)
+panelGradient.Rotation = 90
+panelGradient.Color = ColorSequence.new({
+    ColorSequenceKeypoint.new(0, Color3.fromRGB(65, 65, 65)),  -- Gray top
+    ColorSequenceKeypoint.new(1, Color3.fromRGB(20, 20, 20))   -- Dark black bottom
+})
 
 local panelPadding = Instance.new("UIPadding", settingsPanel)
-panelPadding.PaddingTop = UDim.new(0, 20)
-panelPadding.PaddingBottom = UDim.new(0, 20)
-panelPadding.PaddingLeft = UDim.new(0, 25)
-panelPadding.PaddingRight = UDim.new(0, 25)
+panelPadding.PaddingTop = UDim.new(0, 15)
+panelPadding.PaddingBottom = UDim.new(0, 15)
+panelPadding.PaddingLeft = UDim.new(0, 20)
+panelPadding.PaddingRight = UDim.new(0, 20)
 
-local panelLayout = Instance.new("UIListLayout", settingsPanel)
-panelLayout.SortOrder = Enum.SortOrder.LayoutOrder
-panelLayout.Padding = UDim.new(0, 15)
-panelLayout.HorizontalAlignment = Enum.HorizontalAlignment.Center
+-- Header Title & Close Button Container
+local headerContainer = Instance.new("Frame", settingsPanel)
+headerContainer.Size = UDim2.new(1, 0, 0, 45)
+headerContainer.BackgroundTransparency = 1
 
--- Title (Fixed: Position removed since UIListLayout handles it)
-local panelTitle = Instance.new("TextLabel", settingsPanel)
-panelTitle.Size = UDim2.new(1, 0, 0, 35)
+local panelTitle = Instance.new("TextLabel", headerContainer)
+panelTitle.Size = UDim2.new(0.7, 0, 1, 0)
 panelTitle.BackgroundTransparency = 1
-panelTitle.Text = "--- SETTINGS ---"
+panelTitle.Text = "SETTINGS"
 panelTitle.TextColor3 = COLOR_WHITE
 panelTitle.FontFace = FONT
-panelTitle.TextSize = 18
-panelTitle.LayoutOrder = 1
+panelTitle.TextSize = 22
+panelTitle.TextXAlignment = Enum.TextXAlignment.Left
 
--- Master Volume Section
-local volLabel = Instance.new("TextLabel", settingsPanel)
-volLabel.Size = UDim2.new(1, 0, 0, 20)
-volLabel.BackgroundTransparency = 1
-volLabel.Text = "Master Volume:"
-volLabel.TextColor3 = COLOR_WHITE
-volLabel.FontFace = FONT
-volLabel.TextSize = 14
-volLabel.LayoutOrder = 2
-volLabel.TextXAlignment = Enum.TextXAlignment.Left
-
-local volBox = Instance.new("TextBox", settingsPanel)
-volBox.Size = UDim2.new(1, 0, 0, 35)
-volBox.BackgroundColor3 = Color3.fromRGB(35, 35, 35)
-volBox.TextColor3 = COLOR_WHITE
-volBox.Text = "1"
-volBox.FontFace = FONT
-volBox.TextSize = 14
-volBox.LayoutOrder = 3
-Instance.new("UICorner", volBox).CornerRadius = UDim.new(0, 6)
-
--- Bop Intensity Section (0 to 200)
-local bopLabel = Instance.new("TextLabel", settingsPanel)
-bopLabel.Size = UDim2.new(1, 0, 0, 20)
-bopLabel.BackgroundTransparency = 1
-bopLabel.Text = "Bop Intensity (0-200):"
-bopLabel.TextColor3 = COLOR_WHITE
-bopLabel.FontFace = FONT
-bopLabel.TextSize = 14
-bopLabel.LayoutOrder = 4
-bopLabel.TextXAlignment = Enum.TextXAlignment.Left
-
-local bopBox = Instance.new("TextBox", settingsPanel)
-bopBox.Size = UDim2.new(1, 0, 0, 35)
-bopBox.BackgroundColor3 = Color3.fromRGB(35, 35, 35)
-bopBox.TextColor3 = COLOR_WHITE
-bopBox.Text = "50"
-bopBox.FontFace = FONT
-bopBox.TextSize = 14
-bopBox.LayoutOrder = 5
-Instance.new("UICorner", bopBox).CornerRadius = UDim.new(0, 6)
-
--- Close Button
-local closeSettingsBtn = Instance.new("TextButton", settingsPanel)
-closeSettingsBtn.Size = UDim2.new(0, 140, 0, 40)
-closeSettingsBtn.BackgroundColor3 = Color3.fromRGB(150, 0, 0)
-closeSettingsBtn.Text = "CLOSE"
+local closeSettingsBtn = Instance.new("TextButton", headerContainer)
+closeSettingsBtn.Size = UDim2.new(0, 36, 0, 36)
+closeSettingsBtn.Position = UDim2.new(1, -36, 0.5, -18)
+closeSettingsBtn.BackgroundColor3 = Color3.fromRGB(150, 40, 40)
+closeSettingsBtn.Text = "✕"
 closeSettingsBtn.TextColor3 = COLOR_WHITE
 closeSettingsBtn.FontFace = FONT
-closeSettingsBtn.TextSize = 14
-closeSettingsBtn.LayoutOrder = 6
+closeSettingsBtn.TextSize = 16
 Instance.new("UICorner", closeSettingsBtn).CornerRadius = UDim.new(0, 8)
+local closeStroke = Instance.new("UIStroke", closeSettingsBtn)
+closeStroke.Color = Color3.fromRGB(200, 80, 80)
+closeStroke.Thickness = 1.5
 
--- Connections
+-- 3. Category Tabs (Audio & Gameplay options matching reference style)[span_2](start_span)[span_2](end_span)
+local tabContainer = Instance.new("Frame", settingsPanel)
+tabContainer.Size = UDim2.new(1, 0, 0, 36)
+tabContainer.Position = UDim2.new(0, 0, 0, 50)
+tabContainer.BackgroundTransparency = 1
+
+local tabLayout = Instance.new("UIListLayout", tabContainer)
+tabLayout.FillDirection = Enum.FillDirection.Horizontal
+tabLayout.Padding = UDim.new(0, 10)
+
+local audioTabBtn = Instance.new("TextButton", tabContainer)
+audioTabBtn.Size = UDim2.new(0, 120, 1, 0)
+audioTabBtn.BackgroundColor3 = Color3.fromRGB(60, 60, 60)
+audioTabBtn.Text = "Audio"
+audioTabBtn.TextColor3 = COLOR_WHITE
+audioTabBtn.FontFace = FONT
+audioTabBtn.TextSize = 14
+Instance.new("UICorner", audioTabBtn).CornerRadius = UDim.new(0, 6)
+local audioTabStroke = Instance.new("UIStroke", audioTabBtn)
+audioTabStroke.Color = Color3.fromRGB(100, 100, 100)
+audioTabStroke.Thickness = 1.5
+
+local gameplayTabBtn = Instance.new("TextButton", tabContainer)
+gameplayTabBtn.Size = UDim2.new(0, 120, 1, 0)
+gameplayTabBtn.BackgroundColor3 = Color3.fromRGB(35, 35, 35)
+gameplayTabBtn.Text = "Gameplay"
+gameplayTabBtn.TextColor3 = COLOR_GREY
+gameplayTabBtn.FontFace = FONT
+gameplayTabBtn.TextSize = 14
+Instance.new("UICorner", gameplayTabBtn).CornerRadius = UDim.new(0, 6)
+
+-- Content Pages Container
+local contentContainer = Instance.new("Frame", settingsPanel)
+contentContainer.Size = UDim2.new(1, 0, 1, -100)
+contentContainer.Position = UDim2.new(0, 0, 0, 95)
+contentContainer.BackgroundTransparency = 1
+
+-- Audio Page
+local audioPage = Instance.new("ScrollingFrame", contentContainer)
+audioPage.Size = UDim2.new(1, 0, 1, 0)
+audioPage.BackgroundTransparency = 1
+audioPage.BorderSizePixel = 0
+audioPage.ScrollBarThickness = 4
+audioPage.AutomaticCanvasSize = Enum.AutomaticSize.Y
+local audioPageLayout = Instance.new("UIListLayout", audioPage)
+audioPageLayout.Padding = UDim.new(0, 15)
+audioPageLayout.SortOrder = Enum.SortOrder.LayoutOrder
+
+-- Gameplay Page
+local gameplayPage = Instance.new("ScrollingFrame", contentContainer)
+gameplayPage.Size = UDim2.new(1, 0, 1, 0)
+gameplayPage.Visible = false
+gameplayPage.BackgroundTransparency = 1
+gameplayPage.BorderSizePixel = 0
+gameplayPage.ScrollBarThickness = 4
+gameplayPage.AutomaticCanvasSize = Enum.AutomaticSize.Y
+local gameplayPageLayout = Instance.new("UIListLayout", gameplayPage)
+gameplayPageLayout.Padding = UDim.new(0, 15)
+gameplayPageLayout.SortOrder = Enum.SortOrder.LayoutOrder
+
+-- Tab Switching Logic
+audioTabBtn.MouseButton1Click:Connect(function()
+    audioPage.Visible = true
+    gameplayPage.Visible = false
+    audioTabBtn.BackgroundColor3 = Color3.fromRGB(60, 60, 60)
+    audioTabBtn.TextColor3 = COLOR_WHITE
+    audioTabStroke.Color = Color3.fromRGB(100, 100, 100)
+    gameplayTabBtn.BackgroundColor3 = Color3.fromRGB(35, 35, 35)
+    gameplayTabBtn.TextColor3 = COLOR_GREY
+    if gameplayTabBtn:FindFirstChild("UIStroke") then gameplayTabBtn.UIStroke:Destroy() end
+end)
+
+gameplayTabBtn.MouseButton1Click:Connect(function()
+    audioPage.Visible = false
+    gameplayPage.Visible = true
+    gameplayTabBtn.BackgroundColor3 = Color3.fromRGB(60, 60, 60)
+    gameplayTabBtn.TextColor3 = COLOR_WHITE
+    local gpStroke = gameplayTabBtn:FindFirstChild("UIStroke") or Instance.new("UIStroke", gameplayTabBtn)
+    gpStroke.Color = Color3.fromRGB(100, 100, 100)
+    gpStroke.Thickness = 1.5
+    audioTabBtn.BackgroundColor3 = Color3.fromRGB(35, 35, 35)
+    audioTabBtn.TextColor3 = COLOR_GREY
+    audioTabStroke.Color = Color3.fromRGB(50, 50, 50)
+end)
+
+-- 4. Box Slider Helper (Numeric Input Box + Interactive Slider Bar matching reference style)[span_3](start_span)[span_3](end_span)
+local function createSliderSetting(parent, labelText, minVal, maxVal, defaultVal, callback, layoutOrder)
+    local row = Instance.new("Frame", parent)
+    row.Size = UDim2.new(1, 0, 0, 45)
+    row.BackgroundTransparency = 1
+    row.LayoutOrder = layoutOrder or 1
+
+    local lbl = Instance.new("TextLabel", row)
+    lbl.Size = UDim2.new(0.35, 0, 1, 0)
+    lbl.BackgroundTransparency = 1
+    lbl.Text = labelText
+    lbl.TextColor3 = COLOR_WHITE
+    lbl.FontFace = FONT
+    lbl.TextSize = 14
+    lbl.TextXAlignment = Enum.TextXAlignment.Left
+
+    -- Numeric Box on the left[span_4](start_span)[span_4](end_span)
+    local valBox = Instance.new("TextBox", row)
+    valBox.Size = UDim2.new(0, 55, 0, 32)
+    valBox.Position = UDim2.new(0.36, 0, 0.5, -16)
+    valBox.BackgroundColor3 = Color3.fromRGB(45, 45, 45)
+    valBox.TextColor3 = COLOR_WHITE
+    valBox.FontFace = FONT
+    valBox.TextSize = 13
+    valBox.Text = tostring(defaultVal)
+    Instance.new("UICorner", valBox).CornerRadius = UDim.new(0, 6)
+    local boxStroke = Instance.new("UIStroke", valBox)
+    boxStroke.Color = Color3.fromRGB(80, 80, 80)
+    boxStroke.Thickness = 1
+
+    -- Slider Track Bar on the right[span_5](start_span)[span_5](end_span)
+    local sliderBar = Instance.new("Frame", row)
+    sliderBar.Size = UDim2.new(0.58, 0, 0, 10)
+    sliderBar.Position = UDim2.new(0.40, 65, 0.5, -5)
+    sliderBar.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
+    Instance.new("UICorner", sliderBar).CornerRadius = UDim.new(1, 0)
+    local barStroke = Instance.new("UIStroke", sliderBar)
+    barStroke.Color = Color3.fromRGB(70, 70, 70)
+    barStroke.Thickness = 1
+
+    -- Slider Fill Bar
+    local sliderFill = Instance.new("Frame", sliderBar)
+    sliderFill.Size = UDim2.new((defaultVal - minVal) / (maxVal - minVal), 0, 1, 0)
+    sliderFill.BackgroundColor3 = Color3.fromRGB(80, 200, 100) -- Green slider accent
+    Instance.new("UICorner", sliderFill).CornerRadius = UDim.new(1, 0)
+
+    -- Draggable knob
+    local sliderBtn = Instance.new("TextButton", sliderBar)
+    sliderBtn.Size = UDim2.new(0, 16, 0, 16)
+    sliderBtn.Position = UDim2.new((defaultVal - minVal) / (maxVal - minVal), -8, 0.5, -8)
+    sliderBtn.BackgroundColor3 = Color3.fromRGB(220, 220, 220)
+    sliderBtn.Text = ""
+    Instance.new("UICorner", sliderBtn).CornerRadius = UDim.new(1, 0)
+
+    local currentVal = defaultVal
+
+    local function updateValue(val)
+        currentVal = math.clamp(math.round(val), minVal, maxVal)
+        valBox.Text = tostring(currentVal)
+        local alpha = (currentVal - minVal) / (maxVal - minVal)
+        sliderFill.Size = UDim2.new(alpha, 0, 1, 0)
+        sliderBtn.Position = UDim2.new(alpha, -8, 0.5, -8)
+        callback(currentVal)
+    end
+
+    valBox.FocusLost:Connect(function()
+        local num = tonumber(valBox.Text)
+        if num then
+            updateValue(num)
+        else
+            valBox.Text = tostring(currentVal)
+        end
+    end)
+
+    local dragging = false
+    sliderBtn.MouseButton1Down:Connect(function() dragging = true end)
+    sliderBar.InputBegan:Connect(function(input)
+        if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
+            dragging = true
+            local mousePos = UserInputService:GetMouseLocation()
+            local absPos = sliderBar.AbsolutePosition
+            local absSize = sliderBar.AbsoluteSize
+            local alpha = math.clamp((mousePos.X - absPos.X) / absSize.X, 0, 1)
+            updateValue(minVal + alpha * (maxVal - minVal))
+        end
+    end)
+
+    UserInputService.InputEnded:Connect(function(input)
+        if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
+            dragging = false
+        end
+    end)
+
+    UserInputService.InputChanged:Connect(function(input)
+        if dragging and (input.UserInputType == Enum.UserInputType.MouseMovement or input.UserInputType == Enum.UserInputType.Touch) then
+            local mousePos = UserInputService:GetMouseLocation()
+            local absPos = sliderBar.AbsolutePosition
+            local absSize = sliderBar.AbsoluteSize
+            local alpha = math.clamp((mousePos.X - absPos.X) / absSize.X, 0, 1)
+            updateValue(minVal + alpha * (maxVal - minVal))
+        end
+    end)
+
+    return row
+end
+
+-- Add Sliders to Audio Page
+createSliderSetting(audioPage, "MASTER VOLUME:", 0, 5, masterVolume, function(val)
+    masterVolume = val
+    bgmPlayer.Volume = masterVolume
+end, 1)
+
+-- Add Sliders to Gameplay Page
+createSliderSetting(gameplayPage, "BOP INTENSITY:", 0, 200, bopIntensity, function(val)
+    bopIntensity = val
+end, 1)
+
+-- Toggle Settings Panel visibility
 settingsBtn.MouseButton1Click:Connect(function()
 	settingsPanel.Visible = not settingsPanel.Visible
 	if settingsPanel.Visible then
@@ -580,25 +758,6 @@ end)
 
 closeSettingsBtn.MouseButton1Click:Connect(function()
 	settingsPanel.Visible = false
-end)
-
-volBox.FocusLost:Connect(function()
-	local v = tonumber(volBox.Text)
-	if v then
-		masterVolume = math.clamp(v, 0, 5)
-		bgmPlayer.Volume = masterVolume
-	else
-		volBox.Text = tostring(masterVolume)
-	end
-end)
-
-bopBox.FocusLost:Connect(function()
-	local v = tonumber(bopBox.Text)
-	if v then
-		bopIntensity = math.clamp(v, 0, 200)
-	else
-		bopBox.Text = tostring(bopIntensity)
-	end
 end)
 -- the end of "settings" button Ui
 
