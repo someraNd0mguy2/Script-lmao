@@ -468,71 +468,106 @@ styleListLayout.Padding = UDim.new(0, 2)
 -- the end of selectStyle Ui
 
 
--- ### Settings UI & Controls (Expanded Full Panel) ###
+-- ### Settings UI & Controls ###
 local masterVolume = 1
 local bopIntensity = 50 -- Default bop strength (0 to 200)
 
 local settingsBtn = Instance.new("TextButton", screenGui)
-settingsBtn.Name, settingsBtn.Size = "SettingsBtn", UDim2.new(0, 130, 0, 35)
-settingsBtn.Position = UDim2.new(0, 335, 0, 60) -- Positioned right of Style button
-settingsBtn.BackgroundColor3, settingsBtn.Text, settingsBtn.TextColor3 = Color3.fromRGB(40, 40, 40), "⛭ Settings ✧", COLOR_WHITE
-settingsBtn.FontFace, settingsBtn.TextSize = FONT, 13
+settingsBtn.Name = "SettingsBtn"
+settingsBtn.Size = UDim2.new(0, 130, 0, 35)
+settingsBtn.Position = UDim2.new(0, 335, 0, 60)
+settingsBtn.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
+settingsBtn.Text = "⛭ Settings ✧"
+settingsBtn.TextColor3 = COLOR_WHITE
+settingsBtn.FontFace = FONT
+settingsBtn.TextSize = 13
 Instance.new("UICorner", settingsBtn).CornerRadius = UDim.new(0, 8)
 
--- Scaled to cover a larger portion of the screen (centered popup)
+-- 65% Screen Scaled Panel (Centered)
 local settingsPanel = Instance.new("Frame", screenGui)
-settingsPanel.Name, settingsPanel.Visible = "SettingsPanel", false
-settingsPanel.Size = UDim2.new(0.65, 0, 0.65, 0) -- Covers 65% of screen width and height
-settingsPanel.Position = UDim2.new(0.5, 0, 0.5, 0) -- Perfectly centered
+settingsPanel.Name = "SettingsPanel"
+settingsPanel.Visible = false
+settingsPanel.Size = UDim2.new(0.65, 0, 0.65, 0)
+settingsPanel.Position = UDim2.new(0.5, 0, 0.5, 0)
 settingsPanel.AnchorPoint = Vector2.new(0.5, 0.5)
 settingsPanel.BackgroundColor3 = Color3.fromRGB(25, 25, 25)
 Instance.new("UICorner", settingsPanel).CornerRadius = UDim.new(0, 12)
 
--- Optional Title inside the large panel
-local panelTitle = Instance.new("TextLabel", settingsPanel)
-panelTitle.Size, panelTitle.Position = UDim2.new(1, 0, 0, 40)
-panelTitle.BackgroundTransparency, panelTitle.Text, panelTitle.TextColor3 = 1, "--- SETTINGS ---", COLOR_WHITE
-panelTitle.FontFace, panelTitle.TextSize = FONT, 16
-panelTitle.TextXAlignment = Enum.TextXAlignment.Center
+local panelPadding = Instance.new("UIPadding", settingsPanel)
+panelPadding.PaddingTop = UDim.new(0, 20)
+panelPadding.PaddingBottom = UDim.new(0, 20)
+panelPadding.PaddingLeft = UDim.new(0, 25)
+panelPadding.PaddingRight = UDim.new(0, 25)
 
--- Master Volume Label & Input
+local panelLayout = Instance.new("UIListLayout", settingsPanel)
+panelLayout.SortOrder = Enum.SortOrder.LayoutOrder
+panelLayout.Padding = UDim.new(0, 15)
+panelLayout.HorizontalAlignment = Enum.HorizontalAlignment.Center
+
+-- Title (Fixed: Position removed since UIListLayout handles it)
+local panelTitle = Instance.new("TextLabel", settingsPanel)
+panelTitle.Size = UDim2.new(1, 0, 0, 35)
+panelTitle.BackgroundTransparency = 1
+panelTitle.Text = "--- SETTINGS ---"
+panelTitle.TextColor3 = COLOR_WHITE
+panelTitle.FontFace = FONT
+panelTitle.TextSize = 18
+panelTitle.LayoutOrder = 1
+
+-- Master Volume Section
 local volLabel = Instance.new("TextLabel", settingsPanel)
-volLabel.Size, volLabel.Position = UDim2.new(1, -40, 0, 25), UDim2.new(0, 20, 0, 60)
-volLabel.BackgroundTransparency, volLabel.Text, volLabel.TextColor3 = 1, "Master Volume:", COLOR_WHITE
-volLabel.FontFace, volLabel.TextSize = FONT, 14
+volLabel.Size = UDim2.new(1, 0, 0, 20)
+volLabel.BackgroundTransparency = 1
+volLabel.Text = "Master Volume:"
+volLabel.TextColor3 = COLOR_WHITE
+volLabel.FontFace = FONT
+volLabel.TextSize = 14
+volLabel.LayoutOrder = 2
 volLabel.TextXAlignment = Enum.TextXAlignment.Left
 
 local volBox = Instance.new("TextBox", settingsPanel)
-volBox.Size, volBox.Position = UDim2.new(1, -40, 0, 35), UDim2.new(0, 20, 0, 85)
-volBox.BackgroundColor3, volBox.TextColor3, volBox.Text = Color3.fromRGB(35, 35, 35), COLOR_WHITE, "1"
-volBox.FontFace, volBox.TextSize = FONT, 14
+volBox.Size = UDim2.new(1, 0, 0, 35)
+volBox.BackgroundColor3 = Color3.fromRGB(35, 35, 35)
+volBox.TextColor3 = COLOR_WHITE
+volBox.Text = "1"
+volBox.FontFace = FONT
+volBox.TextSize = 14
+volBox.LayoutOrder = 3
 Instance.new("UICorner", volBox).CornerRadius = UDim.new(0, 6)
 
--- Bop Intensity Label & Input (0 to 200)
+-- Bop Intensity Section (0 to 200)
 local bopLabel = Instance.new("TextLabel", settingsPanel)
-bopLabel.Size, bopLabel.Position = UDim2.new(1, -40, 0, 25), UDim2.new(0, 20, 0, 135)
-bopLabel.BackgroundTransparency, bopLabel.Text, bopLabel.TextColor3 = 1, "Bop Intensity (0-200):", COLOR_WHITE
-bopLabel.FontFace, bopLabel.TextSize = FONT, 14
+bopLabel.Size = UDim2.new(1, 0, 0, 20)
+bopLabel.BackgroundTransparency = 1
+bopLabel.Text = "Bop Intensity (0-200):"
+bopLabel.TextColor3 = COLOR_WHITE
+bopLabel.FontFace = FONT
+bopLabel.TextSize = 14
+bopLabel.LayoutOrder = 4
 bopLabel.TextXAlignment = Enum.TextXAlignment.Left
 
 local bopBox = Instance.new("TextBox", settingsPanel)
-bopBox.Size, bopBox.Position = UDim2.new(1, -40, 0, 35), UDim2.new(0, 20, 0, 160)
-bopBox.BackgroundColor3, bopBox.TextColor3, bopBox.Text = Color3.fromRGB(35, 35, 35), COLOR_WHITE, "50"
-bopBox.FontFace, bopBox.TextSize = FONT, 14
+bopBox.Size = UDim2.new(1, 0, 0, 35)
+bopBox.BackgroundColor3 = Color3.fromRGB(35, 35, 35)
+bopBox.TextColor3 = COLOR_WHITE
+bopBox.Text = "50"
+bopBox.FontFace = FONT
+bopBox.TextSize = 14
+bopBox.LayoutOrder = 5
 Instance.new("UICorner", bopBox).CornerRadius = UDim.new(0, 6)
 
--- Close Button for the Settings Panel
+-- Close Button
 local closeSettingsBtn = Instance.new("TextButton", settingsPanel)
-closeSettingsBtn.Size, closeSettingsBtn.Position = UDim2.new(0, 120, 0, 35), UDim2.new(0.5, -60, 1, -50)
-closeSettingsBtn.BackgroundColor3, closeSettingsBtn.Text, closeSettingsBtn.TextColor3 = Color3.fromRGB(150, 0, 0), "CLOSE", COLOR_WHITE
-closeSettingsBtn.FontFace, closeSettingsBtn.TextSize = FONT, 13
+closeSettingsBtn.Size = UDim2.new(0, 140, 0, 40)
+closeSettingsBtn.BackgroundColor3 = Color3.fromRGB(150, 0, 0)
+closeSettingsBtn.Text = "CLOSE"
+closeSettingsBtn.TextColor3 = COLOR_WHITE
+closeSettingsBtn.FontFace = FONT
+closeSettingsBtn.TextSize = 14
+closeSettingsBtn.LayoutOrder = 6
 Instance.new("UICorner", closeSettingsBtn).CornerRadius = UDim.new(0, 8)
 
-closeSettingsBtn.MouseButton1Click:Connect(function()
-	settingsPanel.Visible = false
-end)
-
--- Toggle Settings Panel
+-- Connections
 settingsBtn.MouseButton1Click:Connect(function()
 	settingsPanel.Visible = not settingsPanel.Visible
 	if settingsPanel.Visible then
@@ -543,7 +578,10 @@ settingsBtn.MouseButton1Click:Connect(function()
 	end
 end)
 
--- Handle Volume input changes
+closeSettingsBtn.MouseButton1Click:Connect(function()
+	settingsPanel.Visible = false
+end)
+
 volBox.FocusLost:Connect(function()
 	local v = tonumber(volBox.Text)
 	if v then
@@ -554,7 +592,6 @@ volBox.FocusLost:Connect(function()
 	end
 end)
 
--- Handle Bop Intensity input changes (0 to 200)
 bopBox.FocusLost:Connect(function()
 	local v = tonumber(bopBox.Text)
 	if v then
@@ -882,27 +919,19 @@ end)
 -- Ability Buttons Helper
 local function makeAbilityButton(name, img, actionTxt, keyHint, size, pos)
 	local group = Instance.new("Frame", screenGui)
-	group.Name = name
-	group.BackgroundTransparency = 1
-	group.Size = UDim2.new(0, size, 0, size + 20)
-	group.Position = pos or UDim2.new()
-	group.AnchorPoint = Vector2.new(1, 1)
-
+	group.Name, group.BackgroundTransparency = name, 1
+	group.Size, group.Position, group.AnchorPoint = UDim2.new(0, size, 0, size + 20), pos, Vector2.new(1, 1)
 	local btn = Instance.new("ImageButton", group)
 	btn.Name, btn.Size, btn.BackgroundTransparency, btn.Image = "Btn", UDim2.new(1, 0, 0, size), 1, img
-	
 	local overlay = Instance.new("Frame", btn)
 	overlay.Size, overlay.BackgroundColor3, overlay.BackgroundTransparency, overlay.ZIndex = UDim2.new(1, 0, 1, 0), Color3.new(0, 0, 0), 1, 5
 	Instance.new("UICorner", overlay).CornerRadius = UDim.new(0.5, 0)
-	
 	local cdLbl = Instance.new("TextLabel", btn)
 	cdLbl.Size, cdLbl.BackgroundTransparency, cdLbl.Text, cdLbl.TextColor3 = UDim2.new(1, 0, 1, 0), 1, "", COLOR_WHITE
 	cdLbl.TextSize, cdLbl.FontFace, cdLbl.ZIndex = 18, FONT_THIN, 6
-	
 	local keyLbl = Instance.new("TextLabel", group)
 	keyLbl.Size, keyLbl.Position, keyLbl.BackgroundTransparency = UDim2.new(1, 0, 0, 20), UDim2.new(0, 0, 1, -20), 1
 	keyLbl.Text, keyLbl.TextColor3, keyLbl.TextSize, keyLbl.FontFace = (isMobile and actionTxt or ("[" .. keyHint .. "] " .. actionTxt)), COLOR_WHITE, 13, FONT
-	
 	return { button = btn, overlay = overlay, cdLabel = cdLbl }
 end
 
