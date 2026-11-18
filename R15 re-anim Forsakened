@@ -23,7 +23,7 @@ Duration = 7;
 })
 
 game.StarterGui:SetCore("SendNotification", {
-Title = "Version 0.95";
+Title = "Version 0.967";
 Text = "Ehnormalsb/NotError on roblox";
 Duration = 7;
 })
@@ -262,7 +262,6 @@ local ANIM_IDS = {
 	Head = "rbxassetid://74100161379681"
 }
 -- It will use the index set animation you want to use (put it 2 and it will use the 2nd set whenever the script is executed)
-
 
 
 --=======================================================
@@ -833,19 +832,63 @@ local connections = {}
 local function stopScript()
 	for _, c in ipairs(connections) do c:Disconnect() end
 	table.clear(connections)
+
+	if getgenv().R15ReanimForsakened_Cleanup then
+		pcall(getgenv().R15ReanimForsakened_Cleanup)
+	end
+
 	getgenv().CombatSystemLoaded = nil
+	getgenv().R15ReanimForsakened_Cleanup = nil
+
+	if bgmPlayer then
+		pcall(function()
+			bgmPlayer:Stop()
+			bgmPlayer:Destroy()
+		end)
+	end
+	if playlistConnection then
+		playlistConnection:Disconnect()
+		playlistConnection = nil
+	end
+
 	if player.Character then
 		local hum = player.Character:FindFirstChildOfClass("Humanoid")
-		local animateScript = player.Character:FindFirstChild("Animate")
-		if animateScript then animateScript.Disabled = false end
+		local hrp = player.Character:FindFirstChild("HumanoidRootPart")
+		
+		-- Reset camera subject back to humanoid if it was locked onto head/torso
+		if hum and workspace.CurrentCamera then
+			workspace.CurrentCamera.CameraSubject = hum
+		end
+
 		if hum then
+			hum.WalkSpeed = 16
+			hum.AutoRotate = true
+			hum.HipHeight = 0 -- Reset any emote height offsets
+
 			local animator = hum:FindFirstChildOfClass("Animator")
-			if animator then for _, track in ipairs(animator:GetPlayingAnimationTracks()) do track:Stop(0.1) end end
-			hum.WalkSpeed, hum.AutoRotate = 16, true
+			if animator then 
+				for _, track in ipairs(animator:GetPlayingAnimationTracks()) do 
+					track:Stop(0.1) 
+				end 
+			end
+		end
+
+		if hrp then
+			local boomboxSound = hrp:FindFirstChild("CustomBoomboxSound")
+			if boomboxSound then boomboxSound:Destroy() end
+		end
+
+		local animateScript = player.Character:FindFirstChild("Animate")
+		if animateScript then 
+			animateScript.Disabled = false 
 		end
 	end
-	screenGui:Destroy()
+
+	if screenGui then
+		screenGui:Destroy()
+	end
 end
+
 stopBtn.MouseButton1Click:Connect(stopScript)
 
 local function setupCharacter(character)
