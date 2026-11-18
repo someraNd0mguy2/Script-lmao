@@ -278,7 +278,7 @@ end)
 
 if success and type(remoteData) == "table" then
     EMOTE_DATA = remoteData
-    print("[Emote System] Successfully loaded " .. #EMOTE_DATA .. " emotes from GitHub!")
+    print("[Emote System] Successfully loaded " .. #EMOTE_DATA .. " emotes from GitHub")
 else
     warn("[Emote System] Failed to load remote emotes. Using fallback empty table. Error: " .. tostring(remoteData))
 end
@@ -882,19 +882,27 @@ end)
 -- Ability Buttons Helper
 local function makeAbilityButton(name, img, actionTxt, keyHint, size, pos)
 	local group = Instance.new("Frame", screenGui)
-	group.Name, group.BackgroundTransparency = name, 1
-	group.Size, group.Position, group.AnchorPoint = UDim2.new(0, size, 0, size + 20), pos, Vector2.new(1, 1)
+	group.Name = name
+	group.BackgroundTransparency = 1
+	group.Size = UDim2.new(0, size, 0, size + 20)
+	group.Position = pos or UDim2.new()
+	group.AnchorPoint = Vector2.new(1, 1)
+
 	local btn = Instance.new("ImageButton", group)
 	btn.Name, btn.Size, btn.BackgroundTransparency, btn.Image = "Btn", UDim2.new(1, 0, 0, size), 1, img
+	
 	local overlay = Instance.new("Frame", btn)
 	overlay.Size, overlay.BackgroundColor3, overlay.BackgroundTransparency, overlay.ZIndex = UDim2.new(1, 0, 1, 0), Color3.new(0, 0, 0), 1, 5
 	Instance.new("UICorner", overlay).CornerRadius = UDim.new(0.5, 0)
+	
 	local cdLbl = Instance.new("TextLabel", btn)
 	cdLbl.Size, cdLbl.BackgroundTransparency, cdLbl.Text, cdLbl.TextColor3 = UDim2.new(1, 0, 1, 0), 1, "", COLOR_WHITE
 	cdLbl.TextSize, cdLbl.FontFace, cdLbl.ZIndex = 18, FONT_THIN, 6
+	
 	local keyLbl = Instance.new("TextLabel", group)
 	keyLbl.Size, keyLbl.Position, keyLbl.BackgroundTransparency = UDim2.new(1, 0, 0, 20), UDim2.new(0, 0, 1, -20), 1
 	keyLbl.Text, keyLbl.TextColor3, keyLbl.TextSize, keyLbl.FontFace = (isMobile and actionTxt or ("[" .. keyHint .. "] " .. actionTxt)), COLOR_WHITE, 13, FONT
+	
 	return { button = btn, overlay = overlay, cdLabel = cdLbl }
 end
 
