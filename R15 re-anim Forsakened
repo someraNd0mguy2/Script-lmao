@@ -467,6 +467,105 @@ local styleListLayout = Instance.new("UIListLayout", styleDropdown)
 styleListLayout.Padding = UDim.new(0, 2)
 -- the end of selectStyle Ui
 
+
+-- ### Settings UI & Controls (Expanded Full Panel) ###
+local masterVolume = 1
+local bopIntensity = 50 -- Default bop strength (0 to 200)
+
+local settingsBtn = Instance.new("TextButton", screenGui)
+settingsBtn.Name, settingsBtn.Size = "SettingsBtn", UDim2.new(0, 130, 0, 35)
+settingsBtn.Position = UDim2.new(0, 335, 0, 60) -- Positioned right of Style button
+settingsBtn.BackgroundColor3, settingsBtn.Text, settingsBtn.TextColor3 = Color3.fromRGB(40, 40, 40), "⛭ Settings ✧", COLOR_WHITE
+settingsBtn.FontFace, settingsBtn.TextSize = FONT, 13
+Instance.new("UICorner", settingsBtn).CornerRadius = UDim.new(0, 8)
+
+-- Scaled to cover a larger portion of the screen (centered popup)
+local settingsPanel = Instance.new("Frame", screenGui)
+settingsPanel.Name, settingsPanel.Visible = "SettingsPanel", false
+settingsPanel.Size = UDim2.new(0.65, 0, 0.65, 0) -- Covers 65% of screen width and height
+settingsPanel.Position = UDim2.new(0.5, 0, 0.5, 0) -- Perfectly centered
+settingsPanel.AnchorPoint = Vector2.new(0.5, 0.5)
+settingsPanel.BackgroundColor3 = Color3.fromRGB(25, 25, 25)
+Instance.new("UICorner", settingsPanel).CornerRadius = UDim.new(0, 12)
+
+-- Optional Title inside the large panel
+local panelTitle = Instance.new("TextLabel", settingsPanel)
+panelTitle.Size, panelTitle.Position = UDim2.new(1, 0, 0, 40)
+panelTitle.BackgroundTransparency, panelTitle.Text, panelTitle.TextColor3 = 1, "--- SETTINGS ---", COLOR_WHITE
+panelTitle.FontFace, panelTitle.TextSize = FONT, 16
+panelTitle.TextXAlignment = Enum.TextXAlignment.Center
+
+-- Master Volume Label & Input
+local volLabel = Instance.new("TextLabel", settingsPanel)
+volLabel.Size, volLabel.Position = UDim2.new(1, -40, 0, 25), UDim2.new(0, 20, 0, 60)
+volLabel.BackgroundTransparency, volLabel.Text, volLabel.TextColor3 = 1, "Master Volume:", COLOR_WHITE
+volLabel.FontFace, volLabel.TextSize = FONT, 14
+volLabel.TextXAlignment = Enum.TextXAlignment.Left
+
+local volBox = Instance.new("TextBox", settingsPanel)
+volBox.Size, volBox.Position = UDim2.new(1, -40, 0, 35), UDim2.new(0, 20, 0, 85)
+volBox.BackgroundColor3, volBox.TextColor3, volBox.Text = Color3.fromRGB(35, 35, 35), COLOR_WHITE, "1"
+volBox.FontFace, volBox.TextSize = FONT, 14
+Instance.new("UICorner", volBox).CornerRadius = UDim.new(0, 6)
+
+-- Bop Intensity Label & Input (0 to 200)
+local bopLabel = Instance.new("TextLabel", settingsPanel)
+bopLabel.Size, bopLabel.Position = UDim2.new(1, -40, 0, 25), UDim2.new(0, 20, 0, 135)
+bopLabel.BackgroundTransparency, bopLabel.Text, bopLabel.TextColor3 = 1, "Bop Intensity (0-200):", COLOR_WHITE
+bopLabel.FontFace, bopLabel.TextSize = FONT, 14
+bopLabel.TextXAlignment = Enum.TextXAlignment.Left
+
+local bopBox = Instance.new("TextBox", settingsPanel)
+bopBox.Size, bopBox.Position = UDim2.new(1, -40, 0, 35), UDim2.new(0, 20, 0, 160)
+bopBox.BackgroundColor3, bopBox.TextColor3, bopBox.Text = Color3.fromRGB(35, 35, 35), COLOR_WHITE, "50"
+bopBox.FontFace, bopBox.TextSize = FONT, 14
+Instance.new("UICorner", bopBox).CornerRadius = UDim.new(0, 6)
+
+-- Close Button for the Settings Panel
+local closeSettingsBtn = Instance.new("TextButton", settingsPanel)
+closeSettingsBtn.Size, closeSettingsBtn.Position = UDim2.new(0, 120, 0, 35), UDim2.new(0.5, -60, 1, -50)
+closeSettingsBtn.BackgroundColor3, closeSettingsBtn.Text, closeSettingsBtn.TextColor3 = Color3.fromRGB(150, 0, 0), "CLOSE", COLOR_WHITE
+closeSettingsBtn.FontFace, closeSettingsBtn.TextSize = FONT, 13
+Instance.new("UICorner", closeSettingsBtn).CornerRadius = UDim.new(0, 8)
+
+closeSettingsBtn.MouseButton1Click:Connect(function()
+	settingsPanel.Visible = false
+end)
+
+-- Toggle Settings Panel
+settingsBtn.MouseButton1Click:Connect(function()
+	settingsPanel.Visible = not settingsPanel.Visible
+	if settingsPanel.Visible then
+		boomboxPanel.Visible = false
+		emotePanel.Visible = false
+		bgmDropdown.Visible = false
+		styleDropdown.Visible = false
+	end
+end)
+
+-- Handle Volume input changes
+volBox.FocusLost:Connect(function()
+	local v = tonumber(volBox.Text)
+	if v then
+		masterVolume = math.clamp(v, 0, 5)
+		bgmPlayer.Volume = masterVolume
+	else
+		volBox.Text = tostring(masterVolume)
+	end
+end)
+
+-- Handle Bop Intensity input changes (0 to 200)
+bopBox.FocusLost:Connect(function()
+	local v = tonumber(bopBox.Text)
+	if v then
+		bopIntensity = math.clamp(v, 0, 200)
+	else
+		bopBox.Text = tostring(bopIntensity)
+	end
+end)
+-- the end of "settings" button Ui
+
+
 local stopBtn = Instance.new("TextButton", screenGui)
 stopBtn.Name, stopBtn.Size = "StopScriptBtn", UDim2.new(0, 130, 0, 35)
 stopBtn.Position, stopBtn.AnchorPoint = UDim2.new(0.9, -90, 0, 60), Vector2.new(0.5, 0)
@@ -1427,7 +1526,6 @@ end
 			if data.AutoMove then
 				startAutoMove(data.Moveable)
 			end
-
 		end)
 	end
 
@@ -1522,6 +1620,16 @@ end
 
 		local targetFov = (State.isSprinting and moving) and 85 or 70
 		camera.FieldOfView = camera.FieldOfView + (targetFov - camera.FieldOfView) * math.min(dt * 2, 1)
+
+		-- ### Music-Synced View Bopping System ###
+		if bgmPlayer.IsPlaying and bopIntensity > 0 then
+			local loudness = bgmPlayer.PlaybackLoudness or 0
+			if loudness > 15 then
+				-- Creates a rhythmic vertical bop synced to the music's playback loudness and intensity setting
+				local bopOffset = math.sin(os.clock() * 16) * (loudness / 600) * (bopIntensity / 100)
+				camera.CFrame = camera.CFrame * CFrame.new(0, bopOffset * 0.12, 0)
+			end
+		end
 
 		if State.isShiftLock then
 			humanoid.AutoRotate = false
