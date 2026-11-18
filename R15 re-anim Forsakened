@@ -472,13 +472,13 @@ styleListLayout.Padding = UDim.new(0, 2)
 local masterVolume = 1
 local bopIntensity = 50 -- Default bop strength (0 to 200)
 
--- 1. Square Settings Button with an Outline (UIStroke)
+-- Square Settings Button with an Outline
 local settingsBtn = Instance.new("TextButton", screenGui)
 settingsBtn.Name = "SettingsBtn"
-settingsBtn.Size = UDim2.new(0, 42, 0, 40) -- Square sizing
+settingsBtn.Size = UDim2.new(0, 42, 0, 40)
 settingsBtn.Position = UDim2.new(0, 335, 0, 60)
 settingsBtn.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
-settingsBtn.Text = "《|⚙️|》"
+settingsBtn.Text = "《|¤|》"
 settingsBtn.TextColor3 = COLOR_WHITE
 settingsBtn.FontFace = FONT
 settingsBtn.TextSize = 18
@@ -488,7 +488,7 @@ local settingsBtnStroke = Instance.new("UIStroke", settingsBtn)
 settingsBtnStroke.Color = Color3.fromRGB(120, 120, 120)
 settingsBtnStroke.Thickness = 2
 
--- 2. 65% Screen Scaled Panel with Top-to-Bottom Gray-to-Black Gradient & UIStroke
+-- 65% Screen Scaled Panel with 50/50 Gray-to-Black Vertical Gradient
 local settingsPanel = Instance.new("Frame", screenGui)
 settingsPanel.Name = "SettingsPanel"
 settingsPanel.Visible = false
@@ -499,15 +499,17 @@ settingsPanel.BackgroundColor3 = Color3.new(1, 1, 1)
 Instance.new("UICorner", settingsPanel).CornerRadius = UDim.new(0, 14)
 
 local panelStroke = Instance.new("UIStroke", settingsPanel)
-panelStroke.Color = Color3.fromRGB(90, 90, 90)
-panelStroke.Thickness = 2
+panelStroke.Color = Color3.fromRGB(100, 100, 100)
+panelStroke.Thickness = 2.5
 
--- Balanced Vertical Gradient (Gray at top fading down to dark black)
+-- 50/50 Split Gradient (Top half gray, bottom half dark black)
 local panelGradient = Instance.new("UIGradient", settingsPanel)
 panelGradient.Rotation = 90
 panelGradient.Color = ColorSequence.new({
-    ColorSequenceKeypoint.new(0, Color3.fromRGB(65, 65, 65)),  -- Gray top
-    ColorSequenceKeypoint.new(1, Color3.fromRGB(20, 20, 20))   -- Dark black bottom
+    ColorSequenceKeypoint.new(0.0, Color3.fromRGB(75, 75, 75)),   -- Solid Gray Top
+    ColorSequenceKeypoint.new(0.5, Color3.fromRGB(50, 50, 50)),   -- Middle Blend
+    ColorSequenceKeypoint.new(0.51, Color3.fromRGB(20, 20, 20)),  -- Crisp split to Black
+    ColorSequenceKeypoint.new(1.0, Color3.fromRGB(15, 15, 15))    -- Dark Black Bottom
 })
 
 local panelPadding = Instance.new("UIPadding", settingsPanel)
@@ -543,7 +545,7 @@ local closeStroke = Instance.new("UIStroke", closeSettingsBtn)
 closeStroke.Color = Color3.fromRGB(200, 80, 80)
 closeStroke.Thickness = 1.5
 
--- 3. Category Tabs (Audio & Gameplay options matching reference style)[span_2](start_span)[span_2](end_span)
+-- Category Tabs (Audio & Gameplay with High-Contrast Outlines)
 local tabContainer = Instance.new("Frame", settingsPanel)
 tabContainer.Size = UDim2.new(1, 0, 0, 36)
 tabContainer.Position = UDim2.new(0, 0, 0, 50)
@@ -551,28 +553,31 @@ tabContainer.BackgroundTransparency = 1
 
 local tabLayout = Instance.new("UIListLayout", tabContainer)
 tabLayout.FillDirection = Enum.FillDirection.Horizontal
-tabLayout.Padding = UDim.new(0, 10)
+tabLayout.Padding = UDim.new(0, 12)
 
 local audioTabBtn = Instance.new("TextButton", tabContainer)
 audioTabBtn.Size = UDim2.new(0, 120, 1, 0)
-audioTabBtn.BackgroundColor3 = Color3.fromRGB(60, 60, 60)
+audioTabBtn.BackgroundColor3 = Color3.fromRGB(65, 130, 240) -- Active Blue Accent
 audioTabBtn.Text = "Audio"
 audioTabBtn.TextColor3 = COLOR_WHITE
 audioTabBtn.FontFace = FONT
 audioTabBtn.TextSize = 14
 Instance.new("UICorner", audioTabBtn).CornerRadius = UDim.new(0, 6)
 local audioTabStroke = Instance.new("UIStroke", audioTabBtn)
-audioTabStroke.Color = Color3.fromRGB(100, 100, 100)
+audioTabStroke.Color = Color3.fromRGB(255, 255, 255)
 audioTabStroke.Thickness = 1.5
 
 local gameplayTabBtn = Instance.new("TextButton", tabContainer)
 gameplayTabBtn.Size = UDim2.new(0, 120, 1, 0)
-gameplayTabBtn.BackgroundColor3 = Color3.fromRGB(35, 35, 35)
+gameplayTabBtn.BackgroundColor3 = Color3.fromRGB(40, 40, 40) -- Inactive Dark Gray
 gameplayTabBtn.Text = "Gameplay"
 gameplayTabBtn.TextColor3 = COLOR_GREY
 gameplayTabBtn.FontFace = FONT
 gameplayTabBtn.TextSize = 14
 Instance.new("UICorner", gameplayTabBtn).CornerRadius = UDim.new(0, 6)
+local gameplayTabStroke = Instance.new("UIStroke", gameplayTabBtn)
+gameplayTabStroke.Color = Color3.fromRGB(90, 90, 90)
+gameplayTabStroke.Thickness = 1.5
 
 -- Content Pages Container
 local contentContainer = Instance.new("Frame", settingsPanel)
@@ -603,82 +608,84 @@ local gameplayPageLayout = Instance.new("UIListLayout", gameplayPage)
 gameplayPageLayout.Padding = UDim.new(0, 15)
 gameplayPageLayout.SortOrder = Enum.SortOrder.LayoutOrder
 
--- Tab Switching Logic
+-- Tab Switching Logic with Visual State Updates
 audioTabBtn.MouseButton1Click:Connect(function()
     audioPage.Visible = true
     gameplayPage.Visible = false
-    audioTabBtn.BackgroundColor3 = Color3.fromRGB(60, 60, 60)
+    -- Audio Active
+    audioTabBtn.BackgroundColor3 = Color3.fromRGB(65, 130, 240)
     audioTabBtn.TextColor3 = COLOR_WHITE
-    audioTabStroke.Color = Color3.fromRGB(100, 100, 100)
-    gameplayTabBtn.BackgroundColor3 = Color3.fromRGB(35, 35, 35)
+    audioTabStroke.Color = Color3.fromRGB(255, 255, 255)
+    -- Gameplay Inactive
+    gameplayTabBtn.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
     gameplayTabBtn.TextColor3 = COLOR_GREY
-    if gameplayTabBtn:FindFirstChild("UIStroke") then gameplayTabBtn.UIStroke:Destroy() end
+    gameplayTabStroke.Color = Color3.fromRGB(90, 90, 90)
 end)
 
 gameplayTabBtn.MouseButton1Click:Connect(function()
     audioPage.Visible = false
     gameplayPage.Visible = true
-    gameplayTabBtn.BackgroundColor3 = Color3.fromRGB(60, 60, 60)
+    -- Gameplay Active
+    gameplayTabBtn.BackgroundColor3 = Color3.fromRGB(65, 130, 240)
     gameplayTabBtn.TextColor3 = COLOR_WHITE
-    local gpStroke = gameplayTabBtn:FindFirstChild("UIStroke") or Instance.new("UIStroke", gameplayTabBtn)
-    gpStroke.Color = Color3.fromRGB(100, 100, 100)
-    gpStroke.Thickness = 1.5
-    audioTabBtn.BackgroundColor3 = Color3.fromRGB(35, 35, 35)
+    gameplayTabStroke.Color = Color3.fromRGB(255, 255, 255)
+    -- Audio Inactive
+    audioTabBtn.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
     audioTabBtn.TextColor3 = COLOR_GREY
-    audioTabStroke.Color = Color3.fromRGB(50, 50, 50)
+    audioTabStroke.Color = Color3.fromRGB(90, 90, 90)
 end)
 
--- 4. Box Slider Helper (Numeric Input Box + Interactive Slider Bar matching reference style)[span_3](start_span)[span_3](end_span)
+-- Shrunk Slider Helper (Fits safely within menu bounds)
 local function createSliderSetting(parent, labelText, minVal, maxVal, defaultVal, callback, layoutOrder)
     local row = Instance.new("Frame", parent)
-    row.Size = UDim2.new(1, 0, 0, 45)
+    row.Size = UDim2.new(1, -10, 0, 45) -- Leaves margin so it doesn't clip edges
     row.BackgroundTransparency = 1
     row.LayoutOrder = layoutOrder or 1
 
     local lbl = Instance.new("TextLabel", row)
-    lbl.Size = UDim2.new(0.35, 0, 1, 0)
+    lbl.Size = UDim2.new(0.4, 0, 1, 0)
     lbl.BackgroundTransparency = 1
     lbl.Text = labelText
     lbl.TextColor3 = COLOR_WHITE
     lbl.FontFace = FONT
-    lbl.TextSize = 14
+    lbl.TextSize = 13
     lbl.TextXAlignment = Enum.TextXAlignment.Left
 
-    -- Numeric Box on the left[span_4](start_span)[span_4](end_span)
+    -- Numeric Input Box
     local valBox = Instance.new("TextBox", row)
-    valBox.Size = UDim2.new(0, 55, 0, 32)
-    valBox.Position = UDim2.new(0.36, 0, 0.5, -16)
+    valBox.Size = UDim2.new(0, 48, 0, 30)
+    valBox.Position = UDim2.new(0.41, 0, 0.5, -15)
     valBox.BackgroundColor3 = Color3.fromRGB(45, 45, 45)
     valBox.TextColor3 = COLOR_WHITE
     valBox.FontFace = FONT
-    valBox.TextSize = 13
+    valBox.TextSize = 12
     valBox.Text = tostring(defaultVal)
     Instance.new("UICorner", valBox).CornerRadius = UDim.new(0, 6)
     local boxStroke = Instance.new("UIStroke", valBox)
-    boxStroke.Color = Color3.fromRGB(80, 80, 80)
+    boxStroke.Color = Color3.fromRGB(90, 90, 90)
     boxStroke.Thickness = 1
 
-    -- Slider Track Bar on the right[span_5](start_span)[span_5](end_span)
+    -- Shrunk Slider Track Bar
     local sliderBar = Instance.new("Frame", row)
-    sliderBar.Size = UDim2.new(0.58, 0, 0, 10)
-    sliderBar.Position = UDim2.new(0.40, 65, 0.5, -5)
-    sliderBar.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
+    sliderBar.Size = UDim2.new(0.52, 0, 0, 10)
+    sliderBar.Position = UDim2.new(0.44, 52, 0.5, -5)
+    sliderBar.BackgroundColor3 = Color3.fromRGB(25, 25, 25)
     Instance.new("UICorner", sliderBar).CornerRadius = UDim.new(1, 0)
     local barStroke = Instance.new("UIStroke", sliderBar)
-    barStroke.Color = Color3.fromRGB(70, 70, 70)
+    barStroke.Color = Color3.fromRGB(80, 80, 80)
     barStroke.Thickness = 1
 
     -- Slider Fill Bar
     local sliderFill = Instance.new("Frame", sliderBar)
     sliderFill.Size = UDim2.new((defaultVal - minVal) / (maxVal - minVal), 0, 1, 0)
-    sliderFill.BackgroundColor3 = Color3.fromRGB(80, 200, 100) -- Green slider accent
+    sliderFill.BackgroundColor3 = Color3.fromRGB(80, 200, 100)
     Instance.new("UICorner", sliderFill).CornerRadius = UDim.new(1, 0)
 
-    -- Draggable knob
+    -- Draggable Knob
     local sliderBtn = Instance.new("TextButton", sliderBar)
-    sliderBtn.Size = UDim2.new(0, 16, 0, 16)
-    sliderBtn.Position = UDim2.new((defaultVal - minVal) / (maxVal - minVal), -8, 0.5, -8)
-    sliderBtn.BackgroundColor3 = Color3.fromRGB(220, 220, 220)
+    sliderBtn.Size = UDim2.new(0, 14, 0, 14)
+    sliderBtn.Position = UDim2.new((defaultVal - minVal) / (maxVal - minVal), -7, 0.5, -7)
+    sliderBtn.BackgroundColor3 = Color3.fromRGB(240, 240, 240)
     sliderBtn.Text = ""
     Instance.new("UICorner", sliderBtn).CornerRadius = UDim.new(1, 0)
 
@@ -689,7 +696,7 @@ local function createSliderSetting(parent, labelText, minVal, maxVal, defaultVal
         valBox.Text = tostring(currentVal)
         local alpha = (currentVal - minVal) / (maxVal - minVal)
         sliderFill.Size = UDim2.new(alpha, 0, 1, 0)
-        sliderBtn.Position = UDim2.new(alpha, -8, 0.5, -8)
+        sliderBtn.Position = UDim2.new(alpha, -7, 0.5, -7)
         callback(currentVal)
     end
 
@@ -734,13 +741,13 @@ local function createSliderSetting(parent, labelText, minVal, maxVal, defaultVal
     return row
 end
 
--- Add Sliders to Audio Page
+-- Add Shrunk Sliders to Audio Page
 createSliderSetting(audioPage, "MASTER VOLUME:", 0, 5, masterVolume, function(val)
     masterVolume = val
     bgmPlayer.Volume = masterVolume
 end, 1)
 
--- Add Sliders to Gameplay Page
+-- Add Shrunk Sliders to Gameplay Page
 createSliderSetting(gameplayPage, "BOP INTENSITY:", 0, 200, bopIntensity, function(val)
     bopIntensity = val
 end, 1)
@@ -759,15 +766,6 @@ end)
 closeSettingsBtn.MouseButton1Click:Connect(function()
 	settingsPanel.Visible = false
 end)
--- the end of "settings" button Ui
-
-
-local stopBtn = Instance.new("TextButton", screenGui)
-stopBtn.Name, stopBtn.Size = "StopScriptBtn", UDim2.new(0, 130, 0, 35)
-stopBtn.Position, stopBtn.AnchorPoint = UDim2.new(0.9, -90, 0, 60), Vector2.new(0.5, 0)
-stopBtn.BackgroundColor3, stopBtn.Text, stopBtn.TextColor3 = Color3.fromRGB(150, 0, 0), "STOP SCRIPT", COLOR_WHITE
-stopBtn.FontFace, stopBtn.TextSize = FONT, 13
-Instance.new("UICorner", stopBtn).CornerRadius = UDim.new(0, 8)
 -- the end of "stop script" Ui
 
 local emoteToggleBtn = Instance.new("TextButton", screenGui)
@@ -1102,7 +1100,7 @@ local blockUI = makeAbilityButton("Block", IMG_BLOCK, "Q", "Q", 75, UDim2.new(1,
 -- ### Injured Button ###
 local injuredBtn = Instance.new("TextButton", screenGui)
 injuredBtn.Name, injuredBtn.Size = "InjuredToggleBtn", UDim2.new(0, 75, 0, 30)
-injuredBtn.Position, injuredBtn.AnchorPoint = UDim2.new(1, -165, 1, -235), Vector2.new(1, 1)
+injuredBtn.Position, injuredBtn.AnchorPoint = UDim2.new(1, -195, 1, -235), Vector2.new(1, 1)
 injuredBtn.BackgroundColor3, injuredBtn.Text, injuredBtn.TextColor3 = Color3.fromRGB(100, 0, 0), "Injured : Off", COLOR_WHITE
 injuredBtn.FontFace, injuredBtn.TextSize = FONT, 11
 Instance.new("UICorner", injuredBtn).CornerRadius = UDim.new(0, 6)
